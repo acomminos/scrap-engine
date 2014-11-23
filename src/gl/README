@@ -1,0 +1,3 @@
+This is an attempt at an object-oriented shim around the shader program.
+
+This has been done many times before, but is good practice.
