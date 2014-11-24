@@ -16,7 +16,7 @@
 #ifndef SCRAP_CONFIG_H_
 #define SCRAP_CONFIG_H_
 
-#include <GLFW/glfw3.h>
+#include <cstdint>
 
 namespace scrap {
 

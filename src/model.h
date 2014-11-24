@@ -24,7 +24,7 @@
 class Model {
  public:
   Model(const float *vertices, const float *uv, int num_vertices,
-        const char *texture);
+        void *texture);
   ~Model();
   uint32_t vertex_buffer() { return vertex_buffer_; }
   uint32_t uv_buffer() { return uv_buffer_; }

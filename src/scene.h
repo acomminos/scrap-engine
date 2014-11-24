@@ -23,6 +23,8 @@ class Scene {
     virtual void Update(double delta_time) = 0;
     virtual void Render() = 0;
 
+    // virtual void OnVideoModeChange( TODO(andrew)
+
     virtual void OnMouseButton(int button, int action, int mods) = 0;
     virtual void OnMouseScroll(double dx, double dy) = 0;
     virtual void OnMouseMove(double x, double y) = 0;
