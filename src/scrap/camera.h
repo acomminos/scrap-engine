@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SCRAP_CAMERA_H_
-#define SCRAP_CAMERA_H_
+#ifndef SRC_SCRAP_CAMERA_H_
+#define SRC_SCRAP_CAMERA_H_
 
 #include <glm/glm.hpp>
 
@@ -29,11 +29,11 @@ class Camera {
   // radians.
   void Rotate(float x, float y, float z);
   void Translate(float x, float y, float z);
-  glm::mat4 matrix() { return matrix_; };
+  glm::mat4 matrix() { return matrix_; }
  private:
   glm::mat4 matrix_;
 };
 
 }  // namespace scrap
 
-#endif  // SCRAP_CAMERA_H_
+#endif  // SRC_SCRAP_CAMERA_H_

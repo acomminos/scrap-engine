@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "engine.h"
+#include "scrap/engine.h"
 
 static GLFWwindow* window_;
 static std::stack<scrap::Scene*> scene_stack_;
@@ -32,10 +32,12 @@ void scrap::engine::Init(scrap::Scene *scene, scrap::Config config) {
         glfwTerminate();
         return;
     }
-    glfwSetKeyCallback(window_, [](GLFWwindow *, int key, int scancode, int action, int mods) {
+    glfwSetKeyCallback(window_, [](GLFWwindow *, int key, int scancode,
+                                   int action, int mods) {
         scene_stack_.top()->OnKey(key, scancode, action, mods);
     });
-    glfwSetMouseButtonCallback(window_, [](GLFWwindow *, int button, int action, int mods) {
+    glfwSetMouseButtonCallback(window_, [](GLFWwindow *, int button, int action,
+                                           int mods) {
         scene_stack_.top()->OnMouseButton(button, action, mods);
     });
 
@@ -54,7 +56,7 @@ void scrap::engine::Push(scrap::Scene *scene) {
 
 void scrap::engine::Pop() {
     scene_stack_.pop();
-    // TODO: destroy if out of scenes?
+    // TODO(andrew): destroy if out of scenes?
     // if (scene_stack_.empty()) {
     //     Destroy();
     // }

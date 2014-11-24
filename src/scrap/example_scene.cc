@@ -19,7 +19,7 @@
 
 void scrap::ExampleScene::Update(double delta_time) {
     theta_ = fmod(theta_ + (theta_velocity_ * delta_time), 2*M_PI);
-    //printf("dt: %f, t: %fpi\n", delta_time, theta_/M_PI);
+    // printf("dt: %f, t: %fpi\n", delta_time, theta_/M_PI);
 }
 
 void scrap::ExampleScene::Render() {

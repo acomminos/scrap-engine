@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SCRAP_CONFIG_H_
-#define SCRAP_CONFIG_H_
+#ifndef SRC_SCRAP_CONFIG_H_
+#define SRC_SCRAP_CONFIG_H_
 
 #include <cstdint>
 
@@ -43,4 +43,4 @@ class Config {
 
 };  // namespace scrap
 
-#endif  // SCRAP_CONFIG_H_
+#endif  // SRC_SCRAP_CONFIG_H_

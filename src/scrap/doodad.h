@@ -28,7 +28,7 @@ class Doodad {
   // Creates a new Doodad with the given model, position, rotation, and scale.
   Doodad(Model *model, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale);
   // Creates a new Doodad with the given model located at the origin.
-  Doodad(Model *model) : model_(model) {};
+  Doodad(Model *model) : model_(model) {}
   // Rotates the doodad about its current position using the specified values
   // (in radians).
   void Rotate(float x, float y, float z);
@@ -43,6 +43,6 @@ class Doodad {
   glm::mat4 matrix_;
 };
 
-} // namespace scrap
+}  // namespace scrap
 
 #endif  // SRC_SCRAP_DOODAD_H_
