@@ -13,31 +13,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SCRAP_ENGINE_H_
-#define SCRAP_ENGINE_H_
+#ifndef SCRAP_SCENE_MODEL_H_
+#define SCRAP_SCENE_MODEL_H_
 
-#include <stack>
-#include "config.h"
 #include "scene.h"
-#include "gl/gl_config.h"
+#include "model.h"
 
-// The engine manages the game window and exclusively accesses the GLFW context.
 namespace scrap {
-namespace engine {
 
-// Initializes the global game engine with the given scene.
-void Init(scrap::Scene *scene, scrap::Config config);
-// Destroys the engine, freeing all resources.
-void Destroy();
-// Pushes a new scene onto the engine's scene stack.
-void Push(scrap::Scene *scene);
-// Pops a scene off of the engine's scene stack.
-void Pop();
+class ModelScene : public Scene {
+ public:
+  virtual void Update(double delta_time);
+  virtual void Render();
 
-int Width();
-int Height();
+  virtual void OnMouseButton(int button, int action, int mods) = 0;
+  virtual void OnMouseScroll(double dx, double dy) = 0;
+  virtual void OnMouseMove(double x, double y) = 0;
+  virtual void OnMouseEnter() = 0;
+  virtual void OnMouseLeave() = 0;
 
-}  // namespace engine
-}  // namespace scrap
+  virtual void OnKey(int key, int scancode, int action, int mods) = 0;
 
-#endif  // SCRAP_ENGINE_H_
+ private:
+  Camera *active_camera_;
+  std::map<Model, Doodad> objects_;
+};
+
+}  // scrap
+
+#endif  // SCRAP_SCENE_MODEL_H_

@@ -23,12 +23,13 @@ class Scene {
     virtual void Update(double delta_time) = 0;
     virtual void Render() = 0;
 
+    virtual void OnMouseButton(int button, int action, int mods) = 0;
     virtual void OnMouseScroll(double dx, double dy) = 0;
     virtual void OnMouseMove(double x, double y) = 0;
     virtual void OnMouseEnter() = 0;
     virtual void OnMouseLeave() = 0;
 
-    virtual void OnKeyEvent(int key, int scancode, int action, int mods) = 0;
+    virtual void OnKey(int key, int scancode, int action, int mods) = 0;
 };
 
 }

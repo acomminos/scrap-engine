@@ -27,6 +27,9 @@ void scrap::ExampleScene::Render() {
     int y = r_ * sin(theta_);
 }
 
+void scrap::ExampleScene::OnMouseButton(int button, int action, int mods) {
+}
+
 void scrap::ExampleScene::OnMouseScroll(double dx, double dy) {
 }
 
@@ -39,7 +42,7 @@ void scrap::ExampleScene::OnMouseEnter() {
 void scrap::ExampleScene::OnMouseLeave() {
 }
 
-void scrap::ExampleScene::OnKeyEvent(int key, int scancode, int action, int mods) {
+void scrap::ExampleScene::OnKey(int key, int scancode, int action, int mods) {
     printf("Key event (key: %d, scancode: %d, action: %d, mods: %d)\n",
            key, scancode, action, mods);
 }

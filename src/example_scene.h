@@ -26,11 +26,12 @@ class ExampleScene : public Scene {
   virtual void Update(double delta_time);
   virtual void Render();
 
+  virtual void OnMouseButton(int button, int action, int mods);
   virtual void OnMouseScroll(double dx, double dy);
   virtual void OnMouseMove(double x, double y);
   virtual void OnMouseEnter();
   virtual void OnMouseLeave();
-  virtual void OnKeyEvent(int key, int scancode, int action, int mods);
+  virtual void OnKey(int key, int scancode, int action, int mods);
 
  private:
   const float theta_velocity_ = M_PI/2;  // pi/2 rad/s

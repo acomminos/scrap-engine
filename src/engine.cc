@@ -25,15 +25,18 @@ void scrap::engine::Init(scrap::Scene *scene, scrap::Config config) {
 
     glfwInit();
 
-    // TODO(andrew): ensure that config modes are sane.
+    // TODO(andrew): ensure that config modes are sane. USE CONFIG!
     window_ = glfwCreateWindow(config.width(), config.height(),
-                               "Scrapit", NULL, NULL);
+                               "Scrap Engine", NULL, NULL);
     if (!window_) {
         glfwTerminate();
         return;
     }
-    glfwSetKeyCallback(window_, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-        scene_stack_.top()->OnKeyEvent(key, scancode, action, mods);
+    glfwSetKeyCallback(window_, [](GLFWwindow *, int key, int scancode, int action, int mods) {
+        scene_stack_.top()->OnKey(key, scancode, action, mods);
+    });
+    glfwSetMouseButtonCallback(window_, [](GLFWwindow *, int button, int action, int mods) {
+        scene_stack_.top()->OnMouseButton(button, action, mods);
     });
 
     glfwMakeContextCurrent(window_);
@@ -55,6 +58,22 @@ void scrap::engine::Pop() {
     // if (scene_stack_.empty()) {
     //     Destroy();
     // }
+}
+
+int scrap::engine::Width() {
+    if (window_ == NULL)
+        return -1;
+    int width;
+    glfwGetWindowSize(window_, &width, NULL);
+    return width;
+}
+
+int scrap::engine::Height() {
+    if (window_ == NULL)
+        return -1;
+    int height;
+    glfwGetWindowSize(window_, NULL, &height);
+    return height;
 }
 
 void Loop() {

@@ -13,31 +13,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SCRAP_ENGINE_H_
-#define SCRAP_ENGINE_H_
+#ifndef SCRAP_MODEL_H_
+#define SCRAP_MODEL_H_
 
-#include <stack>
-#include "config.h"
-#include "scene.h"
-#include "gl/gl_config.h"
+#include <cstdint>
 
-// The engine manages the game window and exclusively accesses the GLFW context.
-namespace scrap {
-namespace engine {
+// A model in the game world.
+// Has an assigned texture and vertices. One instance may be shared by several
+// Doodad instances. Uses the RAII model for OpenGL buffer allocation.
+class Model {
+ public:
+  Model(const float *vertices, const float *uv, int num_vertices,
+        const char *texture);
+  ~Model();
+  uint32_t vertex_buffer() { return vertex_buffer_; }
+  uint32_t uv_buffer() { return uv_buffer_; }
+  uint32_t texture() { return texture_; }
+ private:
+  uint32_t vertex_buffer_;
+  uint32_t uv_buffer_;
+  uint32_t texture_;
+};
 
-// Initializes the global game engine with the given scene.
-void Init(scrap::Scene *scene, scrap::Config config);
-// Destroys the engine, freeing all resources.
-void Destroy();
-// Pushes a new scene onto the engine's scene stack.
-void Push(scrap::Scene *scene);
-// Pops a scene off of the engine's scene stack.
-void Pop();
-
-int Width();
-int Height();
-
-}  // namespace engine
-}  // namespace scrap
-
-#endif  // SCRAP_ENGINE_H_
+#endif  // SCRAP_MODEL_H_

@@ -16,6 +16,8 @@
 #ifndef SCRAP_CONFIG_H_
 #define SCRAP_CONFIG_H_
 
+#include <GLFW/glfw3.h>
+
 namespace scrap {
 
 // Configuration options are preferred options for setting up the game engine.
@@ -24,7 +26,8 @@ namespace scrap {
 // TODO(andrew): support for loading from file
 class Config {
  public:
-  Config() : width_(1024), height_(768), fullscreen_(false) {}
+  // Creates a new default config with the video mode of the primary monitor.
+  Config() : width_(800), height_(600), fullscreen_(false) { }
   uint32_t width() { return width_; }
   void set_width(uint32_t width) { width_ = width; }
   uint32_t height() { return height_; }
