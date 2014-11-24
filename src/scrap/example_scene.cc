@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "example_scene.h"
+#include "scrap/example_scene.h"
 #include <cstdio>
-#include "engine.h"
+#include "scrap/engine.h"
 
 void scrap::ExampleScene::Update(double delta_time) {
     theta_ = fmod(theta_ + (theta_velocity_ * delta_time), 2*M_PI);

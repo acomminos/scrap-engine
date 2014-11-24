@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SCRAP_EXAMPLE_SCENE_H_
-#define SCRAP_EXAMPLE_SCENE_H_
+#ifndef SRC_SCRAP_EXAMPLE_SCENE_H_
+#define SRC_SCRAP_EXAMPLE_SCENE_H_
 
 #include <math.h>
-#include "scene.h"
+#include "scrap/scene.h"
 
 namespace scrap {
 
@@ -41,4 +41,4 @@ class ExampleScene : public Scene {
 
 }  // namespace scrap
 
-#endif  // SCRAP_EXAMPLE_SCENE_H_
+#endif  // SRC_SCRAP_EXAMPLE_SCENE_H_

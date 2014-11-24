@@ -13,21 +13,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "doodad.h"
+#ifndef SRC_SCRAP_MODEL_H_
+#define SRC_SCRAP_MODEL_H_
 
-scrap::Doodad::Doodad(Model *model, glm::vec3 pos, glm::vec3 rot,
-                      glm::vec3 scale) : model_(model) {
-    matrix_ *= scale * rot * pos;
-}
+#include <cstdint>
 
-void scrap::Doodad::Rotate(float x, float y, float z) {
-    // TODO(andrew)
-}
+// A model in the game world.
+// Has an assigned texture and vertices. One instance may be shared by several
+// Doodad instances. Uses the RAII model for OpenGL buffer allocation.
+class Model {
+ public:
+  Model(const float *vertices, const float *uv, int num_vertices,
+        void *texture);
+  ~Model();
+  uint32_t vertex_buffer() { return vertex_buffer_; }
+  uint32_t uv_buffer() { return uv_buffer_; }
+  uint32_t texture() { return texture_; }
+ private:
+  uint32_t vertex_buffer_;
+  uint32_t uv_buffer_;
+  uint32_t texture_;
+};
 
-void scrap::Doodad::Translate(float x, float y, float z) {
-    // TODO(andrew)
-}
-
-void scrap::Doodad::Scale(float x, float y, float z) {
-    // TODO(andrew)
-}
+#endif  // SRC_SCRAP_MODEL_H_

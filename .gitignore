@@ -26,9 +26,9 @@
 *.exe
 *.out
 *.app
-scrap
 
 # CMake
+build/
 CMakeCache.txt
 CMakeFiles
 Makefile

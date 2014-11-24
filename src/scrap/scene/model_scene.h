@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SCRAP_SCENE_MODEL_H_
-#define SCRAP_SCENE_MODEL_H_
+#ifndef SRC_SCRAP_SCENE_MODEL_H_
+#define SRC_SCRAP_SCENE_MODEL_H_
 
-#include "scene.h"
-#include "model.h"
+#include "scrap/scene.h"
+#include "scrap/model.h"
 
 namespace scrap {
 
@@ -39,6 +39,6 @@ class ModelScene : public Scene {
   std::map<Model, Doodad> objects_;
 };
 
-}  // scrap
+}  // namespace scrap
 
-#endif  // SCRAP_SCENE_MODEL_H_
+#endif  // SRC_SCRAP_SCENE_MODEL_H_

@@ -13,11 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SCRAP_DOODAD_H_
-#define SCRAP_DOODAD_H_
+#ifndef SRC_SCRAP_DOODAD_H_
+#define SRC_SCRAP_DOODAD_H_
 
 #include <glm/glm.hpp>
-#include "model.h"
+#include "scrap/model.h"
 
 namespace scrap {
 
@@ -45,4 +45,4 @@ class Doodad {
 
 } // namespace scrap
 
-#endif
+#endif  // SRC_SCRAP_DOODAD_H_

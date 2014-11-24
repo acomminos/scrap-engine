@@ -17,9 +17,9 @@
 #include <cstdio>
 #include <cstdlib>
 
-#include "engine.h"
-#include "config.h"
-#include "example_scene.h"
+#include "scrap/engine.h"
+#include "scrap/config.h"
+#include "scrap/example_scene.h"
 
 int main(int argc, char *argv[]) {
     scrap::Config config;
@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (err) {
-        fprintf(stderr, "Usage: scrap [OPTION]... [FILE]...\n");
+        fprintf(stderr, "Usage: salvage [OPTION]... [FILE]...\n");
         return -1;
     }
 

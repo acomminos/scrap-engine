@@ -13,38 +13,31 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SCRAP_UTIL_OBJ_LOADER_H_
-#define SCRAP_UTIL_OBJ_LOADER_H_
+#ifndef SRC_SCRAP_ENGINE_H_
+#define SRC_SCRAP_ENGINE_H_
 
-#include <istream>
-#include "model.h"
+#include <stack>
+#include "scrap/config.h"
+#include "scrap/scene.h"
+#include "scrap/gl/gl_config.h"
 
-// A wavefront .obj file loader with support for vertex mapping and UV
-// coordinates.
+// The engine manages the game window and exclusively accesses the GLFW context.
 namespace scrap {
-namespace util {
-namespace OBJLoader {
+namespace engine {
 
-Model* Parse(std::istream& in) {
-    std::string type;
-    while (!in.eof()) {
-        in.get(type, ' ');
-        if (type.equals("vt")) {
-            float x, y, z;
-            in >> x;
-            in >> y;
-            in >> z;
-        }
+// Initializes the global game engine with the given scene.
+void Init(scrap::Scene *scene, scrap::Config config);
+// Destroys the engine, freeing all resources.
+void Destroy();
+// Pushes a new scene onto the engine's scene stack.
+void Push(scrap::Scene *scene);
+// Pops a scene off of the engine's scene stack.
+void Pop();
 
-        // Skip until newline terminator (\ or \n)
-        char end;
-        do {
-            end = in.get();
-        } while (end != '\\' && end != '\n')
-    }
-    Model *model = new Model();
-}
+int Width();
+int Height();
 
-}  // namespace OBJLoader
-}  // namespace util
+}  // namespace engine
 }  // namespace scrap
+
+#endif  // SRC_SCRAP_ENGINE_H_

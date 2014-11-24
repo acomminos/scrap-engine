@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SCRAP_SCENE_H_
-#define SCRAP_SCENE_H_
+#ifndef SRC_SCRAP_SCENE_H_
+#define SRC_SCRAP_SCENE_H_
 
 namespace scrap {
 
@@ -36,4 +36,4 @@ class Scene {
 
 }
 
-#endif // SCRAP_SCENE_H_
+#endif // SRC_SCRAP_SCENE_H_

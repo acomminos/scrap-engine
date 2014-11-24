@@ -13,31 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SCRAP_ENGINE_H_
-#define SCRAP_ENGINE_H_
+#include "scrap/scene/model_scene.h"
 
-#include <stack>
-#include "config.h"
-#include "scene.h"
-#include "gl/gl_config.h"
+void scrap::ModelScene::Update(double delta_time) {
+}
 
-// The engine manages the game window and exclusively accesses the GLFW context.
-namespace scrap {
-namespace engine {
-
-// Initializes the global game engine with the given scene.
-void Init(scrap::Scene *scene, scrap::Config config);
-// Destroys the engine, freeing all resources.
-void Destroy();
-// Pushes a new scene onto the engine's scene stack.
-void Push(scrap::Scene *scene);
-// Pops a scene off of the engine's scene stack.
-void Pop();
-
-int Width();
-int Height();
-
-}  // namespace engine
-}  // namespace scrap
-
-#endif  // SCRAP_ENGINE_H_
+void scrap::ModelScene::Render() {
+}
