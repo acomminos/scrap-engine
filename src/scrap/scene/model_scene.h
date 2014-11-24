@@ -18,6 +18,7 @@
 
 #include "scrap/scene.h"
 #include "scrap/model.h"
+#include "scrap/camera.h"
 
 namespace scrap {
 

@@ -53,6 +53,8 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
+    printf("Starting salvage (libscrap sandbox)...\n");
+
     scrap::ExampleScene es;
     scrap::engine::Init(&es, config);
 

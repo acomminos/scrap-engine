@@ -18,19 +18,22 @@
 
 #include <cstdint>
 
-// A model in the game world.
+// A model assignable to a Doodad.
 // Has an assigned texture and vertices. One instance may be shared by several
 // Doodad instances. Uses the RAII model for OpenGL buffer allocation.
 class Model {
  public:
-  Model(const float *vertices, const float *uv, int num_vertices,
-        void *texture);
+  Model(const float *vertices, int num_vertices, const float *elements,
+        int num_elements, const float *uv, int num_vertices,
+        void *texture, int width, int height);
   ~Model();
-  uint32_t vertex_buffer() { return vertex_buffer_; }
+  uint32_t array_buffer() { return array_buffer_; }
+  uint32_t element_buffer() { return element_buffer_; }
   uint32_t uv_buffer() { return uv_buffer_; }
   uint32_t texture() { return texture_; }
  private:
-  uint32_t vertex_buffer_;
+  uint32_t array_buffer_;
+  uint32_t element_buffer_;
   uint32_t uv_buffer_;
   uint32_t texture_;
 };

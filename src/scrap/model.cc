@@ -16,21 +16,29 @@
 #include "scrap/model.h"
 #include "scrap/gl/gl_config.h"
 
-Model::Model(const float *vertices, const float *uv, int num_vertices,
-             void *texture) {
+Model::Model(const float *vertices, int num_vertices,
+             const float *elements, int num_elements,
+             const float *uv,
+             void *texture, int width, int height) {
     // TODO(andrew): Models with animations (changing vertex data) shouldn't
     // use STATIC_DRAW. Make this a configurable option.
-    glGenBuffers(1, &vertex_buffer_);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+    glGenBuffers(1, &array_buffer_);
+    glBindBuffer(GL_ARRAY_BUFFER, array_buffer_);
     glBufferData(GL_ARRAY_BUFFER, 3 * num_vertices * sizeof(float),
                  vertices, GL_STATIC_DRAW);
+
+    glGenBuffers(1, &element_buffer_);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer_);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * num_vertices * sizeof(float),
+                 elements, GL_STATIC_DRAW);
 
     glGenBuffers(1, &uv_buffer_);
     glBindBuffer(GL_ARRAY_BUFFER, uv_buffer_);
     glBufferData(GL_ARRAY_BUFFER, 2 * num_vertices * sizeof(float),
-                 vertices, GL_STATIC_DRAW);
+                 uv, GL_STATIC_DRAW);
 
     glBindBuffer(0, GL_ARRAY_BUFFER);
+    glBindBuffer(0, GL_ELEMENT_ARRAY_BUFFER);
 
     glGenTextures(1, &texture_);
     glBindTexture(GL_TEXTURE_2D, texture_);
@@ -39,7 +47,7 @@ Model::Model(const float *vertices, const float *uv, int num_vertices,
 }
 
 Model::~Model() {
-    glDeleteBuffers(1, &buffer_);
+    glDeleteBuffers(1, &vertex_buffer_);
     glDeleteBuffers(1, &uv_buffer_);
     glDeleteTextures(1, &texture_);
 }
