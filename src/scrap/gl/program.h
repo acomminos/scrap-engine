@@ -22,6 +22,13 @@
 namespace scrap {
 namespace gl {
 
+// A wrapper around a GLSL shader program.
+// Shaders attached to this program are provided the following:
+// Attributes:
+// - pos : mat3 (position)
+// Uniforms:
+// - tex : sampler2d (texture)
+// - mvp : mat4 (MVP matrix)
 class Program {
  public:
   // Registers a new shader program with OpenGL.
