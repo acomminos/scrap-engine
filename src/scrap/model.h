@@ -23,15 +23,17 @@
 // Doodad instances. Uses the RAII model for OpenGL buffer allocation.
 class Model {
  public:
-  Model(const float *vertices, int num_vertices, const float *elements,
-        int num_elements, const float *uv, int num_vertices,
-        void *texture, int width, int height);
+  Model(const float *vertices, int num_vertices, const int *elements,
+        int num_elements, const float *uv, void *texture, int width,
+        int height);
   ~Model();
+  uint32_t num_vertices() { return num_vertices_; }
   uint32_t array_buffer() { return array_buffer_; }
   uint32_t element_buffer() { return element_buffer_; }
   uint32_t uv_buffer() { return uv_buffer_; }
   uint32_t texture() { return texture_; }
  private:
+  uint32_t num_vertices_;
   uint32_t array_buffer_;
   uint32_t element_buffer_;
   uint32_t uv_buffer_;

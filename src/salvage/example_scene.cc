@@ -13,36 +13,36 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "scrap/example_scene.h"
+#include "salvage/example_scene.h"
 #include <cstdio>
 #include "scrap/engine.h"
 
-void scrap::ExampleScene::Update(double delta_time) {
+void salvage::ExampleScene::Update(double delta_time) {
     theta_ = fmod(theta_ + (theta_velocity_ * delta_time), 2*M_PI);
     // printf("dt: %f, t: %fpi\n", delta_time, theta_/M_PI);
 }
 
-void scrap::ExampleScene::Render() {
+void salvage::ExampleScene::Render() {
     int x = r_ * cos(theta_);
     int y = r_ * sin(theta_);
 }
 
-void scrap::ExampleScene::OnMouseButton(int button, int action, int mods) {
+void salvage::ExampleScene::OnMouseButton(int button, int action, int mods) {
 }
 
-void scrap::ExampleScene::OnMouseScroll(double dx, double dy) {
+void salvage::ExampleScene::OnMouseScroll(double dx, double dy) {
 }
 
-void scrap::ExampleScene::OnMouseMove(double x, double y) {
+void salvage::ExampleScene::OnMouseMove(double x, double y) {
 }
 
-void scrap::ExampleScene::OnMouseEnter() {
+void salvage::ExampleScene::OnMouseEnter() {
 }
 
-void scrap::ExampleScene::OnMouseLeave() {
+void salvage::ExampleScene::OnMouseLeave() {
 }
 
-void scrap::ExampleScene::OnKey(int key, int scancode, int action, int mods) {
+void salvage::ExampleScene::OnKey(int key, int scancode, int action, int mods) {
     printf("Key event (key: %d, scancode: %d, action: %d, mods: %d)\n",
            key, scancode, action, mods);
 }

@@ -13,36 +13,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_SCRAP_SCENE_MODEL_H_
-#define SRC_SCRAP_SCENE_MODEL_H_
+#ifndef SRC_SALVAGE_EXAMPLE_SCENE_H_
+#define SRC_SALVAGE_EXAMPLE_SCENE_H_
 
-#include <vector>
+#include <math.h>
 #include "scrap/scene.h"
-#include "scrap/model.h"
-#include "scrap/camera.h"
-#include "scrap/doodad.h"
 
-namespace scrap {
+namespace salvage {
 
-class ModelScene : public Scene {
+class ExampleScene : public scrap::Scene {
  public:
-  ModelScene();
   virtual void Update(double delta_time);
   virtual void Render();
 
-  virtual void OnMouseButton(int button, int action, int mods) = 0;
-  virtual void OnMouseScroll(double dx, double dy) = 0;
-  virtual void OnMouseMove(double x, double y) = 0;
-  virtual void OnMouseEnter() = 0;
-  virtual void OnMouseLeave() = 0;
-
-  virtual void OnKey(int key, int scancode, int action, int mods) = 0;
+  virtual void OnMouseButton(int button, int action, int mods);
+  virtual void OnMouseScroll(double dx, double dy);
+  virtual void OnMouseMove(double x, double y);
+  virtual void OnMouseEnter();
+  virtual void OnMouseLeave();
+  virtual void OnKey(int key, int scancode, int action, int mods);
 
  private:
-  Camera *active_camera_;
-  std::vector<Doodad*> doodads_;
+  const float theta_velocity_ = M_PI/2;  // pi/2 rad/s
+  float theta_;
+  float r_;
 };
 
-}  // namespace scrap
+}  // namespace salvage
 
-#endif  // SRC_SCRAP_SCENE_MODEL_H_
+#endif  // SRC_SALVAGE_EXAMPLE_SCENE_H_

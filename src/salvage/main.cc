@@ -19,7 +19,7 @@
 
 #include "scrap/engine.h"
 #include "scrap/config.h"
-#include "scrap/example_scene.h"
+#include "salvage/example_scene.h"
 
 int main(int argc, char *argv[]) {
     scrap::Config config;
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
 
     printf("Starting salvage (libscrap sandbox)...\n");
 
-    scrap::ExampleScene es;
+    salvage::ExampleScene es;
     scrap::engine::Init(&es, config);
 
     return 0;

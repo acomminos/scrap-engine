@@ -12,33 +12,28 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+#ifndef SRC_SCRAP_GL_PROGRAM_H_
+#define SRC_SCRAP_GL_PROGRAM_H_
 
-#ifndef SRC_SCRAP_EXAMPLE_SCENE_H_
-#define SRC_SCRAP_EXAMPLE_SCENE_H_
-
-#include <math.h>
-#include "scrap/scene.h"
+#include <string>
+#include "scrap/gl/shader.h"
 
 namespace scrap {
+namespace gl {
 
-class ExampleScene : public Scene {
+class Program {
  public:
-  virtual void Update(double delta_time);
-  virtual void Render();
-
-  virtual void OnMouseButton(int button, int action, int mods);
-  virtual void OnMouseScroll(double dx, double dy);
-  virtual void OnMouseMove(double x, double y);
-  virtual void OnMouseEnter();
-  virtual void OnMouseLeave();
-  virtual void OnKey(int key, int scancode, int action, int mods);
-
+  // Registers a new shader program with OpenGL.
+  Program(Shader *vertex_shader, Shader *fragment_shader);
+  ~Program();
  private:
-  const float theta_velocity_ = M_PI/2;  // pi/2 rad/s
-  float theta_;
-  float r_;
+  Shader *vertex_shader_;
+  Shader *fragment_shader_;
+  int program_;
 };
 
+}  // namespace gl
 }  // namespace scrap
 
-#endif  // SRC_SCRAP_EXAMPLE_SCENE_H_
+#endif  // SRC_SCRAP_GL_PROGRAM_H_

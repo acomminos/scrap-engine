@@ -17,9 +17,10 @@
 #include "scrap/gl/gl_config.h"
 
 Model::Model(const float *vertices, int num_vertices,
-             const float *elements, int num_elements,
+             const int *elements, int num_elements,
              const float *uv,
-             void *texture, int width, int height) {
+             void *texture, int width, int height) :
+             num_vertices_(num_vertices) {
     // TODO(andrew): Models with animations (changing vertex data) shouldn't
     // use STATIC_DRAW. Make this a configurable option.
     glGenBuffers(1, &array_buffer_);
@@ -42,12 +43,13 @@ Model::Model(const float *vertices, int num_vertices,
 
     glGenTextures(1, &texture_);
     glBindTexture(GL_TEXTURE_2D, texture_);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,  texture_);
+    // TODO(andrew): glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,  texture_);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 Model::~Model() {
-    glDeleteBuffers(1, &vertex_buffer_);
+    glDeleteBuffers(1, &array_buffer_);
+    glDeleteBuffers(1, &element_buffer_);
     glDeleteBuffers(1, &uv_buffer_);
     glDeleteTextures(1, &texture_);
 }

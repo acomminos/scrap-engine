@@ -17,7 +17,7 @@
 
 scrap::Doodad::Doodad(Model *model, glm::vec3 pos, glm::vec3 rot,
                       glm::vec3 scale) : model_(model) {
-    matrix_ *= scale * rot * pos;
+    // TODO(andrew)
 }
 
 void scrap::Doodad::Rotate(float x, float y, float z) {

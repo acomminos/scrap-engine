@@ -13,12 +13,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_SCRAP_GL_GL_CONFIG_H_
-#define SRC_SCRAP_GL_GL_CONFIG_H_
+#include "scrap/gl/program.h"
 
-// Helper include for interfacing with GLFW/GLES2
+scrap::gl::Program::Program(scrap::gl::Shader *vertex_shader,
+    scrap::gl::Shader *fragment_shader) :
+    vertex_shader_(vertex_shader),
+    fragment_shader_(fragment_shader) {
+    program_ = glCreateProgram();
+    glAttachShader(program_, vertex_shader->shader());
+    glAttachShader(program_, fragment_shader->shader());
+    glLinkProgram(program_);
+}
 
-#define GLFW_INCLUDE_ES2
-#include <GLFW/glfw3.h>
-
-#endif  // SRC_SCRAP_GL_GL_CONFIG_H_
+scrap::gl::Program::~Program() {
+    glDeleteProgram(program_);
+}

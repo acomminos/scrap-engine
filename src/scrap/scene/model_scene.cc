@@ -14,9 +14,27 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scrap/scene/model_scene.h"
+#include <iterator>
+#include "scrap/gl/gl_config.h"
+
+scrap::ModelScene::ModelScene() {
+    glEnable(GL_DEPTH_TEST);
+}
 
 void scrap::ModelScene::Update(double delta_time) {
 }
 
 void scrap::ModelScene::Render() {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    std::vector<Doodad*>::const_iterator it;
+    for (it = doodads_.cbegin(); it != doodads_.cend(); it++) {
+        Doodad *doodad = *it;
+        // TODO(andrew): group by model to prevent unnecessary buffer swapping
+        Model *model = doodad->model();
+        glBindBuffer(GL_ARRAY_BUFFER, model->array_buffer());
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->element_buffer());
+        // TODO(andrew): setup vertex shader
+        glDrawElements(GL_TRIANGLES, model->num_vertices(), GL_UNSIGNED_INT,
+                       NULL);
+    }
 }

@@ -1,8 +1,9 @@
 set (SOURCE
     engine.cc
-    example_scene.cc
-#    model.cc
-#    doodad.cc
+    gl/shader.cc
+    gl/program.cc
+    model.cc
+    doodad.cc
 )
 
 find_package (PkgConfig REQUIRED)

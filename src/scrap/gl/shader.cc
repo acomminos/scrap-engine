@@ -13,12 +13,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_SCRAP_GL_GL_CONFIG_H_
-#define SRC_SCRAP_GL_GL_CONFIG_H_
+#include "scrap/gl/shader.h"
 
-// Helper include for interfacing with GLFW/GLES2
+scrap::gl::Shader::Shader(scrap::gl::ShaderType type,
+                          std::string source) {
+    const char *c_source = source.c_str();
+    shader_ = glCreateShader(type);
+    glShaderSource(shader_, 1, &c_source, NULL);
+    glCompileShader(shader_);
+}
 
-#define GLFW_INCLUDE_ES2
-#include <GLFW/glfw3.h>
-
-#endif  // SRC_SCRAP_GL_GL_CONFIG_H_
+scrap::gl::Shader::~Shader() {
+    glDeleteShader(shader_);
+}

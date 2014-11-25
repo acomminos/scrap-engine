@@ -13,12 +13,34 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_SCRAP_GL_GL_CONFIG_H_
-#define SRC_SCRAP_GL_GL_CONFIG_H_
+#ifndef SRC_SCRAP_GL_SHADER_H_
+#define SRC_SCRAP_GL_SHADER_H_
 
-// Helper include for interfacing with GLFW/GLES2
+#include <string>
+#include "scrap/gl/gl_config.h"
 
-#define GLFW_INCLUDE_ES2
-#include <GLFW/glfw3.h>
+namespace scrap {
+namespace gl {
 
-#endif  // SRC_SCRAP_GL_GL_CONFIG_H_
+enum ShaderType {
+    Vertex = GL_VERTEX_SHADER,
+    Fragment = GL_VERTEX_SHADER
+};
+
+// A wrapper around GLSL shaders using RAII.
+class Shader {
+ public:
+  // Creates a new shader of the given type with the provided source.
+  // TODO(andrew): error checking.
+  Shader(ShaderType type, std::string source);
+  ~Shader();
+  int shader() { return shader_; }
+ private:
+  ShaderType type_;
+  int shader_;
+};
+
+}  // namespace gl
+}  // namespace scrap
+
+#endif  // SRC_SCRAP_GL_SHADER_H_
