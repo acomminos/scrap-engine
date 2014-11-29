@@ -16,20 +16,22 @@
 #ifndef SRC_SCRAP_DOODAD_H_
 #define SRC_SCRAP_DOODAD_H_
 
+#include <map>
 #include <glm/glm.hpp>
 #include "scrap/model.h"
+#include "scrap/material.h"
 #include "scrap/gl/program.h"
 
 namespace scrap {
 
 // A doodad is an object in the game world. It is given a (preferably shared)
 // model instance to transform and represent in user coordinates.
+// Doodads also have the ability to assign uniforms for use in custom shaders.
 class Doodad {
  public:
-  // Creates a new Doodad with the given model, position, rotation, and scale.
-  Doodad(Model *model, glm::vec3 pos, glm::vec3 rot, glm::vec3 scale);
-  // Creates a new Doodad with the given model located at the origin.
-  Doodad(Model *model) : model_(model) {}
+  // Creates a new Doodad with the given model and material
+  // The created Doodad will be situated at the origin.
+  Doodad(Model &model, Material &material);
   // Rotates the doodad about its current position using the specified values
   // (in radians).
   void Rotate(float x, float y, float z);
@@ -37,12 +39,15 @@ class Doodad {
   void Translate(float x, float y, float z);
   // Scales the doodad by the given scale factors. Applied relatively.
   void Scale(float x, float y, float z);
-  Model* model() { return model_; }
-  // Returns the transformation matrix applied to the Doodad's model.
+  
+  Model &model() { return model_; }
+  Material &material() { return material_; }
+  // Returns the model transformation matrix applied to the Doodad's model.
   glm::mat4 matrix() { return matrix_; }
+
  private:
-  Model *model_;
-  gl::Program *program_;
+  Model &model_;
+  Material &material_;
   glm::mat4 matrix_;
 };
 

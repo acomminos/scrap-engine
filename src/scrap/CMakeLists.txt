@@ -2,8 +2,10 @@ set (SOURCE
     engine.cc
     gl/shader.cc
     gl/program.cc
+    material.cc
     model.cc
     doodad.cc
+    scene/model_scene.cc
 )
 
 find_package (PkgConfig REQUIRED)

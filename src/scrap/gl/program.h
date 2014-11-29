@@ -17,27 +17,59 @@
 #define SRC_SCRAP_GL_PROGRAM_H_
 
 #include <string>
+#include <memory>
+#include <glm/glm.hpp>
 #include "scrap/gl/shader.h"
+#include "scrap/model.h"
 
 namespace scrap {
 namespace gl {
 
 // A wrapper around a GLSL shader program.
-// Shaders attached to this program are provided the following:
-// Attributes:
-// - pos : mat3 (position)
-// Uniforms:
-// - tex : sampler2d (texture)
-// - mvp : mat4 (MVP matrix)
+// Uses std::unique_ptr to manage lifecycle of OpenGL state.
+// All shaders are provided the following parameters:
+// - attrib vec3 pos
+// - attrib vec2 uv
+// - uniform mat4 mvp
+// - uniform sampler2d tex
+// Custom shaders can use uniforms provided by Doodads as input.
 class Program {
  public:
   // Registers a new shader program with OpenGL.
-  Program(Shader *vertex_shader, Shader *fragment_shader);
+  Program();
   ~Program();
+
+  // Attaches the given shaders, and links this program.
+  // Returns an OpenGL error code.
+  int Link(std::unique_ptr<scrap::gl::Shader> vertex_shader,
+           std::unique_ptr<scrap::gl::Shader> fragment_shader);
+  // Instructs OpenGL to use this program and enables vertex attributes.
+  void Begin();
+  // Discards the current GL program and disables vertex attributes.
+  void End();
+
+  // Basic shader properties
+  void SetPositionPointer(uint32_t buffer, uint32_t offset, uint32_t stride);
+  void SetUVMapPointer(uint32_t buffer, uint32_t offset, uint32_t stride);
+  void SetMVPMatrix(const glm::mat4 &mvp);
+  void SetTexture(uint32_t texture);
+  
+  // Custom shader properties
+  void SetUniform(const char *name, int value);
+  void SetUniform(const char *name, float value);
+  void SetVertexAttribPointer(uint32_t index, int32_t size, int32_t type,
+                              bool normalized, uint32_t stride,
+                              const void *pointer);
+
  private:
-  Shader *vertex_shader_;
-  Shader *fragment_shader_;
-  int program_;
+  std::unique_ptr<Shader> vertex_shader_;
+  std::unique_ptr<Shader> fragment_shader_;
+  uint32_t program_;
+  uint32_t u_mvp_;
+  uint32_t u_tex_;
+  uint32_t a_pos_;
+  uint32_t a_uv_;
+
 };
 
 }  // namespace gl

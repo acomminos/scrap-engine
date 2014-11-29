@@ -17,10 +17,12 @@
 #define SRC_SCRAP_SCENE_MODEL_H_
 
 #include <vector>
+#include <map>
 #include "scrap/scene.h"
 #include "scrap/model.h"
 #include "scrap/camera.h"
 #include "scrap/doodad.h"
+#include "scrap/gl/program.h"
 
 namespace scrap {
 
@@ -38,9 +40,19 @@ class ModelScene : public Scene {
 
   virtual void OnKey(int key, int scancode, int action, int mods) = 0;
 
+  // Adds a Doodad to the current scene.
+  void AddDoodad(Doodad *doodad);
+
+  // Obtain the currently active camera in the scene.
+  Camera *active_camera() { return active_camera_; }
+
  private:
   Camera *active_camera_;
-  std::vector<Doodad*> doodads_;
+  // Map programs to Doodads to save on program swaps
+  // TODO(andrew): implement grouping priority queue-like structure to produce
+  // optimal loading scheme
+  std::map<std::string, gl::Program*> programs_;
+  std::map<gl::Program*, std::vector<Doodad*>*> doodads_;
 };
 
 }  // namespace scrap

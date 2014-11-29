@@ -17,6 +17,7 @@
 #define SRC_SCRAP_UTIL_OBJ_LOADER_H_
 
 #include <istream>
+#include <regex>
 #include "scrap/model.h"
 
 // A wavefront .obj file loader with support for vertex mapping and UV
@@ -25,22 +26,41 @@ namespace scrap {
 namespace util {
 namespace OBJLoader {
 
+// x, y, z, optional w
+static const std::regex kVertexRegex = "(\f+)\w+(\f+)\w+(\f+)(?:\w+(\f+))?";
+// v, optional vt, optional vn
+static const std::regex kFaceRegex = "(\d+)(?:\/(\d+)?(?:\/(\d+))?)?";
+
+// Parses the OBJ data provided by the given stream.
 Model* Parse(std::istream& in) {
+    in.flags(std::skipws);
     std::string type;
+    std::vector<int> elements;
+    std::vector<float> vertices;
+    std::vector<float> uv;
     while (!in.eof()) {
-        in.get(type, ' ');
-        if (type.equals("vt")) {
+        std::getline(in, type, ' ');
+        if (type.equals("v")) {
             float x, y, z;
             in >> x;
             in >> y;
             in >> z;
-        }
+            vertices.push_back(x);
+            vertices.push_back(y);
+            vertices.push_back(z);
+            // TODO(andrew): support for w coordinate?
+        } else if (type.equals("vt")) {
+            float u, v;
+            in >> u;
+            in >> v;
+            uv.push_back(u);
+            uv.push_back(v);
+        } else if (type.equals("f")) {
+            float v, vt, vn;
+            std::smatch results;
+            std::regex_match(kFaceRegex, results);
 
-        // Skip until newline terminator (\ or \n)
-        char end;
-        do {
-            end = in.get();
-        } while (end != '\\' && end != '\n')
+        }
     }
     Model *model = new Model();
 }

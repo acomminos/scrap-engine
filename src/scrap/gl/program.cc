@@ -15,16 +15,40 @@
 
 #include "scrap/gl/program.h"
 
-scrap::gl::Program::Program(scrap::gl::Shader *vertex_shader,
-    scrap::gl::Shader *fragment_shader) :
-    vertex_shader_(vertex_shader),
-    fragment_shader_(fragment_shader) {
+scrap::gl::Program::Program() {
     program_ = glCreateProgram();
-    glAttachShader(program_, vertex_shader->shader());
-    glAttachShader(program_, fragment_shader->shader());
-    glLinkProgram(program_);
 }
 
 scrap::gl::Program::~Program() {
     glDeleteProgram(program_);
+}
+
+int scrap::gl::Program::Link(std::unique_ptr<scrap::gl::Shader> vertex_shader,
+    std::unique_ptr<scrap::gl::Shader> fragment_shader) {
+    vertex_shader_ = std::move(vertex_shader);
+    fragment_shader_ = std::move(fragment_shader);
+
+    glAttachShader(program_, vertex_shader->shader());
+    glAttachShader(program_, fragment_shader->shader());
+    glLinkProgram(program_);
+
+    // Retrieve basic shader properties
+    u_mvp_ = glGetUniformLocation(program_, "u_mvp");
+    u_tex_ = glGetUniformLocation(program_, "u_tex");
+    a_pos_ = glGetAttribLocation(program_, "a_pos");
+    a_uv_ = glGetAttribLocation(program_, "a_uv");
+
+    return glGetError();
+}
+
+void scrap::gl::Program::Begin() {
+    glUseProgram(program_);
+    glEnableVertexAttribArray(a_pos_);
+    glEnableVertexAttribArray(a_uv_);
+}
+
+void scrap::gl::Program::End() {
+    glDisableVertexAttribArray(a_pos_);
+    glDisableVertexAttribArray(a_uv_);
+    glUseProgram(0);
 }

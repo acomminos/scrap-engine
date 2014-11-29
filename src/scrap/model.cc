@@ -16,7 +16,7 @@
 #include "scrap/model.h"
 #include "scrap/gl/gl_config.h"
 
-Model::Model(const float *vertices, int num_vertices,
+scrap::Model::Model(const float *vertices, int num_vertices,
              const int *elements, int num_elements,
              const float *uv,
              void *texture, int width, int height) :
@@ -47,7 +47,7 @@ Model::Model(const float *vertices, int num_vertices,
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-Model::~Model() {
+scrap::Model::~Model() {
     glDeleteBuffers(1, &array_buffer_);
     glDeleteBuffers(1, &element_buffer_);
     glDeleteBuffers(1, &uv_buffer_);

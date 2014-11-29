@@ -13,32 +13,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_SCRAP_MODEL_H_
-#define SRC_SCRAP_MODEL_H_
+#ifndef SRC_SCRAP_SHADER_BASIC_PROGRAM_H_
+#define SRC_SCRAP_SHADER_BASIC_PROGRAM_H_
 
-#include <cstdint>
+#include "scrap/gl/program.h"
 
 namespace scrap {
+namespace shader {
 
-// A model assignable to a Doodad. Contains vertex data in an element buffer.
-// Uses the RAII model for OpenGL buffer allocation.
-class Model {
+// A basic OpenGL shader program with support for primitive drawing, UV
+// textures, and transforms.
+class BasicProgram : public gl::Program {
  public:
-  Model(const float *vertices, int num_vertices, const int *elements,
-        int num_elements, const float *uv, void *texture, int width,
-        int height);
-  ~Model();
-  uint32_t num_vertices() { return num_vertices_; }
-  uint32_t array_buffer() { return array_buffer_; }
-  uint32_t element_buffer() { return element_buffer_; }
+  BasicProgram();
+  ~BasicProgram();
+  virtual void DrawDoodad(ModelScene *scene, Doodad *doodad);
  private:
-  uint32_t num_vertices_;
-  uint32_t array_buffer_;
-  uint32_t element_buffer_;
-  uint32_t uv_buffer_;
-  uint32_t texture_;
 };
 
+}  // namespace shader
 }  // namespace scrap
 
-#endif  // SRC_SCRAP_MODEL_H_
+#endif  // SRC_SCRAP_SHADER_BASIC_PROGRAM_H_

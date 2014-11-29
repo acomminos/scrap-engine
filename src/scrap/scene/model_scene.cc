@@ -15,10 +15,13 @@
 
 #include "scrap/scene/model_scene.h"
 #include <iterator>
+#include <cassert>
 #include "scrap/gl/gl_config.h"
 
 scrap::ModelScene::ModelScene() {
     glEnable(GL_DEPTH_TEST);
+    
+    // TODO(andrew): populate programs_
 }
 
 void scrap::ModelScene::Update(double delta_time) {
@@ -26,15 +29,34 @@ void scrap::ModelScene::Update(double delta_time) {
 
 void scrap::ModelScene::Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    std::vector<Doodad*>::const_iterator it;
-    for (it = doodads_.cbegin(); it != doodads_.cend(); it++) {
-        Doodad *doodad = *it;
-        // TODO(andrew): group by model to prevent unnecessary buffer swapping
-        Model *model = doodad->model();
-        glBindBuffer(GL_ARRAY_BUFFER, model->array_buffer());
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model->element_buffer());
-        // TODO(andrew): setup vertex shader
-        glDrawElements(GL_TRIANGLES, model->num_vertices(), GL_UNSIGNED_INT,
-                       NULL);
+    glm::mat4 mat_view = active_camera_->matrix();
+    glm::mat4 mat_vproj = mat_view * glm::mat4();  // TODO(andrew): implement projection matrix
+    for (auto it_map = doodads_.cbegin(); it_map != doodads_.cend(); it_map++) {
+        gl::Program *program = it_map->first;
+        std::vector<Doodad*> *list = it_map->second;
+
+        program->Begin();
+        for (auto it_vec = list->cbegin(); it_vec != list->cend(); it_vec++) {
+            Doodad *doodad = *it_vec;
+            Model &model = doodad->model();
+            Material &material = doodad->material();
+            glm::mat4 mat_model = doodad->matrix();
+            program->SetMVPMatrix(mat_model * mat_vproj);
+            program->SetTexture(material.texture());
+            glBindBuffer(GL_ARRAY_BUFFER, model.array_buffer());
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.element_buffer());
+            // TODO(andrew): setup vertex shader
+            glDrawElements(GL_TRIANGLES, model.num_vertices(), GL_UNSIGNED_INT,
+                           NULL);
+        }
+        program->End();
     }
+}
+
+void scrap::ModelScene::AddDoodad(Doodad *doodad) {
+    std::string program_name = doodad->material().program_name();
+    gl::Program *program = programs_[program_name];
+    assert(program != nullptr);
+    std::vector<Doodad*> *doodad_list = doodads_[program];
+    doodad_list->push_back(doodad);
 }

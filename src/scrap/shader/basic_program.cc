@@ -13,22 +13,17 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "scrap/doodad.h"
-#include <glm/gtc/matrix_transform.hpp>
+#include "scrap/shader/basic_program.h"
 
-scrap::Doodad::Doodad(Model &model, Material &material) : model_(model),
-                                                          material_(material) {
-    // TODO(andrew)
+scrap::shader::BasicProgram::BasicProgram() : Program(nullptr, nullptr) {
+
 }
 
-void scrap::Doodad::Rotate(float x, float y, float z) {
-    // TODO(andrew)
+scrap::shader::BasicProgram::~BasicProgram() {
+
 }
 
-void scrap::Doodad::Translate(float x, float y, float z) {
-    matrix_ = glm::translate(matrix_, glm::vec3(x, y, z));
-}
-
-void scrap::Doodad::Scale(float x, float y, float z) {
-    matrix_ = glm::scale(matrix_, glm::vec3(x, y, z));
+void scrap::shader::BasicProgram::DrawDoodad(ModelScene *scene,
+                                             Doodad *doodad) {
+    
 }
