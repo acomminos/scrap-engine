@@ -29,7 +29,7 @@ void scrap::ModelScene::Update(double delta_time) {
 
 void scrap::ModelScene::Render() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glm::mat4 mat_view = active_camera_->matrix();
+    glm::mat4 mat_view = active_camera_->GetTransform();
     glm::mat4 mat_vproj = mat_view * glm::mat4();  // TODO(andrew): implement projection matrix
     for (auto it_map = doodads_.cbegin(); it_map != doodads_.cend(); it_map++) {
         gl::Program *program = it_map->first;
@@ -43,6 +43,7 @@ void scrap::ModelScene::Render() {
             glm::mat4 mat_model = doodad->matrix();
             program->SetMVPMatrix(mat_model * mat_vproj);
             program->SetTexture(material.texture());
+
             glBindBuffer(GL_ARRAY_BUFFER, model.array_buffer());
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.element_buffer());
             // TODO(andrew): setup vertex shader
@@ -51,6 +52,10 @@ void scrap::ModelScene::Render() {
         }
         program->End();
     }
+}
+
+void scrap::ModelScene::OnSizeChange(int width, int height) {
+    glViewport(0, 0, width, height);
 }
 
 void scrap::ModelScene::AddDoodad(Doodad *doodad) {

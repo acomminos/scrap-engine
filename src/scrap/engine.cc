@@ -25,9 +25,12 @@ void scrap::engine::Init(scrap::Scene *scene, scrap::Config config) {
 
     glfwInit();
 
-    // TODO(andrew): ensure that config modes are sane. USE CONFIG!
+    GLFWmonitor *monitor = NULL;
+    if (config.fullscreen())
+        monitor = glfwGetPrimaryMonitor();
+
     window_ = glfwCreateWindow(config.width(), config.height(),
-                               "Scrap Engine", NULL, NULL);
+                               "Scrap Engine", monitor, NULL);
     if (!window_) {
         glfwTerminate();
         return;
@@ -39,6 +42,9 @@ void scrap::engine::Init(scrap::Scene *scene, scrap::Config config) {
     glfwSetMouseButtonCallback(window_, [](GLFWwindow *, int button, int action,
                                            int mods) {
         scene_stack_.top()->OnMouseButton(button, action, mods);
+    });
+    glfwSetFramebufferSizeCallback(window_, [](GLFWwindow*, int width, int height) {
+        scene_stack_.top()->OnSizeChange(width, height);
     });
 
     glfwMakeContextCurrent(window_);

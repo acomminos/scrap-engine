@@ -31,6 +31,7 @@ class ModelScene : public Scene {
   ModelScene();
   virtual void Update(double delta_time);
   virtual void Render();
+  virtual void OnSizeChange(int width, int height) ;
 
   virtual void OnMouseButton(int button, int action, int mods) = 0;
   virtual void OnMouseScroll(double dx, double dy) = 0;

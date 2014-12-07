@@ -13,25 +13,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_SCRAP_SCENE_H_
-#define SRC_SCRAP_SCENE_H_
+#include "scrap/texture.h"
 
-namespace scrap {
+scrap::Texture::Texture(int format, const char *data, int width, int height) {
+    glGenTextures(1, &texture_);
+    glBindTexture(GL_TEXTURE_2D, texture_);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, format, width, height, 0, 
+                 format, GL_UNSIGNED_BYTE, data);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
 
-class Scene {
- public:
-  virtual void Update(double delta_time) = 0;
-  virtual void Render() = 0;
-
-  virtual void OnMouseButton(int button, int action, int mods) = 0;
-  virtual void OnMouseScroll(double dx, double dy) = 0;
-  virtual void OnMouseMove(double x, double y) = 0;
-  virtual void OnMouseEnter() = 0;
-  virtual void OnMouseLeave() = 0;
-  virtual void OnKey(int key, int scancode, int action, int mods) = 0;
-  virtual void OnSizeChange(int width, int height) = 0;
-};
-
-}  // namespace scrap
-
-#endif  // SRC_SCRAP_SCENE_H_
+scrap::Texture::~Texture() {
+}

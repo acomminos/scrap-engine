@@ -20,18 +20,28 @@
 
 namespace scrap {
 
-// The camera provides an interface to producing a 'view' matrix in the
-// MVP (model-view-projection) transformation strategy.
+// The camera provides an interface to producing a view and projection matrix
+// in the MVP (model-view-projection) transformation strategy.
 class Camera {
  public:
-  Camera(glm::vec3 pos, glm::vec3 rot);
+  Camera(float fov, float ratio, float near, float far);
   // Rotates the camera about its current position by the given amount of
   // radians.
   void Rotate(float x, float y, float z);
   void Translate(float x, float y, float z);
-  glm::mat4 matrix() { return matrix_; }
+  void fov(float fov) { fov_ = fov; }
+  void ratio(float ratio) { ratio_ = ratio; }
+  void near(float near) { near_ = near; }
+  void far(float far) { far_ = far; }
+  glm::mat4 GetTransform();
+  glm::mat4 ToModelCoords(const glm::mat4 &mat);
  private:
-  glm::mat4 matrix_;
+  float fov_;
+  float ratio_;
+  float near_;
+  float far_;
+  glm::mat4 rotation_;
+  glm::vec3 position_;
 };
 
 }  // namespace scrap

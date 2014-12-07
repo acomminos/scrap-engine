@@ -23,8 +23,10 @@ namespace salvage {
 
 class ExampleScene : public scrap::Scene {
  public:
+  ExampleScene();
   virtual void Update(double delta_time);
   virtual void Render();
+  virtual void OnSizeChange(int width, int height);
 
   virtual void OnMouseButton(int button, int action, int mods);
   virtual void OnMouseScroll(double dx, double dy);

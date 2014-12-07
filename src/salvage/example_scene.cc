@@ -16,6 +16,11 @@
 #include "salvage/example_scene.h"
 #include <cstdio>
 #include "scrap/engine.h"
+#include "scrap/util/obj_loader.h"
+
+salvage::ExampleScene::ExampleScene() {
+    // TODO: load models
+}
 
 void salvage::ExampleScene::Update(double delta_time) {
     theta_ = fmod(theta_ + (theta_velocity_ * delta_time), 2*M_PI);
@@ -25,6 +30,9 @@ void salvage::ExampleScene::Update(double delta_time) {
 void salvage::ExampleScene::Render() {
     int x = r_ * cos(theta_);
     int y = r_ * sin(theta_);
+}
+
+void salvage::ExampleScene::OnSizeChange(int width, int height) {
 }
 
 void salvage::ExampleScene::OnMouseButton(int button, int action, int mods) {

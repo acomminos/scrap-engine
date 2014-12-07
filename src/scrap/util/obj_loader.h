@@ -18,6 +18,7 @@
 
 #include <istream>
 #include <regex>
+#include <cassert>
 #include "scrap/model.h"
 
 // A wavefront .obj file loader with support for vertex mapping and UV
@@ -26,43 +27,71 @@ namespace scrap {
 namespace util {
 namespace OBJLoader {
 
+// A vertex described by (x,y,z).
+// TODO(andrew): move?
+typedef struct {
+    float x, y, z;
+} Vertex;
+
+// A tuple of texture coordinates (u,v).
+typedef struct {
+    float u, v;
+} UV;
+
+// A vertex with texture coordinates.
+typedef struct {
+    Vertex &vertex;
+    UV &uv;
+} Element;
+
 // x, y, z, optional w
-static const std::regex kVertexRegex = "(\f+)\w+(\f+)\w+(\f+)(?:\w+(\f+))?";
+static const std::regex kVertexRegex = std::regex("(\f+)\w+(\f+)\w+(\f+)(?:\w+(\f+))?");
 // v, optional vt, optional vn
-static const std::regex kFaceRegex = "(\d+)(?:\/(\d+)?(?:\/(\d+))?)?";
+static const std::regex kFaceRegex = std::regex("(\d+)(?:\/(\d+)?(?:\/(\d+))?)?");
 
 // Parses the OBJ data provided by the given stream.
 Model* Parse(std::istream& in) {
-    in.flags(std::skipws);
     std::string type;
-    std::vector<int> elements;
-    std::vector<float> vertices;
-    std::vector<float> uv;
+    std::vector<Vertex> vertices;
+    std::vector<UV> uvs;
+    std::vector<Element> elements;
     while (!in.eof()) {
         std::getline(in, type, ' ');
-        if (type.equals("v")) {
+        if (type.compare("v") == 0) {
             float x, y, z;
             in >> x;
             in >> y;
             in >> z;
-            vertices.push_back(x);
-            vertices.push_back(y);
-            vertices.push_back(z);
+            vertices.push_back({x, y, z});
             // TODO(andrew): support for w coordinate?
-        } else if (type.equals("vt")) {
+        } else if (type.compare("vt") == 0) {
             float u, v;
             in >> u;
             in >> v;
-            uv.push_back(u);
-            uv.push_back(v);
-        } else if (type.equals("f")) {
-            float v, vt, vn;
-            std::smatch results;
-            std::regex_match(kFaceRegex, results);
+            uvs.push_back({u, v});
+        } else if (type.compare("f") == 0) {
+            std::string line;
+            std::getline(in, line);
+            int v, vt, vn;
+            std::smatch m;
+            std::regex_match(line, m, kFaceRegex);
+            if (m.empty())
+                assert("No matches found for face regex!");
+            else if (m.size() < 2)
+                assert("Not enough matches for face line!");
+            if (m[1].matched)
+                v = atoi(static_cast<std::string>(m[1]).c_str());
+            if (m[2].matched)
+                vt = atoi(static_cast<std::string>(m[2]).c_str());
+            if (m[3].matched)
+                vn = atoi(static_cast<std::string>(m[3]).c_str());
 
+            Vertex &vertex = vertices[v];
+            UV &uv = uvs[vt];
+            elements.push_back({vertex, uv});
         }
     }
-    Model *model = new Model();
+    //Model *model = new Model();
 }
 
 }  // namespace OBJLoader
