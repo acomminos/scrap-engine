@@ -41,6 +41,8 @@ void scrap::ModelScene::Render() {
             Model &model = doodad->model();
             Material &material = doodad->material();
             glm::mat4 mat_model = doodad->matrix();
+            program->SetPositionPointer(model.array_buffer(), 0, 0);
+            program->SetUVMapPointer(model.uv_buffer(), 0, 0);
             program->SetMVPMatrix(mat_model * mat_vproj);
             program->SetTexture(material.texture().texture());
 
@@ -56,6 +58,7 @@ void scrap::ModelScene::Render() {
 
 void scrap::ModelScene::OnSizeChange(int width, int height) {
     glViewport(0, 0, width, height);
+    active_camera_->set_ratio((float)width/(float)height);
 }
 
 void scrap::ModelScene::AddDoodad(Doodad &doodad) {

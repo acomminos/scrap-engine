@@ -31,7 +31,7 @@ class ModelScene : public Scene {
   ModelScene();
   virtual void Update(double delta_time);
   virtual void Render();
-  virtual void OnSizeChange(int width, int height) ;
+  virtual void OnSizeChange(int width, int height);
 
   virtual void OnMouseButton(int button, int action, int mods) = 0;
   virtual void OnMouseScroll(double dx, double dy) = 0;
@@ -44,8 +44,9 @@ class ModelScene : public Scene {
   // Adds a Doodad to the current scene.
   void AddDoodad(Doodad &doodad);
 
-  // Obtain the currently active camera in the scene.
   Camera *active_camera() const { return active_camera_; }
+  void set_active_camera(Camera *camera) { active_camera_ = camera; }
+
 
  private:
   Camera *active_camera_;

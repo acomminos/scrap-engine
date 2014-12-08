@@ -25,8 +25,6 @@ class ExampleScene : public scrap::ModelScene {
  public:
   ExampleScene();
   virtual void Update(double delta_time);
-  virtual void Render();
-  virtual void OnSizeChange(int width, int height);
 
   virtual void OnMouseButton(int button, int action, int mods);
   virtual void OnMouseScroll(double dx, double dy);
@@ -39,6 +37,7 @@ class ExampleScene : public scrap::ModelScene {
   const float theta_velocity_ = M_PI/2;  // pi/2 rad/s
   float theta_;
   float r_;
+  scrap::Camera camera_;
 };
 
 }  // namespace salvage

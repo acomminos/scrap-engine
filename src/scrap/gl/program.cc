@@ -55,12 +55,18 @@ void scrap::gl::Program::End() {
 
 void scrap::gl::Program::SetPositionPointer(GLuint buffer, GLuint offset,
                                             GLuint stride) {
-
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glVertexAttribPointer(a_pos_, sizeof(float) * 3, GL_FLOAT, false, stride,
+                          NULL);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void scrap::gl::Program::SetUVMapPointer(GLuint buffer, GLuint offset,
                                          GLuint stride) {
-
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glVertexAttribPointer(a_uv_, sizeof(float) * 2, GL_FLOAT, false, stride,
+                          NULL);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void scrap::gl::Program::SetMVPMatrix(const glm::mat4 &mvp) {

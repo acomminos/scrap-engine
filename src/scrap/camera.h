@@ -29,10 +29,10 @@ class Camera {
   // radians.
   void Rotate(float x, float y, float z);
   void Translate(float x, float y, float z);
-  void fov(float fov) { fov_ = fov; }
-  void ratio(float ratio) { ratio_ = ratio; }
-  void near(float near) { near_ = near; }
-  void far(float far) { far_ = far; }
+  void set_fov(float fov) { fov_ = fov; }
+  void set_ratio(float ratio) { ratio_ = ratio; }
+  void set_near(float near) { near_ = near; }
+  void set_far(float far) { far_ = far; }
   glm::mat4 GetTransform();
   glm::mat4 ToModelCoords(const glm::mat4 &mat);
  private:

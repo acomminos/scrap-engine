@@ -40,16 +40,10 @@ scrap::Model::Model(const float *vertices, int num_vertices,
 
     glBindBuffer(0, GL_ARRAY_BUFFER);
     glBindBuffer(0, GL_ELEMENT_ARRAY_BUFFER);
-
-    glGenTextures(1, &texture_);
-    glBindTexture(GL_TEXTURE_2D, texture_);
-    // TODO(andrew): glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0,  texture_);
-    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 scrap::Model::~Model() {
     glDeleteBuffers(1, &array_buffer_);
     glDeleteBuffers(1, &element_buffer_);
     glDeleteBuffers(1, &uv_buffer_);
-    glDeleteTextures(1, &texture_);
 }

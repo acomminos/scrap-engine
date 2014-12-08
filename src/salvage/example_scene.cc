@@ -18,21 +18,14 @@
 #include "scrap/engine.h"
 #include "scrap/util/obj_loader.h"
 
-salvage::ExampleScene::ExampleScene() {
-    // TODO: load models
+salvage::ExampleScene::ExampleScene() : ModelScene(),
+                                        camera_(M_PI/2, 1.33, 1, 1000) {
+    set_active_camera(&camera_);
 }
 
 void salvage::ExampleScene::Update(double delta_time) {
     theta_ = fmod(theta_ + (theta_velocity_ * delta_time), 2*M_PI);
     // printf("dt: %f, t: %fpi\n", delta_time, theta_/M_PI);
-}
-
-void salvage::ExampleScene::Render() {
-    int x = r_ * cos(theta_);
-    int y = r_ * sin(theta_);
-}
-
-void salvage::ExampleScene::OnSizeChange(int width, int height) {
 }
 
 void salvage::ExampleScene::OnMouseButton(int button, int action, int mods) {
