@@ -20,7 +20,6 @@
 #include <glm/glm.hpp>
 #include "scrap/model.h"
 #include "scrap/material.h"
-#include "scrap/gl/program.h"
 
 namespace scrap {
 
@@ -40,10 +39,10 @@ class Doodad {
   // Scales the doodad by the given scale factors. Applied relatively.
   void Scale(float x, float y, float z);
   
-  Model &model() { return model_; }
-  Material &material() { return material_; }
+  Model &model() const { return model_; }
+  Material &material() const { return material_; }
   // Returns the model transformation matrix applied to the Doodad's model.
-  glm::mat4 matrix() { return matrix_; }
+  glm::mat4 matrix() const { return matrix_; }
 
  private:
   Model &model_;

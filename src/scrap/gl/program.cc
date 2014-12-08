@@ -52,3 +52,21 @@ void scrap::gl::Program::End() {
     glDisableVertexAttribArray(a_uv_);
     glUseProgram(0);
 }
+
+void scrap::gl::Program::SetPositionPointer(GLuint buffer, GLuint offset,
+                                            GLuint stride) {
+
+}
+
+void scrap::gl::Program::SetUVMapPointer(GLuint buffer, GLuint offset,
+                                         GLuint stride) {
+
+}
+
+void scrap::gl::Program::SetMVPMatrix(const glm::mat4 &mvp) {
+
+}
+
+void scrap::gl::Program::SetTexture(GLuint texture) {
+
+}

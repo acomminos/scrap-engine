@@ -28,9 +28,9 @@ void scrap::ModelScene::Update(double delta_time) {
 }
 
 void scrap::ModelScene::Render() {
+    glClearColor(0, 0, 0, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glm::mat4 mat_view = active_camera_->GetTransform();
-    glm::mat4 mat_vproj = mat_view * glm::mat4();  // TODO(andrew): implement projection matrix
+    glm::mat4 mat_vproj = active_camera_->GetTransform();
     for (auto it_map = doodads_.cbegin(); it_map != doodads_.cend(); it_map++) {
         gl::Program *program = it_map->first;
         std::vector<Doodad*> *list = it_map->second;
@@ -42,7 +42,7 @@ void scrap::ModelScene::Render() {
             Material &material = doodad->material();
             glm::mat4 mat_model = doodad->matrix();
             program->SetMVPMatrix(mat_model * mat_vproj);
-            program->SetTexture(material.texture());
+            program->SetTexture(material.texture().texture());
 
             glBindBuffer(GL_ARRAY_BUFFER, model.array_buffer());
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.element_buffer());
@@ -58,10 +58,8 @@ void scrap::ModelScene::OnSizeChange(int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-void scrap::ModelScene::AddDoodad(Doodad *doodad) {
-    std::string program_name = doodad->material().program_name();
-    gl::Program *program = programs_[program_name];
-    assert(program != nullptr);
-    std::vector<Doodad*> *doodad_list = doodads_[program];
-    doodad_list->push_back(doodad);
+void scrap::ModelScene::AddDoodad(Doodad &doodad) {
+    gl::Program &program = doodad.material().program();
+    std::vector<Doodad*> *doodad_list = doodads_[&program];
+    doodad_list->push_back(&doodad);
 }

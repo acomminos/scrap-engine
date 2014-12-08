@@ -14,8 +14,3 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scrap/material.h"
-
-scrap::Material scrap::Material::RGBA(const char *texture, int width,
-                                      const int *uv, int num_coords) {
-
-}

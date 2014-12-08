@@ -16,12 +16,12 @@
 #ifndef SRC_SALVAGE_EXAMPLE_SCENE_H_
 #define SRC_SALVAGE_EXAMPLE_SCENE_H_
 
-#include <math.h>
-#include "scrap/scene.h"
+#include <cmath>
+#include "scrap/scene/model_scene.h"
 
 namespace salvage {
 
-class ExampleScene : public scrap::Scene {
+class ExampleScene : public scrap::ModelScene {
  public:
   ExampleScene();
   virtual void Update(double delta_time);

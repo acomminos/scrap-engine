@@ -18,31 +18,23 @@
 
 #include <string>
 #include <map>
-#include "gl/gl_config.h"
+#include "scrap/gl/gl_config.h"
+#include "scrap/gl/program.h"
+#include "scrap/texture.h"
 
 namespace scrap {
 
-// A material contains a texture and UV coordinates for a particular mesh.
-// Materials can also specify custom shader programs to use.
+// A material contains a texture with a particular shader.
 class Material {
  public:
-  static Material RGBA(const char *texture, int width, const int *uv,
-                       int num_coords);
+  Material(Texture &texture, gl::Program &program) : texture_(texture),
+                                                     program_(program) {};
   ~Material();
-  uint32_t format() { return format_; }
-  uint32_t texture() { return texture_; }
-  uint32_t uv_buffer() { return uv_buffer_; }
-  uint32_t num_coords() { return num_coords_; }
-  std::string program_name() { return program_name_; }
+  Texture &texture() const { return texture_; }
+  gl::Program &program() const { return program_; }
  private:
-  Material(int format, const char *texture, int width, const int *uv, int num_coords);
-  uint32_t format_;
-  // A TEXTURE_2D buffer.
-  uint32_t texture_;
-  // An array buffer storing (u,v) tuples.
-  uint32_t uv_buffer_;
-  uint32_t num_coords_;
-  std::string program_name_;
+  Texture &texture_;
+  gl::Program &program_;
 
   // Sets a custom shader uniform to use in a custom shader.
   void SetCustomUniform(std::string name, int value) {

@@ -20,7 +20,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include "scrap/gl/shader.h"
-#include "scrap/model.h"
+#include "scrap/gl/gl_config.h"
 
 namespace scrap {
 namespace gl {
@@ -49,26 +49,25 @@ class Program {
   void End();
 
   // Basic shader properties
-  void SetPositionPointer(uint32_t buffer, uint32_t offset, uint32_t stride);
-  void SetUVMapPointer(uint32_t buffer, uint32_t offset, uint32_t stride);
+  void SetPositionPointer(GLuint buffer, GLuint offset, GLuint stride);
+  void SetUVMapPointer(GLuint buffer, GLuint offset, GLuint stride);
   void SetMVPMatrix(const glm::mat4 &mvp);
-  void SetTexture(uint32_t texture);
+  void SetTexture(GLuint texture);
   
-  // Custom shader properties
-  void SetUniform(const char *name, int value);
-  void SetUniform(const char *name, float value);
-  void SetVertexAttribPointer(uint32_t index, int32_t size, int32_t type,
-                              bool normalized, uint32_t stride,
-                              const void *pointer);
-
+  // TODO(andrew): Custom shader properties
+  void SetUniform(const char *name, int value) {};
+  void SetUniform(const char *name, float value) {};
+  void SetVertexAttribPointer(GLuint index, int32_t size, int32_t type,
+                              bool normalized, GLuint stride,
+                              const void *pointer) {};
  private:
   std::unique_ptr<Shader> vertex_shader_;
   std::unique_ptr<Shader> fragment_shader_;
-  uint32_t program_;
-  uint32_t u_mvp_;
-  uint32_t u_tex_;
-  uint32_t a_pos_;
-  uint32_t a_uv_;
+  GLuint program_;
+  GLuint u_mvp_;
+  GLuint u_tex_;
+  GLuint a_pos_;
+  GLuint a_uv_;
 
 };
 

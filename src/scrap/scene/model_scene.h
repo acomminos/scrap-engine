@@ -42,16 +42,14 @@ class ModelScene : public Scene {
   virtual void OnKey(int key, int scancode, int action, int mods) = 0;
 
   // Adds a Doodad to the current scene.
-  void AddDoodad(Doodad *doodad);
+  void AddDoodad(Doodad &doodad);
 
   // Obtain the currently active camera in the scene.
-  Camera *active_camera() { return active_camera_; }
+  Camera *active_camera() const { return active_camera_; }
 
  private:
   Camera *active_camera_;
   // Map programs to Doodads to save on program swaps
-  // TODO(andrew): implement grouping priority queue-like structure to produce
-  // optimal loading scheme
   std::map<std::string, gl::Program*> programs_;
   std::map<gl::Program*, std::vector<Doodad*>*> doodads_;
 };

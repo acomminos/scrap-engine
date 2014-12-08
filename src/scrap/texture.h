@@ -25,6 +25,7 @@ class Texture {
   public:
     Texture(int format, const char *data, int width, int height);
     ~Texture();
+    GLuint texture() const { return texture_; }
   private:
     GLuint texture_;
 };
