@@ -13,16 +13,4 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "scrap/texture.h"
-
-scrap::Texture::Texture(int format, const char *data, int width, int height) {
-    glGenTextures(1, &texture_);
-    glBindTexture(GL_TEXTURE_2D, texture_);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, 
-                 format, GL_UNSIGNED_BYTE, data);
-    glBindTexture(GL_TEXTURE_2D, 0);
-}
-
-scrap::Texture::~Texture() {
-    glDeleteTextures(1, &texture_);
-}
+#include "scrap/gl/material.h"

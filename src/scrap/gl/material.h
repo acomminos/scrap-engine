@@ -20,9 +20,10 @@
 #include <map>
 #include "scrap/gl/gl_config.h"
 #include "scrap/gl/program.h"
-#include "scrap/texture.h"
+#include "scrap/gl/texture.h"
 
 namespace scrap {
+namespace gl {
 
 // A material contains a texture with a particular shader.
 class Material {
@@ -48,6 +49,7 @@ class Material {
   std::map<std::string, float> custom_float_uniforms_;
 };
 
+}  // namespace gl
 }  // namespace scrap
 
 #endif  // SRC_SCRAP_MATERIAL_H_

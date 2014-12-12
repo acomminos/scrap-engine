@@ -16,8 +16,8 @@
 #include "scrap/doodad.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-scrap::Doodad::Doodad(Model &model, Material &material) : model_(model),
-                                                          material_(material) {
+scrap::Doodad::Doodad(gl::Model &model, gl::Material &material) : model_(model),
+                                                           material_(material) {
     // TODO(andrew)
 }
 

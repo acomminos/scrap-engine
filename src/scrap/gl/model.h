@@ -19,6 +19,7 @@
 #include <cstdint>
 
 namespace scrap {
+namespace gl {
 
 // A model assignable to a Doodad. Contains vertex data in an element buffer.
 // Uses the RAII model for OpenGL buffer allocation.
@@ -39,6 +40,7 @@ class Model {
   uint32_t uv_buffer_;
 };
 
+}  // namespace gl
 }  // namespace scrap
 
 #endif  // SRC_SCRAP_MODEL_H_

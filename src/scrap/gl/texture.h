@@ -19,6 +19,7 @@
 #include "scrap/gl/gl_config.h"
 
 namespace scrap {
+namespace gl {
 
 // A wrapper around an RGBA 2D OpenGL texture.
 class Texture {
@@ -30,6 +31,7 @@ class Texture {
     GLuint texture_;
 };
 
+};  // namespace gl
 };  // namespace scrap
 
 #endif  // SRC_SCRAP_TEXTURE_H_

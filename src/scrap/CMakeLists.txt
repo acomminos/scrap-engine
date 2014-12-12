@@ -3,9 +3,9 @@ set (SOURCE
     camera.cc
     gl/shader.cc
     gl/program.cc
-    texture.cc
-    material.cc
-    model.cc
+    gl/texture.cc
+    gl/material.cc
+    gl/model.cc
     doodad.cc
     scene/model_scene.cc
 )

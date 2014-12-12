@@ -38,8 +38,8 @@ void scrap::ModelScene::Render() {
         program->Begin();
         for (auto it_vec = list->cbegin(); it_vec != list->cend(); it_vec++) {
             Doodad *doodad = *it_vec;
-            Model &model = doodad->model();
-            Material &material = doodad->material();
+            gl::Model &model = doodad->model();
+            gl::Material &material = doodad->material();
             glm::mat4 mat_model = doodad->matrix();
             program->SetPositionPointer(model.array_buffer(), 0, 0);
             program->SetUVMapPointer(model.uv_buffer(), 0, 0);

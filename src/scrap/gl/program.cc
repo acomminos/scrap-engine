@@ -70,9 +70,9 @@ void scrap::gl::Program::SetUVMapPointer(GLuint buffer, GLuint offset,
 }
 
 void scrap::gl::Program::SetMVPMatrix(const glm::mat4 &mvp) {
-
+    //glUniformMatrix(u_mvp_, mvp.
 }
 
 void scrap::gl::Program::SetTexture(GLuint texture) {
-
+    glUniform1i(u_tex_, texture);
 }

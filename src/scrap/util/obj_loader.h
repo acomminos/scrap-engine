@@ -19,7 +19,7 @@
 #include <istream>
 #include <regex>
 #include <cassert>
-#include "scrap/model.h"
+#include "scrap/gl/model.h"
 
 // A wavefront .obj file loader with support for vertex mapping and UV
 // coordinates.
@@ -45,12 +45,13 @@ typedef struct {
 } Element;
 
 // x, y, z, optional w
-static const std::regex kVertexRegex = std::regex("(\f+)\w+(\f+)\w+(\f+)(?:\w+(\f+))?");
+static const std::regex kVertexRegex = std::regex(R"((\f+)\w+(\f+)\w+(\f+)(?:\w+(\f+))?)");
 // v, optional vt, optional vn
-static const std::regex kFaceRegex = std::regex("(\d+)(?:\/(\d+)?(?:\/(\d+))?)?");
+static const std::regex kFaceRegex = std::regex(R"((\d+)(?:\/(\d+)?(?:\/(\d+))?)?)");
 
-// Parses the OBJ data provided by the given stream.
-Model* Parse(std::istream& in) {
+// Loads the OBJ data from the provided input stream into the model given
+// Returns true if the operation was a success.
+bool Parse(std::istream& in, gl::Model &model) {
     std::string type;
     std::vector<Vertex> vertices;
     std::vector<UV> uvs;
@@ -91,7 +92,6 @@ Model* Parse(std::istream& in) {
             elements.push_back({vertex, uv});
         }
     }
-    //Model *model = new Model();
 }
 
 }  // namespace OBJLoader

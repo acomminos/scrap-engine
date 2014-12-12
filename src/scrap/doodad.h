@@ -18,8 +18,8 @@
 
 #include <map>
 #include <glm/glm.hpp>
-#include "scrap/model.h"
-#include "scrap/material.h"
+#include "scrap/gl/model.h"
+#include "scrap/gl/material.h"
 
 namespace scrap {
 
@@ -30,7 +30,7 @@ class Doodad {
  public:
   // Creates a new Doodad with the given model and material
   // The created Doodad will be situated at the origin.
-  Doodad(Model &model, Material &material);
+  Doodad(gl::Model &model, gl::Material &material);
   // Rotates the doodad about its current position using the specified values
   // (in radians).
   void Rotate(float x, float y, float z);
@@ -39,14 +39,15 @@ class Doodad {
   // Scales the doodad by the given scale factors. Applied relatively.
   void Scale(float x, float y, float z);
   
-  Model &model() const { return model_; }
-  Material &material() const { return material_; }
+  gl::Model &model() const { return model_; }
+  gl::Material &material() const { return material_; }
   // Returns the model transformation matrix applied to the Doodad's model.
   glm::mat4 matrix() const { return matrix_; }
 
  private:
-  Model &model_;
-  Material &material_;
+  gl::Model &model_;
+
+  gl::Material &material_;
   glm::mat4 matrix_;
 };
 

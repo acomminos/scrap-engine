@@ -19,10 +19,10 @@
 #include <vector>
 #include <map>
 #include "scrap/scene.h"
-#include "scrap/model.h"
 #include "scrap/camera.h"
 #include "scrap/doodad.h"
 #include "scrap/gl/program.h"
+#include "scrap/gl/model.h"
 
 namespace scrap {
 

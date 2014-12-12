@@ -13,10 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "scrap/model.h"
+#include "scrap/gl/model.h"
 #include "scrap/gl/gl_config.h"
 
-scrap::Model::Model(const float *vertices, int num_vertices,
+scrap::gl::Model::Model(const float *vertices, int num_vertices,
              const int *elements, int num_elements,
              const float *uv,
              void *texture, int width, int height) :
@@ -42,7 +42,7 @@ scrap::Model::Model(const float *vertices, int num_vertices,
     glBindBuffer(0, GL_ELEMENT_ARRAY_BUFFER);
 }
 
-scrap::Model::~Model() {
+scrap::gl::Model::~Model() {
     glDeleteBuffers(1, &array_buffer_);
     glDeleteBuffers(1, &element_buffer_);
     glDeleteBuffers(1, &uv_buffer_);
