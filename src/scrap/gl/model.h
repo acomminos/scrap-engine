@@ -17,9 +17,27 @@
 #define SRC_SCRAP_MODEL_H_
 
 #include <cstdint>
+#include <vector>
+#include "scrap/gl/gl_config.h"
 
 namespace scrap {
 namespace gl {
+
+// A vertex described by (x,y,z).
+typedef struct {
+    float x, y, z;
+} Vertex;
+
+// A tuple of texture coordinates (u,v).
+typedef struct {
+    float u, v;
+} UV;
+
+// A vertex with texture coordinates.
+typedef struct {
+    Vertex &vertex;
+    UV &uv;
+} Element;
 
 // A model assignable to a Doodad. Contains vertex data in an element buffer.
 // Uses the RAII model for OpenGL buffer allocation.
@@ -29,15 +47,14 @@ class Model {
         int num_elements, const float *uv, void *texture, int width,
         int height);
   ~Model();
-  uint32_t num_vertices() { return num_vertices_; }
-  uint32_t array_buffer() { return array_buffer_; }
-  uint32_t element_buffer() { return element_buffer_; }
-  uint32_t uv_buffer() { return uv_buffer_; }
+  void set_elements(const std::vector<Element> &elements);
+  GLuint num_vertices() { return num_vertices_; }
+  GLuint array_buffer() { return array_buffer_; }
+  GLuint element_buffer() { return element_buffer_; }
  private:
-  uint32_t num_vertices_;
-  uint32_t array_buffer_;
-  uint32_t element_buffer_;
-  uint32_t uv_buffer_;
+  GLuint num_vertices_;
+  GLuint array_buffer_;
+  GLuint element_buffer_;
 };
 
 }  // namespace gl

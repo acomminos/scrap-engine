@@ -20,16 +20,16 @@ static std::stack<scrap::Scene*> scene_stack_;
 
 static void Loop();
 
-void scrap::engine::Init(scrap::Scene *scene, scrap::Config config) {
+void scrap::engine::Init(scrap::Scene *scene, const scrap::Settings& settings) {
     scene_stack_.push(scene);
 
     glfwInit();
 
     GLFWmonitor *monitor = NULL;
-    if (config.fullscreen())
+    if (settings.fullscreen())
         monitor = glfwGetPrimaryMonitor();
 
-    window_ = glfwCreateWindow(config.width(), config.height(),
+    window_ = glfwCreateWindow(settings.width(), settings.height(),
                                "Scrap Engine", monitor, NULL);
     if (!window_) {
         glfwTerminate();

@@ -17,7 +17,7 @@
 #define SRC_SCRAP_ENGINE_H_
 
 #include <stack>
-#include "scrap/config.h"
+#include "scrap/settings.h"
 #include "scrap/scene.h"
 #include "scrap/gl/gl_config.h"
 
@@ -26,7 +26,7 @@ namespace scrap {
 namespace engine {
 
 // Initializes the global game engine with the given scene.
-void Init(scrap::Scene *scene, scrap::Config config);
+void Init(scrap::Scene *scene, const scrap::Settings& settings);
 // Destroys the engine, freeing all resources.
 void Destroy();
 // Pushes a new scene onto the engine's scene stack.

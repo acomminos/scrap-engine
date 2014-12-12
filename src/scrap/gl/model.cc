@@ -25,18 +25,14 @@ scrap::gl::Model::Model(const float *vertices, int num_vertices,
     // use STATIC_DRAW. Make this a configurable option.
     glGenBuffers(1, &array_buffer_);
     glBindBuffer(GL_ARRAY_BUFFER, array_buffer_);
-    glBufferData(GL_ARRAY_BUFFER, 3 * num_vertices * sizeof(float),
+    glBufferData(GL_ARRAY_BUFFER, (2 * num_vertices * sizeof(GLint)) +
+                 (3 * num_vertices * sizeof(GLfloat)),
                  vertices, GL_STATIC_DRAW);
 
     glGenBuffers(1, &element_buffer_);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer_);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * num_vertices * sizeof(float),
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, num_vertices * sizeof(GLint),
                  elements, GL_STATIC_DRAW);
-
-    glGenBuffers(1, &uv_buffer_);
-    glBindBuffer(GL_ARRAY_BUFFER, uv_buffer_);
-    glBufferData(GL_ARRAY_BUFFER, 2 * num_vertices * sizeof(float),
-                 uv, GL_STATIC_DRAW);
 
     glBindBuffer(0, GL_ARRAY_BUFFER);
     glBindBuffer(0, GL_ELEMENT_ARRAY_BUFFER);
@@ -45,5 +41,11 @@ scrap::gl::Model::Model(const float *vertices, int num_vertices,
 scrap::gl::Model::~Model() {
     glDeleteBuffers(1, &array_buffer_);
     glDeleteBuffers(1, &element_buffer_);
-    glDeleteBuffers(1, &uv_buffer_);
+}
+
+void scrap::gl::Model::set_elements(const std::vector<Element> &elements) {
+    glBindBuffer(GL_ARRAY_BUFFER, array_buffer_);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(Element) * elements.size(),
+                 elements.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

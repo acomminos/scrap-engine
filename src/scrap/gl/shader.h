@@ -23,8 +23,8 @@ namespace scrap {
 namespace gl {
 
 enum ShaderType {
-    Vertex = GL_VERTEX_SHADER,
-    Fragment = GL_VERTEX_SHADER
+    VertexShader = GL_VERTEX_SHADER,
+    FragmentShader = GL_VERTEX_SHADER
 };
 
 // A wrapper around GLSL shaders using RAII.

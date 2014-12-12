@@ -27,23 +27,6 @@ namespace scrap {
 namespace util {
 namespace OBJLoader {
 
-// A vertex described by (x,y,z).
-// TODO(andrew): move?
-typedef struct {
-    float x, y, z;
-} Vertex;
-
-// A tuple of texture coordinates (u,v).
-typedef struct {
-    float u, v;
-} UV;
-
-// A vertex with texture coordinates.
-typedef struct {
-    Vertex &vertex;
-    UV &uv;
-} Element;
-
 // x, y, z, optional w
 static const std::regex kVertexRegex = std::regex(R"((\f+)\w+(\f+)\w+(\f+)(?:\w+(\f+))?)");
 // v, optional vt, optional vn
@@ -53,9 +36,10 @@ static const std::regex kFaceRegex = std::regex(R"((\d+)(?:\/(\d+)?(?:\/(\d+))?)
 // Returns true if the operation was a success.
 bool Parse(std::istream& in, gl::Model &model) {
     std::string type;
-    std::vector<Vertex> vertices;
-    std::vector<UV> uvs;
-    std::vector<Element> elements;
+    std::vector<gl::Vertex> vertices;
+    std::vector<gl::UV> uvs;
+    std::vector<gl::Element> elements;
+    //std::vector<int> indices;
     while (!in.eof()) {
         std::getline(in, type, ' ');
         if (type.compare("v") == 0) {
@@ -87,11 +71,12 @@ bool Parse(std::istream& in, gl::Model &model) {
             if (m[3].matched)
                 vn = atoi(static_cast<std::string>(m[3]).c_str());
 
-            Vertex &vertex = vertices[v];
-            UV &uv = uvs[vt];
+            gl::Vertex &vertex = vertices[v];
+            gl::UV &uv = uvs[vt];
             elements.push_back({vertex, uv});
         }
     }
+    model.set_elements(elements);
 }
 
 }  // namespace OBJLoader

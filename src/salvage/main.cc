@@ -18,20 +18,20 @@
 #include <cstdlib>
 
 #include "scrap/engine.h"
-#include "scrap/config.h"
+#include "scrap/settings.h"
 #include "salvage/example_scene.h"
 
 int main(int argc, char *argv[]) {
-    scrap::Config config;
+    scrap::Settings settings;
     int err = 0;
     char arg;
     while ((arg = getopt(argc, argv, ":w:h:f:v")) != -1 && !err) {
         switch (arg) {
             case 'w':
-                config.set_width(atoi(optarg));
+                settings.set_width(atoi(optarg));
                 break;
             case 'h':
-                config.set_height(atoi(optarg));
+                settings.set_height(atoi(optarg));
                 break;
             case 'f':
                 break;
@@ -56,7 +56,7 @@ int main(int argc, char *argv[]) {
     printf("Starting salvage (libscrap sandbox)...\n");
 
     salvage::ExampleScene es;
-    scrap::engine::Init(&es, config);
+    scrap::engine::Init(&es, settings);
 
     return 0;
 }

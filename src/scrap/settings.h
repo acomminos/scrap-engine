@@ -24,15 +24,15 @@ namespace scrap {
 // In the event that an value is unable to be used, the engine is responsible
 // for assigning a reasonable value that works.
 // TODO(andrew): support for loading from file
-class Config {
+class Settings {
  public:
   // Creates a new default config with the video mode of the primary monitor.
-  Config() : width_(800), height_(600), fullscreen_(false) { }
-  uint32_t width() { return width_; }
+  Settings() : width_(800), height_(600), fullscreen_(false) { }
+  uint32_t width() const { return width_; }
   void set_width(uint32_t width) { width_ = width; }
-  uint32_t height() { return height_; }
+  uint32_t height() const { return height_; }
   void set_height(uint32_t height) { height_ = height; }
-  bool fullscreen() { return fullscreen_; }
+  bool fullscreen() const { return fullscreen_; }
   void set_fullscreen(bool fullscreen) { fullscreen_ = fullscreen; }
 
  private:
