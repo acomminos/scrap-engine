@@ -28,9 +28,11 @@ namespace util {
 namespace OBJLoader {
 
 // x, y, z, optional w
-static const std::regex kVertexRegex = std::regex(R"((\f+)\w+(\f+)\w+(\f+)(?:\w+(\f+))?)");
+static const std::regex kVertexRegex =
+    std::regex(R"((\f+)\w+(\f+)\w+(\f+)(?:\w+(\f+))?)");
 // v, optional vt, optional vn
-static const std::regex kFaceRegex = std::regex(R"((\d+)(?:\/(\d+)?(?:\/(\d+))?)?)");
+static const std::regex kFaceRegex =
+    std::regex(R"((\d+)(?:\/(\d+)?(?:\/(\d+))?)?)");
 
 // Loads the OBJ data from the provided input stream into the model given
 // Returns true if the operation was a success.
@@ -43,14 +45,14 @@ bool Parse(std::istream& in, gl::Model &model) {
     while (!in.eof()) {
         std::getline(in, type, ' ');
         if (type.compare("v") == 0) {
-            float x, y, z;
+            GLfloat x, y, z;
             in >> x;
             in >> y;
             in >> z;
             vertices.push_back({x, y, z});
             // TODO(andrew): support for w coordinate?
         } else if (type.compare("vt") == 0) {
-            float u, v;
+            GLfloat u, v;
             in >> u;
             in >> v;
             uvs.push_back({u, v});
@@ -74,9 +76,13 @@ bool Parse(std::istream& in, gl::Model &model) {
             gl::Vertex &vertex = vertices[v];
             gl::UV &uv = uvs[vt];
             elements.push_back({vertex, uv});
+        } else if (type.compare("\\") == 0 || type.compare("\n") == 0) {
+            // Ignore newline
+        } else {
+            printf("Unknown delimiter %s", type.c_str());
         }
     }
-    model.set_elements(elements);
+    model.set_elements(elements.data(), elements.size());
 }
 
 }  // namespace OBJLoader

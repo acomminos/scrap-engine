@@ -13,25 +13,3 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_SCRAP_SHADER_BASIC_PROGRAM_H_
-#define SRC_SCRAP_SHADER_BASIC_PROGRAM_H_
-
-#include "scrap/gl/program.h"
-
-namespace scrap {
-namespace shader {
-
-// A basic OpenGL shader program with support for primitive drawing, UV
-// textures, and transforms.
-class BasicProgram : public gl::Program {
- public:
-  BasicProgram();
-  ~BasicProgram();
-  virtual void DrawDoodad(ModelScene *scene, Doodad *doodad);
- private:
-};
-
-}  // namespace shader
-}  // namespace scrap
-
-#endif  // SRC_SCRAP_SHADER_BASIC_PROGRAM_H_

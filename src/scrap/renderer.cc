@@ -13,23 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "scrap/gl/shader.h"
+#include "scrap/renderer.h"
 
-scrap::gl::Shader::Shader(scrap::gl::ShaderType type) {
-    shader_ = glCreateShader(type);
+scrap::Renderer::Renderer() {
+
 }
 
-scrap::gl::Shader::~Shader() {
-    glDeleteShader(shader_);
-}
+scrap::Renderer::~Renderer() {
 
-bool scrap::gl::Shader::Compile(std::string source) {
-    const GLchar *c_src = source.c_str();
-    glShaderSource(shader_, 1, &c_src, NULL);
-    glCompileShader(shader_);
-
-    GLint result;
-    glGetShaderiv(shader_, GL_COMPILE_STATUS, &result);
-    compiled_ = result;
-    return result;
 }

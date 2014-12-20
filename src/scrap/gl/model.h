@@ -25,29 +25,28 @@ namespace gl {
 
 // A vertex described by (x,y,z).
 typedef struct {
-    float x, y, z;
+    GLfloat x, y, z;
 } Vertex;
 
 // A tuple of texture coordinates (u,v).
 typedef struct {
-    float u, v;
+    GLfloat u, v;
 } UV;
 
 // A vertex with texture coordinates.
 typedef struct {
-    Vertex &vertex;
-    UV &uv;
+    Vertex vertex;
+    UV uv;
 } Element;
 
 // A model assignable to a Doodad. Contains vertex data in an element buffer.
 // Uses the RAII model for OpenGL buffer allocation.
 class Model {
  public:
-  Model(const float *vertices, int num_vertices, const int *elements,
-        int num_elements, const float *uv, void *texture, int width,
-        int height);
+  Model(const Element *elements, GLuint num_elements);
   ~Model();
-  void set_elements(const std::vector<Element> &elements);
+  // Loads the given elements into the model's VBO.
+  void set_elements(const Element *elements, GLuint num_elements);
   GLuint num_vertices() { return num_vertices_; }
   GLuint array_buffer() { return array_buffer_; }
   GLuint element_buffer() { return element_buffer_; }

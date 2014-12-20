@@ -40,9 +40,10 @@ class Program {
   ~Program();
 
   // Attaches the given shaders, and links this program.
-  // Returns an OpenGL error code.
-  int Link(std::unique_ptr<scrap::gl::Shader> vertex_shader,
-           std::unique_ptr<scrap::gl::Shader> fragment_shader);
+  // Returns true if the program was successfully linked.
+  bool Link(std::unique_ptr<scrap::gl::Shader> vertex_shader,
+            std::unique_ptr<scrap::gl::Shader> fragment_shader);
+  bool is_linked() const { return linked_; }
   // Instructs OpenGL to use this program and enables vertex attributes.
   void Begin();
   // Discards the current GL program and disables vertex attributes.
@@ -61,6 +62,7 @@ class Program {
                               bool normalized, GLuint stride,
                               const void *pointer) {};
  private:
+  bool linked_;
   std::unique_ptr<Shader> vertex_shader_;
   std::unique_ptr<Shader> fragment_shader_;
   GLuint program_;

@@ -13,17 +13,29 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "scrap/shader/basic_program.h"
+#ifndef SRC_SCRAP_RENDERER_H_
+#define SRC_SCRAP_RENDERER_H_
 
-scrap::shader::BasicProgram::BasicProgram() : Program(nullptr, nullptr) {
+#include <map>
+#include <vector>
+#include "scrap/doodad.h"
+#include "scrap/camera.h"
 
-}
+namespace scrap {
 
-scrap::shader::BasicProgram::~BasicProgram() {
+class Renderer {
+ public:
+  Renderer();
+  ~Renderer();
+  void AddDoodad(Doodad &doodad);
+  void RemoveDoodad(Doodad &doodad);
+  void SetCamera(Camera *camera);
+  void Render();
+ private:
+  Camera *camera_;
+  std::map<gl::Program*, std::vector<Doodad*>> doodads_;
+};
 
-}
+}  // namespace scrap
 
-void scrap::shader::BasicProgram::DrawDoodad(ModelScene *scene,
-                                             Doodad *doodad) {
-    
-}
+#endif  // SRC_SCRAP_RENDERER_H_

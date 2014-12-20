@@ -23,8 +23,9 @@ scrap::gl::Program::~Program() {
     glDeleteProgram(program_);
 }
 
-int scrap::gl::Program::Link(std::unique_ptr<scrap::gl::Shader> vertex_shader,
+bool scrap::gl::Program::Link(std::unique_ptr<scrap::gl::Shader> vertex_shader,
     std::unique_ptr<scrap::gl::Shader> fragment_shader) {
+    assert(vertex_shader->is_compiled() && fragment_shader->is_compiled());
     vertex_shader_ = std::move(vertex_shader);
     fragment_shader_ = std::move(fragment_shader);
 
@@ -38,7 +39,10 @@ int scrap::gl::Program::Link(std::unique_ptr<scrap::gl::Shader> vertex_shader,
     a_pos_ = glGetAttribLocation(program_, "a_pos");
     a_uv_ = glGetAttribLocation(program_, "a_uv");
 
-    return glGetError();
+    GLint result;
+    glGetProgramiv(program_, GL_LINK_STATUS, &result);
+    linked_ = result;
+    return result;
 }
 
 void scrap::gl::Program::Begin() {
@@ -56,7 +60,7 @@ void scrap::gl::Program::End() {
 void scrap::gl::Program::SetPositionPointer(GLuint buffer, GLuint offset,
                                             GLuint stride) {
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glVertexAttribPointer(a_pos_, sizeof(float) * 3, GL_FLOAT, false, stride,
+    glVertexAttribPointer(a_pos_, sizeof(GLfloat) * 3, GL_FLOAT, false, stride,
                           NULL);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -64,7 +68,7 @@ void scrap::gl::Program::SetPositionPointer(GLuint buffer, GLuint offset,
 void scrap::gl::Program::SetUVMapPointer(GLuint buffer, GLuint offset,
                                          GLuint stride) {
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glVertexAttribPointer(a_uv_, sizeof(float) * 2, GL_FLOAT, false, stride,
+    glVertexAttribPointer(a_uv_, sizeof(GLfloat) * 2, GL_FLOAT, false, stride,
                           NULL);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

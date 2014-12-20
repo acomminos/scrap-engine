@@ -13,38 +13,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_SCRAP_GL_SHADER_H_
-#define SRC_SCRAP_GL_SHADER_H_
+#ifndef SRC_SCRAP_GL_REGISTRY_H_
+#define SRC_SCRAP_GL_REGISTRY_H_
 
 #include <string>
-#include "scrap/gl/gl_config.h"
+#include <vector>
+#include "scrap/gl/shader.h"
 
 namespace scrap {
 namespace gl {
 
-enum ShaderType {
-    VertexShader = GL_VERTEX_SHADER,
-    FragmentShader = GL_VERTEX_SHADER
-};
-
-// A wrapper around GLSL shaders using RAII.
-class Shader {
+ // A registry for GL shader objects.
+class Registry {
  public:
-  // Creates a new shader of the given type.
-  Shader(ShaderType type);
-  ~Shader();
-  // Compiles the provided shader source into this shader.
-  // Returns true if the shader compiled succesfully.
-  bool Compile(std::string source);
-  bool is_compiled() const { return compiled_; }
-  GLuint shader() const { return shader_; }
+  Registry();
+
+  // Attempts to load the shader at the given path.
+  // The shader object is valid for the life of the registry.
+  // Returns a pointer to the loaded shader if successful, NULL otherwise.
+  Shader* LoadShader(ShaderType type, std::string path);
+  // Frees the given shader, removing it from the registry.
+  bool UnloadShader(Shader *shader);
  private:
-  ShaderType type_;
-  GLuint shader_;
-  bool compiled_;
+  std::vector<Shader> shaders_;
 };
 
 }  // namespace gl
 }  // namespace scrap
 
-#endif  // SRC_SCRAP_GL_SHADER_H_
+#endif  // SRC_SCRAP_GL_REGISTRY_H_

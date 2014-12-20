@@ -32,8 +32,8 @@ void scrap::Camera::Rotate(float x, float y, float z) {
 
 glm::mat4 scrap::Camera::GetTransform() {
     glm::mat4 transform;
-    transform *= rotation_;
-    transform = glm::translate(transform, position_);
     transform *= glm::perspective(fov_, ratio_, near_, far_);
+    glm::translate(transform, position_);
+    transform *= -rotation_;
     return transform;
 }
