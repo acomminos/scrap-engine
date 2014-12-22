@@ -1,14 +1,14 @@
 set (SOURCE
-    src/engine.cc
-    src/camera.cc
-    src/gl/shader.cc
-    src/gl/program.cc
-    src/gl/texture.cc
-    src/gl/material.cc
-    src/gl/model.cc
-    src/doodad.cc
-#   src/renderer.cc
-    src/scene/model_scene.cc
+    engine.cc
+    camera.cc
+    gl/shader.cc
+    gl/program.cc
+    gl/texture.cc
+    gl/material.cc
+    gl/model.cc
+    doodad.cc
+#   renderer.cc
+    scene/model_scene.cc
 )
 
 find_package (PkgConfig REQUIRED)
@@ -22,4 +22,4 @@ add_library (scrap SHARED ${SOURCE})
 target_link_libraries (scrap ${GLFW_LIBRARIES})
 
 install (TARGETS scrap DESTINATION lib)
-install (DIRECTORY src/ DESTINATION include/scrap FILES_MATCHING_PATTERN "*.h")
+install (DIRECTORY . DESTINATION include/scrap FILES_MATCHING PATTERN "*.h")

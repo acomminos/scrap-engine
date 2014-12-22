@@ -1,6 +1,6 @@
 set (SOURCE
-    src/example_scene.cc
-    src/main.cc
+    example_scene.cc
+    main.cc
 )
 
 add_executable (salvage ${SOURCE})
