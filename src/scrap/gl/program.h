@@ -27,12 +27,6 @@ namespace gl {
 
 // A wrapper around a GLSL shader program.
 // Uses std::unique_ptr to manage lifecycle of OpenGL state.
-// All shaders are provided the following parameters:
-// - attrib vec3 pos
-// - attrib vec2 uv
-// - uniform mat4 mvp
-// - uniform sampler2d tex
-// Custom shaders can use uniforms provided by Doodads as input.
 class Program {
  public:
   // Registers a new shader program with OpenGL.
@@ -44,33 +38,21 @@ class Program {
   bool Link(std::unique_ptr<scrap::gl::Shader> vertex_shader,
             std::unique_ptr<scrap::gl::Shader> fragment_shader);
   bool is_linked() const { return linked_; }
-  // Instructs OpenGL to use this program and enables vertex attributes.
-  void Begin();
-  // Discards the current GL program and disables vertex attributes.
-  void End();
-
-  // Basic shader properties
-  void SetPositionPointer(GLuint buffer, GLuint offset, GLuint stride);
-  void SetUVMapPointer(GLuint buffer, GLuint offset, GLuint stride);
-  void SetMVPMatrix(const glm::mat4 &mvp);
-  void SetTexture(GLuint texture);
+  // Instructs OpenGL to use this program.
+  void Use();
   
-  // TODO(andrew): Custom shader properties
-  void SetUniform(const char *name, int value) {};
-  void SetUniform(const char *name, float value) {};
-  void SetVertexAttribPointer(GLuint index, int32_t size, int32_t type,
-                              bool normalized, GLuint stride,
-                              const void *pointer) {};
+  GLuint GetUniformLocation(const char *name) const;
+  GLuint GetAttribLocation(const char *name) const;
+  void SetUniform(GLuint uniform, int value);
+  void SetUniform(GLuint uniform, float value);
+  void SetVertexAttribPointer(GLuint index, GLsizei size, GLenum type,
+                              GLboolean normalized, GLuint stride,
+                              const GLvoid *pointer);
  private:
   bool linked_;
   std::unique_ptr<Shader> vertex_shader_;
   std::unique_ptr<Shader> fragment_shader_;
   GLuint program_;
-  GLuint u_mvp_;
-  GLuint u_tex_;
-  GLuint a_pos_;
-  GLuint a_uv_;
-
 };
 
 }  // namespace gl

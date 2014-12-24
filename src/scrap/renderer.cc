@@ -22,3 +22,32 @@ scrap::Renderer::Renderer() {
 scrap::Renderer::~Renderer() {
 
 }
+
+void scrap::Renderer::SetProgram(gl::Program *program) {
+    program_ = program;
+    program->Use();
+    a_pos_ = program->GetAttribLocation("a_pos");
+    a_uv_ = program->GetAttribLocation("a_uv");
+    u_mvp_ = program->GetUniformLocation("u_mvp");
+    u_tex_ = program->GetUniformLocation("u_tex");
+}
+
+void scrap::Renderer::Render(Camera &camera, Doodad &doodad) const {
+    assert(program_);
+
+    gl::Model &model = doodad.model();
+    gl::Material &material = doodad.material();
+
+    auto int_uniforms = material.get_custom_int_uniforms();
+    auto float_uniforms = material.get_custom_float_uniforms();
+    
+    for (auto it = int_uniforms.cbegin(); it != int_uniforms.cend(); it++) {
+        GLuint uniform = program_->GetUniformLocation(it->first.c_str());
+        program_->SetUniform(uniform, it->second);
+    }
+
+    for (auto it = float_uniforms.cbegin(); it != float_uniforms.cend(); it++) {
+        GLuint uniform = program_->GetUniformLocation(it->first.c_str());
+        program_->SetUniform(uniform, it->second);
+    }
+}

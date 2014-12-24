@@ -17,23 +17,32 @@
 #define SRC_SCRAP_RENDERER_H_
 
 #include <map>
-#include <vector>
+#include <set>
+#include <memory>
 #include "scrap/doodad.h"
 #include "scrap/camera.h"
 
 namespace scrap {
 
+// The base implementation of Renderer draws Doodads with shader programs
+// provided the following attributes:
+// - in vec3 a_pos (3d position)
+// - in vec3 a_uv (2d uv coordinates)
+// - uniform mat4 u_mvp (model/view/projection matrix)
+// - uniform sampler2d u_tex (uv texture)
+// As well as each doodad's material's custom uniforms.
 class Renderer {
  public:
   Renderer();
   ~Renderer();
-  void AddDoodad(Doodad &doodad);
-  void RemoveDoodad(Doodad &doodad);
-  void SetCamera(Camera *camera);
-  void Render();
+  void SetProgram(gl::Program *program);
+  void Render(Camera &camera, Doodad &doodad) const;
  private:
-  Camera *camera_;
-  std::map<gl::Program*, std::vector<Doodad*>> doodads_;
+  gl::Program *program_;
+  GLuint a_pos_;
+  GLuint a_uv_;
+  GLuint u_mvp_;
+  GLuint u_tex_;
 };
 
 }  // namespace scrap

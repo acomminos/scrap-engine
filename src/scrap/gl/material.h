@@ -33,6 +33,12 @@ class Material {
   ~Material();
   Texture &texture() const { return texture_; }
   gl::Program &program() const { return program_; }
+  std::map<std::string, int> get_custom_int_uniforms() {
+    return custom_int_uniforms_;
+  }
+  std::map<std::string, float> get_custom_float_uniforms() {
+    return custom_float_uniforms_;
+  }
  private:
   Texture &texture_;
   gl::Program &program_;

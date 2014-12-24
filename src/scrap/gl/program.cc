@@ -33,50 +33,33 @@ bool scrap::gl::Program::Link(std::unique_ptr<scrap::gl::Shader> vertex_shader,
     glAttachShader(program_, fragment_shader->shader());
     glLinkProgram(program_);
 
-    // Retrieve basic shader properties
-    u_mvp_ = glGetUniformLocation(program_, "u_mvp");
-    u_tex_ = glGetUniformLocation(program_, "u_tex");
-    a_pos_ = glGetAttribLocation(program_, "a_pos");
-    a_uv_ = glGetAttribLocation(program_, "a_uv");
-
     GLint result;
     glGetProgramiv(program_, GL_LINK_STATUS, &result);
     linked_ = result;
     return result;
 }
 
-void scrap::gl::Program::Begin() {
+void scrap::gl::Program::Use() {
     glUseProgram(program_);
-    glEnableVertexAttribArray(a_pos_);
-    glEnableVertexAttribArray(a_uv_);
 }
 
-void scrap::gl::Program::End() {
-    glDisableVertexAttribArray(a_pos_);
-    glDisableVertexAttribArray(a_uv_);
-    glUseProgram(0);
+GLuint scrap::gl::Program::GetUniformLocation(const char *name) const {
+    return glGetUniformLocation(program_, name);
 }
 
-void scrap::gl::Program::SetPositionPointer(GLuint buffer, GLuint offset,
-                                            GLuint stride) {
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glVertexAttribPointer(a_pos_, sizeof(GLfloat) * 3, GL_FLOAT, false, stride,
-                          NULL);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+GLuint scrap::gl::Program::GetAttribLocation(const char *name) const {
+    return glGetAttribLocation(program_, name);
 }
 
-void scrap::gl::Program::SetUVMapPointer(GLuint buffer, GLuint offset,
-                                         GLuint stride) {
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glVertexAttribPointer(a_uv_, sizeof(GLfloat) * 2, GL_FLOAT, false, stride,
-                          NULL);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+void scrap::gl::Program::SetUniform(GLuint uniform, int value) {
+    glUniform1i(uniform, value);
 }
 
-void scrap::gl::Program::SetMVPMatrix(const glm::mat4 &mvp) {
-    //glUniformMatrix(u_mvp_, mvp.
+void scrap::gl::Program::SetUniform(GLuint uniform, float value) {
+    glUniform1f(uniform, value);
 }
 
-void scrap::gl::Program::SetTexture(GLuint texture) {
-    glUniform1i(u_tex_, texture);
+void scrap::gl::Program::SetVertexAttribPointer(GLuint index, GLsizei size,
+    GLenum type, GLboolean normalized, GLuint stride, const GLvoid *pointer) {
+    glVertexAttribPointer(index, size, type, normalized, stride, pointer);
 }
