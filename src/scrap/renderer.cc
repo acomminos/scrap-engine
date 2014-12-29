@@ -29,9 +29,6 @@ scrap::Renderer::Renderer(GLsizei width, GLsizei height) : cairo_ctx_(NULL),
         cairo_surface_(NULL) {
     glEnable(GL_DEPTH_TEST);
     glGenBuffers(1, &gui_buffer_);
-    glBindBuffer(GL_ARRAY_BUFFER, gui_buffer_);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(kGUIBuffer), kGUIBuffer,
-                 GL_STATIC_DRAW);
     Resize(width, height);
 }
 
@@ -58,6 +55,16 @@ void scrap::Renderer::Resize(GLsizei width, GLsizei height) {
     cairo_surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width,
                                                 height);
     cairo_ctx_ = cairo_create(cairo_surface_);
+
+    const GLfloat data[] = {
+        -1.0f, -1.0f, 0.0f, 0.0f,
+        -1.0f, 1.0f, 0.0f, (GLfloat)height,
+        1.0f, -1.0f, (GLfloat)width, 0.0f,
+        1.0f, 1.0f, (GLfloat)width, (GLfloat)height
+    };
+
+    glBindBuffer(GL_ARRAY_BUFFER, gui_buffer_);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
 }
 
 void scrap::Renderer::Render(ModelScene &scene) {
@@ -117,13 +124,13 @@ void scrap::Renderer::DrawElements(GLuint buffer, GLsizei num_elements) {
 
 void scrap::Renderer::DrawGUI(ModelScene &scene) {
     glBindBuffer(GL_ARRAY_BUFFER, gui_buffer_);
-    glVertexAttribPointer(a_pos_, sizeof(GLfloat) * 2, GL_FLOAT, GL_FALSE, 0,
-                          NULL);
-    glVertexAttribPointer(a_uv_, sizeof(GLfloat) * 2, GL_FLOAT, GL_FALSE, 0,
-                          NULL);
+    glVertexAttribPointer(a_pos_, sizeof(GLfloat) * 2, GL_FLOAT, GL_FALSE,
+                          sizeof(GLfloat) * 2, NULL);
+    glVertexAttribPointer(a_uv_, sizeof(GLfloat) * 2, GL_FLOAT, GL_FALSE,
+                          sizeof(GLfloat) * 2, (GLvoid*)(sizeof(GLfloat) * 2));
     
 
-    cairo_set_source_rgba(cairo_ctx_, 0.0f, 0.0f, 0.0f, 0.0f);
+    cairo_set_source_rgba(cairo_ctx_, 1.0f, 0.0f, 0.0f, 1.0f);
     cairo_fill(cairo_ctx_);
 
     cairo_save(cairo_ctx_);

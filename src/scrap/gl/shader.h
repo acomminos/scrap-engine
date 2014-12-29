@@ -24,7 +24,7 @@ namespace gl {
 
 enum ShaderType {
     VertexShader = GL_VERTEX_SHADER,
-    FragmentShader = GL_VERTEX_SHADER
+    FragmentShader = GL_FRAGMENT_SHADER
 };
 
 // A wrapper around GLSL shaders using RAII.

@@ -39,6 +39,7 @@ void scrap::ModelScene::OnShow() {
         "}");
     frag_shader.Compile(
         "#version 100\n"
+        "precision mediump float;\n"
         "uniform sampler2D u_tex;\n"
         "in vec2 v_texcoord;\n"
         "void main() {\n"

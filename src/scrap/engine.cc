@@ -112,6 +112,7 @@ int scrap::engine::Height() {
 void LoadExtensions() {
     if (glfwExtensionSupported("GL_KHR_debug")) {
         printf("Enabling GL_KHR_debug logging callback\n");
+        glEnable(GL_DEBUG_OUTPUT_KHR);
         PFNGLDEBUGMESSAGECALLBACKKHRPROC glDebugMessageCallbackKHR =
             (PFNGLDEBUGMESSAGECALLBACKKHRPROC)
             glfwGetProcAddress("glDebugMessageCallbackKHR");
