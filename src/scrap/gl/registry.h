@@ -34,6 +34,7 @@ class Registry {
   Shader* LoadShader(ShaderType type, std::string path);
   // Frees the given shader, removing it from the registry.
   bool UnloadShader(Shader *shader);
+  const std::vector<Shader> shaders() const { return shaders_; }
  private:
   std::vector<Shader> shaders_;
 };

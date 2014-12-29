@@ -13,26 +13,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_SCRAP_TEXTURE_H_
-#define SRC_SCRAP_TEXTURE_H_
+#include "scrap/gui/cairo_texture.h"
 
-#include "scrap/gl/gl_config.h"
+scrap::gui::CairoTexture::CairoTexture(GLsizei width, GLsizei height) :
+    width_(width), height_(height) {
+    surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+}
 
-namespace scrap {
-namespace gl {
+scrap::gui::CairoTexture::~CairoTexture() {
+    cairo_surface_destroy(surface_);
+}
 
-// A wrapper around an RGBA 2D OpenGL texture.
-class Texture {
-  public:
-    Texture();
-    ~Texture();
-    void SetData(GLint format, const GLvoid *data, GLsizei width, GLsizei height);
-    GLuint texture() const { return texture_; }
-  private:
-    GLuint texture_;
-};
-
-};  // namespace gl
-};  // namespace scrap
-
-#endif  // SRC_SCRAP_TEXTURE_H_
+void scrap::gui::CairoTexture::CopyTexture() {
+    unsigned char *data = cairo_image_surface_get_data(surface_);
+    texture_.SetData(GL_UNSIGNED_BYTE, data, width_, height_);
+}

@@ -15,15 +15,20 @@
 
 #include "scrap/gl/texture.h"
 
-scrap::gl::Texture::Texture(int format, const char *data, int width,
-                            int height) {
+scrap::gl::Texture::Texture() {
     glGenTextures(1, &texture_);
-    glBindTexture(GL_TEXTURE_2D, texture_);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, 
-                 format, GL_UNSIGNED_BYTE, data);
-    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 scrap::gl::Texture::~Texture() {
     glDeleteTextures(1, &texture_);
+}
+
+void scrap::gl::Texture::SetData(GLint format, const GLvoid *data, GLsizei width,
+                                 GLsizei height) {
+    // TODO(andrew): bind elsewhere
+    glBindTexture(GL_TEXTURE_2D, texture_);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, 
+                 format, GL_UNSIGNED_BYTE, data);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
 }

@@ -23,6 +23,7 @@ class Scene {
   virtual void Update(double delta_time) = 0;
   virtual void Render() = 0;
 
+  // Callbacks are not triggered when the scene is inactive.
   virtual void OnMouseButton(int button, int action, int mods) = 0;
   virtual void OnMouseScroll(double dx, double dy) = 0;
   virtual void OnMouseMove(double x, double y) = 0;
@@ -30,6 +31,12 @@ class Scene {
   virtual void OnMouseLeave() = 0;
   virtual void OnKey(int key, int scancode, int action, int mods) = 0;
   virtual void OnSizeChange(int width, int height) = 0;
+
+  // Called when the scene is about to be shown. Engine-related initialization
+  // should be done here, and not in the constructor.
+  virtual void OnShow() {};
+  // Called right before a scene is popped, or succeeded by a new scene.
+  virtual void OnHide() {};
 };
 
 }  // namespace scrap

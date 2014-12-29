@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scrap/engine.h"
+#include <cassert>
 
 static GLFWwindow* window_;
 static std::stack<scrap::Scene*> scene_stack_;
@@ -48,6 +49,7 @@ void scrap::engine::Init(scrap::Scene *scene, const scrap::Settings& settings) {
     });
 
     glfwMakeContextCurrent(window_);
+    scene->OnShow();
     Loop();
 }
 
@@ -57,11 +59,19 @@ void scrap::engine::Destroy() {
 }
 
 void scrap::engine::Push(scrap::Scene *scene) {
+    if (scene_stack_.top())
+        scene_stack_.top()->OnHide();
     scene_stack_.push(scene);
+    scene->OnShow();
 }
 
 void scrap::engine::Pop() {
+    assert(scene_stack_.size() > 0);
+    scene_stack_.top()->OnHide();
     scene_stack_.pop();
+    if (scene_stack_.top()) {
+        scene_stack_.top()->OnShow();
+    }
     // TODO(andrew): destroy if out of scenes?
     // if (scene_stack_.empty()) {
     //     Destroy();

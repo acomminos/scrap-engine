@@ -18,9 +18,11 @@
 
 #include <vector>
 #include <map>
+#include <cairo/cairo.h>
 #include "scrap/scene.h"
 #include "scrap/camera.h"
 #include "scrap/doodad.h"
+#include "scrap/renderer.h"
 #include "scrap/gl/program.h"
 #include "scrap/gl/model.h"
 
@@ -29,10 +31,13 @@ namespace scrap {
 class ModelScene : public Scene {
  public:
   ModelScene();
-  virtual void Update(double delta_time);
   virtual void Render();
   virtual void OnSizeChange(int width, int height);
+  virtual void OnShow();
+  virtual void OnHide();
 
+  virtual void Update(double delta_time) = 0;
+  virtual void DrawGUI(cairo_t *context) = 0;
   virtual void OnMouseButton(int button, int action, int mods) = 0;
   virtual void OnMouseScroll(double dx, double dy) = 0;
   virtual void OnMouseMove(double x, double y) = 0;
@@ -41,18 +46,18 @@ class ModelScene : public Scene {
 
   virtual void OnKey(int key, int scancode, int action, int mods) = 0;
 
-  // Adds a Doodad to the current scene.
-  void AddDoodad(Doodad &doodad);
+  const std::vector<Doodad*>& doodads() const { return doodads_; }
+  void add_doodad(Doodad *doodad) { doodads_.push_back(doodad); };
 
   Camera *active_camera() const { return active_camera_; }
   void set_active_camera(Camera *camera) { active_camera_ = camera; }
 
 
  private:
+  Renderer *renderer_;
+  gl::Program *program_;
   Camera *active_camera_;
-  // Map programs to Doodads to save on program swaps
-  std::map<std::string, gl::Program*> programs_;
-  std::map<gl::Program*, std::vector<Doodad*>*> doodads_;
+  std::vector<Doodad*> doodads_;
 };
 
 }  // namespace scrap

@@ -28,6 +28,10 @@ void salvage::ExampleScene::Update(double delta_time) {
     // printf("dt: %f, t: %fpi\n", delta_time, theta_/M_PI);
 }
 
+void salvage::ExampleScene::DrawGUI(cairo_t *ctx) {
+
+}
+
 void salvage::ExampleScene::OnMouseButton(int button, int action, int mods) {
 }
 

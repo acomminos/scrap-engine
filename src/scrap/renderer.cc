@@ -14,16 +14,35 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scrap/renderer.h"
+#include <glm/gtc/type_ptr.hpp>
+#include "scrap/scene/model_scene.h"
 
-scrap::Renderer::Renderer() {
+// 2D texture coordinates drawn with GL_TRIANGLE_STRIP
+static const GLfloat kGUIBuffer[] = {
+    -1.0f, -1.0f,
+    -1.0f, 1.0f,
+    1.0f, -1.0f,
+    1.0f, 1.0f };
 
+scrap::Renderer::Renderer(GLsizei width, GLsizei height) : cairo_ctx_(NULL),
+        cairo_surface_(NULL) {
+    glEnable(GL_DEPTH_TEST);
+    glGenBuffers(1, &gui_buffer_);
+    glBindBuffer(GL_ARRAY_BUFFER, gui_buffer_);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(kGUIBuffer), kGUIBuffer,
+                 GL_STATIC_DRAW);
+    Resize(width, height);
 }
 
 scrap::Renderer::~Renderer() {
-
+    glDeleteBuffers(1, &gui_buffer_);
+    if (cairo_ctx_)
+        cairo_destroy(cairo_ctx_);
+    if (cairo_surface_)
+        cairo_surface_destroy(cairo_surface_);
 }
 
-void scrap::Renderer::SetProgram(gl::Program *program) {
+void scrap::Renderer::SetDefaultProgram(gl::Program *program) {
     program_ = program;
     program->Use();
     a_pos_ = program->GetAttribLocation("a_pos");
@@ -32,22 +51,92 @@ void scrap::Renderer::SetProgram(gl::Program *program) {
     u_tex_ = program->GetUniformLocation("u_tex");
 }
 
-void scrap::Renderer::Render(Camera &camera, Doodad &doodad) const {
+void scrap::Renderer::Resize(GLsizei width, GLsizei height) {
+    if (cairo_ctx_)
+        cairo_destroy(cairo_ctx_);
+    if (cairo_surface_)
+        cairo_surface_destroy(cairo_surface_);
+
+    glViewport(0, 0, width, height);
+    cairo_surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width,
+                                                height);
+    cairo_ctx_ = cairo_create(cairo_surface_);
+}
+
+void scrap::Renderer::Render(ModelScene &scene) {
     assert(program_);
 
-    gl::Model &model = doodad.model();
-    gl::Material &material = doodad.material();
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    auto int_uniforms = material.get_custom_int_uniforms();
-    auto float_uniforms = material.get_custom_float_uniforms();
+    Camera *camera = scene.active_camera();
+    const std::vector<Doodad*> &doodads = scene.doodads();
+
+    glEnableVertexAttribArray(a_pos_);
+    glEnableVertexAttribArray(a_uv_);
+
+    for (auto it = doodads.cbegin(); it != doodads.cend(); it++) {
+        Doodad *doodad = *it;
+        gl::Model &model = doodad->model();
+        gl::Material &material = doodad->material();
+
+        glUniform1i(u_tex_, material.texture().texture());
+        glm::mat4 transform = camera->GetTransform() * doodad->matrix();
+        glUniformMatrix4fv(u_mvp_, 1, GL_FALSE, glm::value_ptr(transform));
+
+        auto int_uniforms = material.get_custom_int_uniforms();
+        auto float_uniforms = material.get_custom_float_uniforms();
+        
+        for (auto it = int_uniforms.cbegin(); it != int_uniforms.cend(); it++) {
+            GLuint uniform = program_->GetUniformLocation(it->first.c_str());
+            glUniform1i(uniform, it->second);
+        }
+
+        for (auto it = float_uniforms.cbegin(); it != float_uniforms.cend(); it++) {
+            GLuint uniform = program_->GetUniformLocation(it->first.c_str());
+            glUniform1f(uniform, it->second);
+        }
+
+        DrawElements(model.array_buffer(), model.num_vertices());
+    }
+
+    DrawGUI(scene);
     
-    for (auto it = int_uniforms.cbegin(); it != int_uniforms.cend(); it++) {
-        GLuint uniform = program_->GetUniformLocation(it->first.c_str());
-        program_->SetUniform(uniform, it->second);
-    }
+    glDisableVertexAttribArray(a_pos_);
+    glDisableVertexAttribArray(a_uv_);
 
-    for (auto it = float_uniforms.cbegin(); it != float_uniforms.cend(); it++) {
-        GLuint uniform = program_->GetUniformLocation(it->first.c_str());
-        program_->SetUniform(uniform, it->second);
-    }
+}
+
+void scrap::Renderer::DrawElements(GLuint buffer, GLsizei num_elements) {
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    program_->SetVertexAttribPointer(a_pos_, sizeof(GLfloat) * 3, GL_FLOAT,
+                                     GL_FALSE, sizeof(GLfloat) * 2, NULL);
+    program_->SetVertexAttribPointer(a_uv_, sizeof(GLfloat) * 2, GL_FLOAT,
+                                     GL_FALSE, sizeof(GLfloat) * 3,
+                                     (GLvoid*)(sizeof(GLfloat) * 3));
+    glDrawArrays(GL_TRIANGLES, 0, num_elements);
+}
+
+void scrap::Renderer::DrawGUI(ModelScene &scene) {
+    glBindBuffer(GL_ARRAY_BUFFER, gui_buffer_);
+    program_->SetVertexAttribPointer(a_pos_, sizeof(GLfloat) * 2, GL_FLOAT,
+                                     GL_FALSE, 0, NULL);
+    program_->SetVertexAttribPointer(a_uv_, sizeof(GLfloat) * 2, GL_FLOAT,
+                                     GL_FALSE, 0, NULL);
+    
+
+    cairo_set_source_rgba(cairo_ctx_, 0.0f, 0.0f, 0.0f, 0.0f);
+    cairo_fill(cairo_ctx_);
+
+    cairo_save(cairo_ctx_);
+    scene.DrawGUI(cairo_ctx_);
+    cairo_restore(cairo_ctx_);
+
+    unsigned char *data = cairo_image_surface_get_data(cairo_surface_);
+    gui_texture_.SetData(GL_UNSIGNED_BYTE, data,
+        cairo_image_surface_get_width(cairo_surface_),
+        cairo_image_surface_get_height(cairo_surface_));
+    glUniform1i(u_tex_, gui_texture_.texture());
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }

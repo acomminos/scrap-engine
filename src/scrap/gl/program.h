@@ -40,11 +40,9 @@ class Program {
   bool is_linked() const { return linked_; }
   // Instructs OpenGL to use this program.
   void Use();
-  
+
   GLuint GetUniformLocation(const char *name) const;
   GLuint GetAttribLocation(const char *name) const;
-  void SetUniform(GLuint uniform, int value);
-  void SetUniform(GLuint uniform, float value);
   void SetVertexAttribPointer(GLuint index, GLsizei size, GLenum type,
                               GLboolean normalized, GLuint stride,
                               const GLvoid *pointer);

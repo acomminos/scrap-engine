@@ -51,14 +51,6 @@ GLuint scrap::gl::Program::GetAttribLocation(const char *name) const {
     return glGetAttribLocation(program_, name);
 }
 
-void scrap::gl::Program::SetUniform(GLuint uniform, int value) {
-    glUniform1i(uniform, value);
-}
-
-void scrap::gl::Program::SetUniform(GLuint uniform, float value) {
-    glUniform1f(uniform, value);
-}
-
 void scrap::gl::Program::SetVertexAttribPointer(GLuint index, GLsizei size,
     GLenum type, GLboolean normalized, GLuint stride, const GLvoid *pointer) {
     glVertexAttribPointer(index, size, type, normalized, stride, pointer);

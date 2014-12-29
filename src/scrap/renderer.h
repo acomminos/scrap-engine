@@ -19,10 +19,14 @@
 #include <map>
 #include <set>
 #include <memory>
+#include <cairo/cairo.h>
 #include "scrap/doodad.h"
 #include "scrap/camera.h"
+#include "scrap/gl/texture.h"
 
 namespace scrap {
+
+class ModelScene;
 
 // The base implementation of Renderer draws Doodads with shader programs
 // provided the following attributes:
@@ -33,16 +37,25 @@ namespace scrap {
 // As well as each doodad's material's custom uniforms.
 class Renderer {
  public:
-  Renderer();
+  Renderer(GLsizei width, GLsizei height);
   ~Renderer();
-  void SetProgram(gl::Program *program);
-  void Render(Camera &camera, Doodad &doodad) const;
+  void SetDefaultProgram(gl::Program *program);
+  void Resize(GLsizei width, GLsizei height);
+  void Render(ModelScene &scene);
  private:
+  void DrawElements(GLuint buffer, GLsizei num_elements);
+  void DrawGUI(ModelScene &scene);
   gl::Program *program_;
+  GLuint gui_buffer_;
   GLuint a_pos_;
   GLuint a_uv_;
   GLuint u_mvp_;
   GLuint u_tex_;
+
+  // GUI
+  gl::Texture gui_texture_;
+  cairo_t *cairo_ctx_;
+  cairo_surface_t *cairo_surface_;
 };
 
 }  // namespace scrap

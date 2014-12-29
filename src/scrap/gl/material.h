@@ -28,11 +28,15 @@ namespace gl {
 // A material contains a texture with a particular shader.
 class Material {
  public:
-  Material(Texture &texture, gl::Program &program) : texture_(texture),
-                                                     program_(program) {};
+  Material(std::shared_ptr<Texture> &texture, gl::Program *program) :
+        texture_(texture), program_(program) {};
+  Material(std::shared_ptr<Texture> &texture) : texture_(texture),
+                                                program_(nullptr) {}
   ~Material();
-  Texture &texture() const { return texture_; }
-  gl::Program &program() const { return program_; }
+  const Texture &texture() const { return *texture_; }
+  // Returns the custom gl::Program used by this material, or nullptr if it
+  // uses the default program.
+  gl::Program *program() const { return program_; }
   std::map<std::string, int> get_custom_int_uniforms() {
     return custom_int_uniforms_;
   }
@@ -40,8 +44,9 @@ class Material {
     return custom_float_uniforms_;
   }
  private:
-  Texture &texture_;
-  gl::Program &program_;
+  std::shared_ptr<Texture> texture_;
+  bool has_program_;
+  gl::Program *program_;
 
   // Sets a custom shader uniform to use in a custom shader.
   void SetCustomUniform(std::string name, int value) {

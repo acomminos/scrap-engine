@@ -25,6 +25,7 @@ class ExampleScene : public scrap::ModelScene {
  public:
   ExampleScene();
   virtual void Update(double delta_time);
+  virtual void DrawGUI(cairo_t *ctx);
 
   virtual void OnMouseButton(int button, int action, int mods);
   virtual void OnMouseScroll(double dx, double dy);

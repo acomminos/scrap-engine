@@ -17,53 +17,25 @@
 #include <iterator>
 #include <cassert>
 #include "scrap/gl/gl_config.h"
+#include "scrap/engine.h"
 
 scrap::ModelScene::ModelScene() {
-    glEnable(GL_DEPTH_TEST);
-    
-    // TODO(andrew): populate programs_
 }
 
-void scrap::ModelScene::Update(double delta_time) {
+void scrap::ModelScene::OnShow() {
+    renderer_ = new Renderer(scrap::engine::Width(), scrap::engine::Height());
 }
 
 void scrap::ModelScene::Render() {
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glm::mat4 mat_vproj = active_camera_->GetTransform();
-    for (auto it_map = doodads_.cbegin(); it_map != doodads_.cend(); it_map++) {
-        gl::Program *program = it_map->first;
-        std::vector<Doodad*> *list = it_map->second;
+    assert(renderer_);  // if this throws, it's a scene lifecycle issue
+    renderer_->Render(*this);
+}
 
-        program->Begin();
-        for (auto it_vec = list->cbegin(); it_vec != list->cend(); it_vec++) {
-            Doodad *doodad = *it_vec;
-            gl::Model &model = doodad->model();
-            gl::Material &material = doodad->material();
-            glm::mat4 mat_model = doodad->matrix();
-            program->SetPositionPointer(model.array_buffer(), 0, 0);
-            program->SetUVMapPointer(model.array_buffer(), 3 * sizeof(GLfloat),
-                                     3 * sizeof(GLfloat));
-            program->SetMVPMatrix(mat_model * mat_vproj);
-            program->SetTexture(material.texture().texture());
-
-            glBindBuffer(GL_ARRAY_BUFFER, model.array_buffer());
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.element_buffer());
-            // TODO(andrew): setup vertex shader
-            glDrawElements(GL_TRIANGLES, model.num_vertices(), GL_UNSIGNED_INT,
-                           NULL);
-        }
-        program->End();
-    }
+void scrap::ModelScene::OnHide() {
+    delete renderer_;
 }
 
 void scrap::ModelScene::OnSizeChange(int width, int height) {
-    glViewport(0, 0, width, height);
     active_camera_->set_ratio((float)width/(float)height);
-}
-
-void scrap::ModelScene::AddDoodad(Doodad &doodad) {
-    gl::Program &program = doodad.material().program();
-    std::vector<Doodad*> *doodad_list = doodads_[&program];
-    doodad_list->push_back(&doodad);
+    renderer_->Resize(width, height);
 }
