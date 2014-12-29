@@ -22,7 +22,8 @@ static const GLfloat kGUIBuffer[] = {
     -1.0f, -1.0f,
     -1.0f, 1.0f,
     1.0f, -1.0f,
-    1.0f, 1.0f };
+    1.0f, 1.0f
+};
 
 scrap::Renderer::Renderer(GLsizei width, GLsizei height) : cairo_ctx_(NULL),
         cairo_surface_(NULL) {
@@ -45,10 +46,6 @@ scrap::Renderer::~Renderer() {
 void scrap::Renderer::SetDefaultProgram(gl::Program *program) {
     program_ = program;
     program->Use();
-    a_pos_ = program->GetAttribLocation("a_pos");
-    a_uv_ = program->GetAttribLocation("a_uv");
-    u_mvp_ = program->GetUniformLocation("u_mvp");
-    u_tex_ = program->GetUniformLocation("u_tex");
 }
 
 void scrap::Renderer::Resize(GLsizei width, GLsizei height) {
@@ -80,6 +77,8 @@ void scrap::Renderer::Render(ModelScene &scene) {
         gl::Model &model = doodad->model();
         gl::Material &material = doodad->material();
 
+        // TODO(andrew): support for custom shaders
+
         glUniform1i(u_tex_, material.texture().texture());
         glm::mat4 transform = camera->GetTransform() * doodad->matrix();
         glUniformMatrix4fv(u_mvp_, 1, GL_FALSE, glm::value_ptr(transform));
@@ -109,20 +108,19 @@ void scrap::Renderer::Render(ModelScene &scene) {
 
 void scrap::Renderer::DrawElements(GLuint buffer, GLsizei num_elements) {
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    program_->SetVertexAttribPointer(a_pos_, sizeof(GLfloat) * 3, GL_FLOAT,
-                                     GL_FALSE, sizeof(GLfloat) * 2, NULL);
-    program_->SetVertexAttribPointer(a_uv_, sizeof(GLfloat) * 2, GL_FLOAT,
-                                     GL_FALSE, sizeof(GLfloat) * 3,
-                                     (GLvoid*)(sizeof(GLfloat) * 3));
+    glVertexAttribPointer(a_pos_, sizeof(GLfloat) * 3, GL_FLOAT, GL_FALSE,
+                          sizeof(GLfloat) * 2, NULL);
+    glVertexAttribPointer(a_uv_, sizeof(GLfloat) * 2, GL_FLOAT, GL_FALSE,
+                          sizeof(GLfloat) * 3, NULL);
     glDrawArrays(GL_TRIANGLES, 0, num_elements);
 }
 
 void scrap::Renderer::DrawGUI(ModelScene &scene) {
     glBindBuffer(GL_ARRAY_BUFFER, gui_buffer_);
-    program_->SetVertexAttribPointer(a_pos_, sizeof(GLfloat) * 2, GL_FLOAT,
-                                     GL_FALSE, 0, NULL);
-    program_->SetVertexAttribPointer(a_uv_, sizeof(GLfloat) * 2, GL_FLOAT,
-                                     GL_FALSE, 0, NULL);
+    glVertexAttribPointer(a_pos_, sizeof(GLfloat) * 2, GL_FLOAT, GL_FALSE, 0,
+                          NULL);
+    glVertexAttribPointer(a_uv_, sizeof(GLfloat) * 2, GL_FLOAT, GL_FALSE, 0,
+                          NULL);
     
 
     cairo_set_source_rgba(cairo_ctx_, 0.0f, 0.0f, 0.0f, 0.0f);

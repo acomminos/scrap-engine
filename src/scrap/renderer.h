@@ -39,6 +39,8 @@ class Renderer {
  public:
   Renderer(GLsizei width, GLsizei height);
   ~Renderer();
+  // Sets the default gl::Program used when materials do not specify a custom
+  // program.
   void SetDefaultProgram(gl::Program *program);
   void Resize(GLsizei width, GLsizei height);
   void Render(ModelScene &scene);

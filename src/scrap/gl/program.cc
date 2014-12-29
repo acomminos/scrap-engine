@@ -43,6 +43,16 @@ void scrap::gl::Program::Use() {
     glUseProgram(program_);
 }
 
+/*
+void scrap::gl::Program::DrawElements(GLuint buffer, GLsizei num_elements) {
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glVertexAttribPointer(a_pos_, sizeof(GLfloat) * 3, GL_FLOAT, GL_FALSE,
+                          sizeof(GLfloat) * 2, NULL);
+    glDrawArrays(GL_TRIANGLES, 0, num_elements);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+*/
+
 GLuint scrap::gl::Program::GetUniformLocation(const char *name) const {
     return glGetUniformLocation(program_, name);
 }
@@ -51,7 +61,9 @@ GLuint scrap::gl::Program::GetAttribLocation(const char *name) const {
     return glGetAttribLocation(program_, name);
 }
 
+/*
 void scrap::gl::Program::SetVertexAttribPointer(GLuint index, GLsizei size,
     GLenum type, GLboolean normalized, GLuint stride, const GLvoid *pointer) {
     glVertexAttribPointer(index, size, type, normalized, stride, pointer);
 }
+*/

@@ -15,10 +15,17 @@
 
 #include "scrap/engine.h"
 #include <cassert>
+#include <cstdio>
+#include "scrap/gl/gl2ext.h"
 
 static GLFWwindow* window_;
 static std::stack<scrap::Scene*> scene_stack_;
 
+static void LoadExtensions();
+static void DebugCallback(GLenum source, GLenum type, GLuint id,
+                          GLenum severity, GLsizei length,
+                          const GLchar *message,
+                          const void *userParam);
 static void Loop();
 
 void scrap::engine::Init(scrap::Scene *scene, const scrap::Settings& settings) {
@@ -29,6 +36,11 @@ void scrap::engine::Init(scrap::Scene *scene, const scrap::Settings& settings) {
     GLFWmonitor *monitor = NULL;
     if (settings.fullscreen())
         monitor = glfwGetPrimaryMonitor();
+
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE); // for GL_KHR_debug
 
     window_ = glfwCreateWindow(settings.width(), settings.height(),
                                "Scrap Engine", monitor, NULL);
@@ -49,6 +61,9 @@ void scrap::engine::Init(scrap::Scene *scene, const scrap::Settings& settings) {
     });
 
     glfwMakeContextCurrent(window_);
+
+    LoadExtensions();
+
     scene->OnShow();
     Loop();
 }
@@ -92,6 +107,21 @@ int scrap::engine::Height() {
     int height;
     glfwGetWindowSize(window_, NULL, &height);
     return height;
+}
+
+void LoadExtensions() {
+    if (glfwExtensionSupported("GL_KHR_debug")) {
+        printf("Enabling GL_KHR_debug logging callback\n");
+        PFNGLDEBUGMESSAGECALLBACKKHRPROC glDebugMessageCallbackKHR =
+            (PFNGLDEBUGMESSAGECALLBACKKHRPROC)
+            glfwGetProcAddress("glDebugMessageCallbackKHR");
+        glDebugMessageCallbackKHR([](GLenum source, GLenum type, GLuint id,
+                                     GLenum severity, GLsizei length,
+                                     const GLchar *message,
+                                     const void *userParam) {
+            fprintf(stderr, "%s\n", message);
+        }, NULL);
+    } 
 }
 
 void Loop() {

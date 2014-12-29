@@ -55,7 +55,7 @@ class ModelScene : public Scene {
 
  private:
   Renderer *renderer_;
-  gl::Program *program_;
+  gl::Program *default_program_;
   Camera *active_camera_;
   std::vector<Doodad*> doodads_;
 };

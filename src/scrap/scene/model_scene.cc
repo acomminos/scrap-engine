@@ -23,7 +23,33 @@ scrap::ModelScene::ModelScene() {
 }
 
 void scrap::ModelScene::OnShow() {
+    default_program_ = new gl::Program();
+    gl::Shader *vert_shader = new gl::Shader(gl::VertexShader);
+    gl::Shader *frag_shader = new gl::Shader(gl::FragmentShader);
+    // FIXME(andrew): example code
+    vert_shader->Compile(
+        "#version 100\n\
+        uniform mat4 u_mvp;\
+        in vec3 a_pos;\
+        in vec2 a_uv;\
+        out vec2 v_texcoord;\
+        void main(void) {\
+            gl_Position = u_mvp * a_pos;\
+            v_texcoord = a_uv;\
+        }");
+    frag_shader->Compile(
+        "#version 100\n\
+        uniform sampler2D u_tex;\
+        in vec2 v_texcoord;\
+        void main() {\
+            vec4 color = texture2D(u_tex, v_texcoord);\
+            gl_FragColor = color; // TODO: shading\
+        }");
+    //default_program_->Link(std::unique_ptr<gl::Shader>(vert_shader),
+    //                       std::unique_ptr<gl::Shader>(frag_shader));
+
     renderer_ = new Renderer(scrap::engine::Width(), scrap::engine::Height());
+    renderer_->SetDefaultProgram(default_program_);
 }
 
 void scrap::ModelScene::Render() {

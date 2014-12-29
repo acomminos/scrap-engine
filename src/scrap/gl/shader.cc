@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "scrap/gl/shader.h"
+#include <cstdio>
 
 scrap::gl::Shader::Shader(scrap::gl::ShaderType type) {
     shader_ = glCreateShader(type);
@@ -30,6 +31,18 @@ bool scrap::gl::Shader::Compile(std::string source) {
 
     GLint result;
     glGetShaderiv(shader_, GL_COMPILE_STATUS, &result);
-    compiled_ = result;
+    //compiled_ = result;
+    compiled_ = true;
+
+    /*
+        GLsizei len = 0;
+        glGetShaderiv(shader_, GL_INFO_LOG_LENGTH, &len);
+        fprintf(stderr, "info length: %lu\n", len);
+        GLchar *buf = new GLchar[len + 1];
+        glGetShaderInfoLog(shader_, len, NULL, buf);
+        fprintf(stderr, "Error in shader compilation: %s\n", buf);
+        delete[] buf;
+    */
+
     return result;
 }

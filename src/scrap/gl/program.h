@@ -21,6 +21,8 @@
 #include <glm/glm.hpp>
 #include "scrap/gl/shader.h"
 #include "scrap/gl/gl_config.h"
+#include "scrap/gl/model.h"
+#include "scrap/camera.h"
 
 namespace scrap {
 namespace gl {
@@ -38,14 +40,16 @@ class Program {
   bool Link(std::unique_ptr<scrap::gl::Shader> vertex_shader,
             std::unique_ptr<scrap::gl::Shader> fragment_shader);
   bool is_linked() const { return linked_; }
+
   // Instructs OpenGL to use this program.
   void Use();
 
   GLuint GetUniformLocation(const char *name) const;
   GLuint GetAttribLocation(const char *name) const;
-  void SetVertexAttribPointer(GLuint index, GLsizei size, GLenum type,
-                              GLboolean normalized, GLuint stride,
-                              const GLvoid *pointer);
+  // Sets the camera to be used to render models.
+  //virtual void SetCamera(const Camera &camera) = 0;
+  // Draws the elements in the provided buffer.
+  //virtual void DrawElements(GLuint buffer, GLsizei num_elements) = 0;
  private:
   bool linked_;
   std::unique_ptr<Shader> vertex_shader_;

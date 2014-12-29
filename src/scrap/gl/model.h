@@ -40,6 +40,7 @@ typedef struct {
 } Element;
 
 // A model assignable to a Doodad. Contains vertex data in an element buffer.
+// See gl::Element for GL buffer data layout.
 // Uses the RAII model for OpenGL buffer allocation.
 class Model {
  public:
