@@ -10,3 +10,4 @@ Features
 
 - TODO(andrew): obj model loading
 - "salvage" scene sandbox
+- Cairo for GUI rendering

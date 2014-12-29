@@ -113,10 +113,10 @@ void scrap::Renderer::Render(ModelScene &scene) {
 
 void scrap::Renderer::DrawElements(GLuint buffer, GLsizei num_elements) {
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glVertexAttribPointer(a_pos_, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2,
+    glVertexAttribPointer(a_pos_, 3, GL_FLOAT, GL_FALSE, sizeof(gl::Element),
                           NULL);
-    glVertexAttribPointer(a_uv_, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 3,
-                          NULL);
+    glVertexAttribPointer(a_uv_, 2, GL_FLOAT, GL_FALSE, sizeof(gl::Element),
+                          (GLvoid*)(sizeof(GLfloat) * 3));
     glDrawArrays(GL_TRIANGLES, 0, num_elements);
 }
 
@@ -130,7 +130,7 @@ void scrap::Renderer::DrawGUI(ModelScene &scene) {
     
 
     cairo_rectangle(cairo_ctx_, 0, 0, 200, 200);
-    cairo_set_source_rgba(cairo_ctx_, 1.0f, 1.0f, 1.0f, 1.0f);
+    cairo_set_source_rgba(cairo_ctx_, 1.0f, 0.0f, 1.0f, 1.0f);
     cairo_fill(cairo_ctx_);
 
     cairo_save(cairo_ctx_);
