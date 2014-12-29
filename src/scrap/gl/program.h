@@ -28,7 +28,6 @@ namespace scrap {
 namespace gl {
 
 // A wrapper around a GLSL shader program.
-// Uses std::unique_ptr to manage lifecycle of OpenGL state.
 class Program {
  public:
   // Registers a new shader program with OpenGL.
@@ -37,8 +36,8 @@ class Program {
 
   // Attaches the given shaders, and links this program.
   // Returns true if the program was successfully linked.
-  bool Link(std::unique_ptr<scrap::gl::Shader> vertex_shader,
-            std::unique_ptr<scrap::gl::Shader> fragment_shader);
+  bool Link(const scrap::gl::Shader &vertex_shader,
+            const scrap::gl::Shader &fragment_shader);
   bool is_linked() const { return linked_; }
 
   // Instructs OpenGL to use this program.
@@ -52,8 +51,6 @@ class Program {
   //virtual void DrawElements(GLuint buffer, GLsizei num_elements) = 0;
  private:
   bool linked_;
-  std::unique_ptr<Shader> vertex_shader_;
-  std::unique_ptr<Shader> fragment_shader_;
   GLuint program_;
 };
 

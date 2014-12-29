@@ -23,14 +23,12 @@ scrap::gl::Program::~Program() {
     glDeleteProgram(program_);
 }
 
-bool scrap::gl::Program::Link(std::unique_ptr<scrap::gl::Shader> vertex_shader,
-    std::unique_ptr<scrap::gl::Shader> fragment_shader) {
-    assert(vertex_shader->is_compiled() && fragment_shader->is_compiled());
-    vertex_shader_ = std::move(vertex_shader);
-    fragment_shader_ = std::move(fragment_shader);
+bool scrap::gl::Program::Link(const scrap::gl::Shader &vertex_shader,
+    const scrap::gl::Shader &fragment_shader) {
+    assert(vertex_shader.is_compiled() && fragment_shader.is_compiled());
 
-    glAttachShader(program_, vertex_shader->shader());
-    glAttachShader(program_, fragment_shader->shader());
+    glAttachShader(program_, vertex_shader.shader());
+    glAttachShader(program_, fragment_shader.shader());
     glLinkProgram(program_);
 
     GLint result;

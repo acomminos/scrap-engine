@@ -31,18 +31,16 @@ bool scrap::gl::Shader::Compile(std::string source) {
 
     GLint result;
     glGetShaderiv(shader_, GL_COMPILE_STATUS, &result);
-    //compiled_ = result;
-    compiled_ = true;
+    compiled_ = result;
 
-    /*
+    if (!result) {
         GLsizei len = 0;
         glGetShaderiv(shader_, GL_INFO_LOG_LENGTH, &len);
-        fprintf(stderr, "info length: %lu\n", len);
         GLchar *buf = new GLchar[len + 1];
         glGetShaderInfoLog(shader_, len, NULL, buf);
         fprintf(stderr, "Error in shader compilation: %s\n", buf);
         delete[] buf;
-    */
+    }
 
     return result;
 }
