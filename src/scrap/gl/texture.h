@@ -26,7 +26,8 @@ class Texture {
   public:
     Texture();
     ~Texture();
-    void SetData(GLint format, const GLvoid *data, GLsizei width, GLsizei height);
+    void SetData(GLenum type, const GLvoid *data, GLsizei width,
+                 GLsizei height);
     GLuint texture() const { return texture_; }
   private:
     GLuint texture_;

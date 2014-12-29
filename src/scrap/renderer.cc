@@ -17,18 +17,21 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "scrap/scene/model_scene.h"
 
-// 2D texture coordinates drawn with GL_TRIANGLE_STRIP
+// 2D vertices and texture coordinates drawn with GL_TRIANGLE_STRIP
 static const GLfloat kGUIBuffer[] = {
-    -1.0f, -1.0f,
-    -1.0f, 1.0f,
-    1.0f, -1.0f,
-    1.0f, 1.0f
+    1.0f, 1.0f, 1.0f, 1.0f,
+    -1.0f, 1.0f, 0.0f, 1.0f,
+    1.0f, -1.0f, 1.0f, 0.0f,
+    -1.0f, -1.0f, 0.0f, 0.0f
 };
 
 scrap::Renderer::Renderer(GLsizei width, GLsizei height) : cairo_ctx_(NULL),
         cairo_surface_(NULL) {
     glEnable(GL_DEPTH_TEST);
     glGenBuffers(1, &gui_buffer_);
+    glBindBuffer(GL_ARRAY_BUFFER, gui_buffer_);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(kGUIBuffer), kGUIBuffer,
+                 GL_STATIC_DRAW);
     Resize(width, height);
 }
 
@@ -43,6 +46,11 @@ scrap::Renderer::~Renderer() {
 void scrap::Renderer::SetDefaultProgram(gl::Program *program) {
     program_ = program;
     program->Use();
+
+    a_pos_ = program->GetAttribLocation("a_pos");
+    a_uv_ = program->GetAttribLocation("a_uv");
+    u_tex_ = program->GetUniformLocation("u_tex");
+    u_mvp_ = program->GetUniformLocation("u_mvp");
 }
 
 void scrap::Renderer::Resize(GLsizei width, GLsizei height) {
@@ -55,16 +63,6 @@ void scrap::Renderer::Resize(GLsizei width, GLsizei height) {
     cairo_surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width,
                                                 height);
     cairo_ctx_ = cairo_create(cairo_surface_);
-
-    const GLfloat data[] = {
-        -1.0f, -1.0f, 0.0f, 0.0f,
-        -1.0f, 1.0f, 0.0f, (GLfloat)height,
-        1.0f, -1.0f, (GLfloat)width, 0.0f,
-        1.0f, 1.0f, (GLfloat)width, (GLfloat)height
-    };
-
-    glBindBuffer(GL_ARRAY_BUFFER, gui_buffer_);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
 }
 
 void scrap::Renderer::Render(ModelScene &scene) {
@@ -115,33 +113,45 @@ void scrap::Renderer::Render(ModelScene &scene) {
 
 void scrap::Renderer::DrawElements(GLuint buffer, GLsizei num_elements) {
     glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glVertexAttribPointer(a_pos_, sizeof(GLfloat) * 3, GL_FLOAT, GL_FALSE,
-                          sizeof(GLfloat) * 2, NULL);
-    glVertexAttribPointer(a_uv_, sizeof(GLfloat) * 2, GL_FLOAT, GL_FALSE,
-                          sizeof(GLfloat) * 3, NULL);
+    glVertexAttribPointer(a_pos_, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 2,
+                          NULL);
+    glVertexAttribPointer(a_uv_, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 3,
+                          NULL);
     glDrawArrays(GL_TRIANGLES, 0, num_elements);
 }
 
 void scrap::Renderer::DrawGUI(ModelScene &scene) {
+    // TODO(andrew): use custom GUI GL program?
     glBindBuffer(GL_ARRAY_BUFFER, gui_buffer_);
-    glVertexAttribPointer(a_pos_, sizeof(GLfloat) * 2, GL_FLOAT, GL_FALSE,
-                          sizeof(GLfloat) * 2, NULL);
-    glVertexAttribPointer(a_uv_, sizeof(GLfloat) * 2, GL_FLOAT, GL_FALSE,
-                          sizeof(GLfloat) * 2, (GLvoid*)(sizeof(GLfloat) * 2));
+    glVertexAttribPointer(a_pos_, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 4,
+                          NULL);
+    glVertexAttribPointer(a_uv_, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 4,
+                          (GLvoid*)(sizeof(GLfloat) * 2));
     
 
-    cairo_set_source_rgba(cairo_ctx_, 1.0f, 0.0f, 0.0f, 1.0f);
+    cairo_rectangle(cairo_ctx_, 0, 0, 200, 200);
+    cairo_set_source_rgba(cairo_ctx_, 1.0f, 1.0f, 1.0f, 1.0f);
     cairo_fill(cairo_ctx_);
 
     cairo_save(cairo_ctx_);
     scene.DrawGUI(cairo_ctx_);
     cairo_restore(cairo_ctx_);
 
+    cairo_surface_flush(cairo_surface_);
+
+    glActiveTexture(GL_TEXTURE0);
+
     unsigned char *data = cairo_image_surface_get_data(cairo_surface_);
     gui_texture_.SetData(GL_UNSIGNED_BYTE, data,
         cairo_image_surface_get_width(cairo_surface_),
         cairo_image_surface_get_height(cairo_surface_));
-    glUniform1i(u_tex_, gui_texture_.texture());
+
+    glBindTexture(GL_TEXTURE_2D, gui_texture_.texture());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glUniform1i(u_tex_, 0);
+    
+    glUniformMatrix4fv(u_mvp_, 1, GL_FALSE, glm::value_ptr(glm::mat4()));
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
