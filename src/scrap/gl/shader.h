@@ -36,6 +36,7 @@ class Shader {
   // Compiles the provided shader source into this shader.
   // Returns true if the shader compiled succesfully.
   bool Compile(std::string source);
+  bool CompileFromFile(std::string shader_name);
   bool is_compiled() const { return compiled_; }
   GLuint shader() const { return shader_; }
  private:

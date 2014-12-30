@@ -44,7 +44,7 @@ void scrap::ModelScene::OnShow() {
         "in vec2 v_texcoord;\n"
         "void main() {\n"
         "    vec4 color = texture2D(u_tex, v_texcoord);\n"
-        "    color.xyz /= color.w; // cairo premultiplies alpha, undo\n"
+        "    color.rgb /= color.a; // cairo premultiplies alpha, undo\n"
         "    gl_FragColor.zyxw = color; // convert cairo ARGB -> RGBA\n"
         "}");
     default_program_->Link(vert_shader, frag_shader);

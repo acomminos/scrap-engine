@@ -35,6 +35,7 @@ class ModelScene;
 // - uniform mat4 u_mvp (model/view/projection matrix)
 // - uniform sampler2d u_tex (uv texture)
 // As well as each doodad's material's custom uniforms.
+// TODO(andrew): isolate cairo GUI
 class Renderer {
  public:
   Renderer(GLsizei width, GLsizei height);
@@ -47,6 +48,8 @@ class Renderer {
  private:
   void DrawElements(GLuint buffer, GLsizei num_elements);
   void DrawGUI(ModelScene &scene);
+  GLsizei width_;
+  GLsizei height_;
   gl::Program *program_;
   GLuint gui_buffer_;
   GLuint a_pos_;
@@ -55,6 +58,7 @@ class Renderer {
   GLuint u_tex_;
 
   // GUI
+  gl::Program gui_program_;
   gl::Texture gui_texture_;
   cairo_t *cairo_ctx_;
   cairo_surface_t *cairo_surface_;

@@ -28,6 +28,7 @@ static const GLfloat kGUIBuffer[] = {
 scrap::Renderer::Renderer(GLsizei width, GLsizei height) : cairo_ctx_(NULL),
         cairo_surface_(NULL) {
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
     glGenBuffers(1, &gui_buffer_);
     glBindBuffer(GL_ARRAY_BUFFER, gui_buffer_);
     glBufferData(GL_ARRAY_BUFFER, sizeof(kGUIBuffer), kGUIBuffer,
@@ -63,6 +64,9 @@ void scrap::Renderer::Resize(GLsizei width, GLsizei height) {
     cairo_surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width,
                                                 height);
     cairo_ctx_ = cairo_create(cairo_surface_);
+
+    width_ = width;
+    height_ = height;
 }
 
 void scrap::Renderer::Render(ModelScene &scene) {
@@ -127,10 +131,9 @@ void scrap::Renderer::DrawGUI(ModelScene &scene) {
                           NULL);
     glVertexAttribPointer(a_uv_, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 4,
                           (GLvoid*)(sizeof(GLfloat) * 2));
-    
 
-    cairo_rectangle(cairo_ctx_, 0, 0, 200, 200);
-    cairo_set_source_rgba(cairo_ctx_, 1.0f, 0.0f, 1.0f, 1.0f);
+    cairo_set_source_rgba(cairo_ctx_, 0.0f, 0.0f, 0.0f, 0.0f);
+    cairo_rectangle(cairo_ctx_, 0, 0, width_, height_);
     cairo_fill(cairo_ctx_);
 
     cairo_save(cairo_ctx_);
@@ -142,9 +145,7 @@ void scrap::Renderer::DrawGUI(ModelScene &scene) {
     glActiveTexture(GL_TEXTURE0);
 
     unsigned char *data = cairo_image_surface_get_data(cairo_surface_);
-    gui_texture_.SetData(GL_UNSIGNED_BYTE, data,
-        cairo_image_surface_get_width(cairo_surface_),
-        cairo_image_surface_get_height(cairo_surface_));
+    gui_texture_.SetData(GL_UNSIGNED_BYTE, data, width_, height_);
 
     glBindTexture(GL_TEXTURE_2D, gui_texture_.texture());
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
