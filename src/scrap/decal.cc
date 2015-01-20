@@ -1,4 +1,4 @@
-// Copyright © 2014 Andrew Comminos <andrew@morlunk.com>
+// Copyright © 2015 Andrew Comminos <andrew@morlunk.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,24 +13,5 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "scrap/gl/texture.h"
+#include "scrap/decal.h"
 
-scrap::gl::Texture::Texture() {
-    glGenTextures(1, &texture_);
-}
-
-scrap::gl::Texture::~Texture() {
-    glDeleteTextures(1, &texture_);
-}
-
-void scrap::gl::Texture::SetData(GLenum type, const GLvoid *data,
-                                 GLsizei width, GLsizei height) {
-    width_ = width;
-    height_ = height;
-    // TODO(andrew): bind elsewhere
-    glBindTexture(GL_TEXTURE_2D, texture_);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, 
-                 GL_RGBA, type, data);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-}

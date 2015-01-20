@@ -18,43 +18,33 @@
 
 #include <cstdint>
 #include <vector>
+#include <glm/glm.hpp>
 #include "scrap/gl/gl_config.h"
 
 namespace scrap {
 namespace gl {
 
-// A vertex described by (x,y,z).
+// A vertex with position, normal, and uv coords.
 typedef struct {
-    GLfloat x, y, z;
-} Vertex;
-
-// A tuple of texture coordinates (u,v).
-typedef struct {
-    GLfloat u, v;
-} UV;
-
-// A vertex with texture coordinates.
-typedef struct {
-    Vertex vertex;
-    UV uv;
+    glm::vec3 pos;
+    glm::vec3 normal;
+    glm::vec2 uv;
 } Element;
 
-// A model assignable to a Doodad. Contains vertex data in an element buffer.
+// A model assignable to a Doodad. Contains vertex data in an array buffer.
 // See gl::Element for GL buffer data layout.
 // Uses the RAII model for OpenGL buffer allocation.
 class Model {
  public:
-  Model(const Element *elements, GLuint num_elements);
+  Model(const Element *elements, GLsizei num_elements);
   ~Model();
   // Loads the given elements into the model's VBO.
-  void set_elements(const Element *elements, GLuint num_elements);
-  GLuint num_vertices() { return num_vertices_; }
+  void set_elements(const Element *elements, GLsizei num_elements);
+  GLuint num_elements() { return num_elements_; }
   GLuint array_buffer() { return array_buffer_; }
-  GLuint element_buffer() { return element_buffer_; }
  private:
-  GLuint num_vertices_;
+  GLsizei num_elements_;
   GLuint array_buffer_;
-  GLuint element_buffer_;
 };
 
 }  // namespace gl

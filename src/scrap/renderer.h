@@ -31,6 +31,7 @@ class ModelScene;
 // The base implementation of Renderer draws Doodads with shader programs
 // provided the following attributes:
 // - in vec3 a_pos (3d position)
+// - in vec3 a_normal (3d normal)
 // - in vec3 a_uv (2d uv coordinates)
 // - uniform mat4 u_mvp (model/view/projection matrix)
 // - uniform sampler2d u_tex (uv texture)

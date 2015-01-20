@@ -105,7 +105,7 @@ void scrap::Renderer::Render(ModelScene &scene) {
             glUniform1f(uniform, it->second);
         }
 
-        DrawElements(model.array_buffer(), model.num_vertices());
+        DrawElements(model.array_buffer(), model.num_elements());
     }
 
     DrawGUI(scene);

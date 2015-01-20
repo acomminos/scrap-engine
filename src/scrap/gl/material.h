@@ -25,6 +25,15 @@
 namespace scrap {
 namespace gl {
 
+// TODO(andrew): move elsewhere
+typedef struct {
+    GLuint buffer;
+    GLint size;
+    GLenum type;
+    GLboolean normalized;
+    GLsizei stride;
+} VertexAttrib;
+
 // A material contains a texture with a particular shader.
 class Material {
  public:
@@ -43,6 +52,9 @@ class Material {
   std::map<std::string, float> get_custom_float_uniforms() {
     return custom_float_uniforms_;
   }
+  std::map<std::string, VertexAttrib> get_custom_attribs() {
+    return custom_attribs_;
+  }
  private:
   std::shared_ptr<Texture> texture_;
   bool has_program_;
@@ -55,9 +67,22 @@ class Material {
   void SetCustomUniform(std::string name, float value) {
     custom_float_uniforms_[name] = value;
   }
+  void SetCustomVertexAttrib(std::string name, GLvoid *data, GLint size,
+                             GLenum type, GLboolean normalized,
+                             GLsizei stride) {
+    VertexAttrib attrib = { 0, size, type, normalized, stride };
+    glGenBuffers(1, &attrib.buffer);
+    custom_attribs_[name] = attrib;
+  }
+
+  bool UnsetCustomVertexAttrib(std::string name) {
+    VertexAttrib &attrib = custom_attribs_[name];
+    glDeleteBuffers(1, &attrib.buffer);
+  }
 
   std::map<std::string, int> custom_int_uniforms_;
   std::map<std::string, float> custom_float_uniforms_;
+  std::map<std::string, VertexAttrib> custom_attribs_;
 };
 
 }  // namespace gl

@@ -29,8 +29,12 @@ class Texture {
     void SetData(GLenum type, const GLvoid *data, GLsizei width,
                  GLsizei height);
     GLuint texture() const { return texture_; }
+    GLsizei width() const { return width_; }
+    GLsizei height() const { return height_; }
   private:
     GLuint texture_;
+    GLsizei width_;
+    GLsizei height_;
 };
 
 };  // namespace gl

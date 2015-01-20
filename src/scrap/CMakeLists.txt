@@ -17,11 +17,13 @@ pkg_search_module (CAIRO REQUIRED cairo)
 include_directories (${GLFW_INCLUDE_DIRS})
 include_directories (${CAIRO_INCLUDE_DIRS})
 
-add_definitions(-DGLFW_INCLUDE_ES2)
-add_definitions(-DGLM_FORCE_RADIANS)
+add_definitions (-DGLFW_INCLUDE_ES2)
+add_definitions (-DGLM_FORCE_RADIANS)
+
+configure_file (config.h.in config.h)
 
 add_library (scrap SHARED ${SOURCE})
 target_link_libraries (scrap ${GLFW_LIBRARIES} ${CAIRO_LIBRARIES})
 
 install (TARGETS scrap DESTINATION lib)
-install (DIRECTORY . DESTINATION include/scrap FILES_MATCHING PATTERN "*.h")
+install (DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} DESTINATION include/scrap FILES_MATCHING PATTERN "*.h")

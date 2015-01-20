@@ -38,8 +38,8 @@ static const std::regex kFaceRegex =
 // Returns true if the operation was a success.
 bool Parse(std::istream& in, gl::Model &model) {
     std::string type;
-    std::vector<gl::Vertex> vertices;
-    std::vector<gl::UV> uvs;
+    std::vector<glm::vec3> vertices;
+    std::vector<glm::vec2> uvs;
     std::vector<gl::Element> elements;
     //std::vector<int> indices;
     while (!in.eof()) {
@@ -55,7 +55,7 @@ bool Parse(std::istream& in, gl::Model &model) {
             GLfloat u, v;
             in >> u;
             in >> v;
-            uvs.push_back({u, v});
+            uvs.push_back(glm::vec2(u, v));
         } else if (type.compare("f") == 0) {
             std::string line;
             std::getline(in, line);
@@ -73,9 +73,9 @@ bool Parse(std::istream& in, gl::Model &model) {
             if (m[3].matched)
                 vn = atoi(static_cast<std::string>(m[3]).c_str());
 
-            gl::Vertex &vertex = vertices[v];
-            gl::UV &uv = uvs[vt];
-            elements.push_back({vertex, uv});
+            glm::vec3 &vertex = vertices[v];
+            glm::vec2 &uv = uvs[vt];
+            elements.push_back((gl::Element){vertex, glm::vec3(), uv});
         } else if (type.compare("\\") == 0 || type.compare("\n") == 0) {
             // Ignore newline
         } else {
