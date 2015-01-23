@@ -16,8 +16,7 @@
 #include "scrap/gl/model.h"
 #include "scrap/gl/gl_config.h"
 
-scrap::gl::Model::Model(const Element *elements, GLsizei num_elements) :
-    num_elements_(num_elements) {
+scrap::gl::Model::Model() {
     // TODO(andrew): Models with animations (changing vertex data) shouldn't
     // use STATIC_DRAW. Make this a configurable option.
     glGenBuffers(1, &array_buffer_);
@@ -34,6 +33,8 @@ scrap::gl::Model::Model(const Element *elements, GLsizei num_elements) :
 scrap::gl::Model::~Model() {
     glDeleteBuffers(1, &array_buffer_);
 }
+
+void scrap::gl::Model::SetVertexData(
 
 void scrap::gl::Model::set_elements(const Element *elements,
                                     GLsizei num_elements) {

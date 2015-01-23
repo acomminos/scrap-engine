@@ -41,14 +41,10 @@ class Program {
   bool is_linked() const { return linked_; }
 
   // Instructs OpenGL to use this program.
-  void Use();
+  void Use() const;
 
   GLuint GetUniformLocation(const char *name) const;
   GLuint GetAttribLocation(const char *name) const;
-  // Sets the camera to be used to render models.
-  //virtual void SetCamera(const Camera &camera) = 0;
-  // Draws the elements in the provided buffer.
-  //virtual void DrawElements(GLuint buffer, GLsizei num_elements) = 0;
  private:
   bool linked_;
   GLuint program_;

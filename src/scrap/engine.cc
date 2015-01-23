@@ -57,6 +57,7 @@ void scrap::engine::Init(scrap::Scene *scene, const scrap::Settings& settings) {
         scene_stack_.top()->OnMouseButton(button, action, mods);
     });
     glfwSetFramebufferSizeCallback(window_, [](GLFWwindow*, int width, int height) {
+        glViewport(0, 0, width, height); // FIXME(andrew): should this go here?
         scene_stack_.top()->OnSizeChange(width, height);
     });
 

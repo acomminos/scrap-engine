@@ -20,18 +20,14 @@
 #include "scrap/engine.h"
 
 scrap::ModelScene::ModelScene() {
-}
-
-void scrap::ModelScene::OnShow() {
-    default_program_ = new gl::Program();
     gl::Shader vert_shader(gl::VertexShader);
     gl::Shader frag_shader(gl::FragmentShader);
     // FIXME(andrew): example code
     vert_shader.Compile(
         "#version 100\n"
         "uniform mat4 u_mvp;\n"
-        "in vec3 a_pos;\n"
-        "in vec2 a_uv;\n"
+        "attribute vec3 a_pos;\n"
+        "attribute vec2 a_uv;\n"
         "varying vec2 v_texcoord;\n"
         "void main(void) {\n"
         "   gl_Position = u_mvp * vec4(a_pos, 1.0);\n"
@@ -41,28 +37,31 @@ void scrap::ModelScene::OnShow() {
         "#version 100\n"
         "precision mediump float;\n"
         "uniform sampler2D u_tex;\n"
-        "in vec2 v_texcoord;\n"
+        "varying vec2 v_texcoord;\n"
         "void main() {\n"
         "    vec4 color = texture2D(u_tex, v_texcoord);\n"
         "    color.rgb /= color.a; // cairo premultiplies alpha, undo\n"
         "    gl_FragColor.zyxw = color; // convert cairo ARGB -> RGBA\n"
         "}");
-    default_program_->Link(vert_shader, frag_shader);
+    default_program_.Link(vert_shader, frag_shader);
+    model_renderer_ = new gl::ModelRenderer(*this, default_program_);
+}
 
-    renderer_ = new Renderer(scrap::engine::Width(), scrap::engine::Height());
-    renderer_->SetDefaultProgram(default_program_);
+scrap::ModelScene::~ModelScene() {
+    delete model_renderer_;
+}
+
+void scrap::ModelScene::OnShow() {
 }
 
 void scrap::ModelScene::Render() {
-    assert(renderer_);  // if this throws, it's a scene lifecycle issue
-    renderer_->Render(*this);
+    assert(model_renderer_);
+    model_renderer_->Render();
 }
 
 void scrap::ModelScene::OnHide() {
-    delete renderer_;
 }
 
 void scrap::ModelScene::OnSizeChange(int width, int height) {
     active_camera_->set_ratio((float)width/(float)height);
-    renderer_->Resize(width, height);
 }

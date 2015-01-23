@@ -17,6 +17,8 @@
 #define SRC_SCRAP_MODEL_H_
 
 #include <cstdint>
+#include <map>
+#include <string>
 #include <vector>
 #include <glm/glm.hpp>
 #include "scrap/gl/gl_config.h"
@@ -24,27 +26,43 @@
 namespace scrap {
 namespace gl {
 
-// A vertex with position, normal, and uv coords.
 typedef struct {
-    glm::vec3 pos;
-    glm::vec3 normal;
-    glm::vec2 uv;
-} Element;
+    bool enabled;
+    GLsizei size;
+    GLenum type;
+    GLboolean normalized;
+    GLsizei stride;
+    GLvoid *offset;
+    GLuint buffer;
+    
+    void SetVertexAttribPointer(GLuint attrib) {
+        glBindBuffer(GL_ARRAY_BUFFER, buffer);
+        glVertexAttribPointer(attrib, size, type, normalized, stride, offset);
+    }
+} AttribBuffer;
 
-// A model assignable to a Doodad. Contains vertex data in an array buffer.
-// See gl::Element for GL buffer data layout.
+// A model assignable to a Doodad. Contains vertex data.
 // Uses the RAII model for OpenGL buffer allocation.
 class Model {
  public:
-  Model(const Element *elements, GLsizei num_elements);
+  // Sets the vertex data for this model.
+  // If any attribute pointers are null, they will not be uploaded.
+  Model();
   ~Model();
-  // Loads the given elements into the model's VBO.
-  void set_elements(const Element *elements, GLsizei num_elements);
-  GLuint num_elements() { return num_elements_; }
-  GLuint array_buffer() { return array_buffer_; }
+  void SetVertexData(const glm::vec3 *positions, const glm::vec3 *normals,
+                     const glm::vec2 *uvs, const glm::vec4 *colours,
+                     GLsizei num_vertices);
+  AttribBuffer position_buffer() const { return position_buffer_; }
+  AttribBuffer normal_buffer() const { return normal_buffer_; }
+  AttribBuffer uv_buffer() const { return uv_buffer_; }
+  AttribBuffer colour_buffer() const { return colour_buffer_; }
+  GLsizei num_vertices() const { return num_vertices_; }
  private:
-  GLsizei num_elements_;
-  GLuint array_buffer_;
+  AttribBuffer position_buffer_;
+  AttribBuffer normal_buffer_;
+  AttribBuffer uv_buffer_;
+  AttribBuffer colour_buffer_;
+  GLsizei num_vertices_;
 };
 
 }  // namespace gl

@@ -39,6 +39,7 @@ static const std::regex kFaceRegex =
 bool Parse(std::istream& in, gl::Model &model) {
     std::string type;
     std::vector<glm::vec3> vertices;
+    std::vector<glm::vec3> normals;
     std::vector<glm::vec2> uvs;
     std::vector<gl::Element> elements;
     //std::vector<int> indices;
@@ -81,6 +82,11 @@ bool Parse(std::istream& in, gl::Model &model) {
         } else {
             printf("Unknown delimiter %s", type.c_str());
         }
+skipline:
+        char next;
+        do {
+            next = in.get();
+        } while (next != '\n' && next != '\\');
     }
     model.set_elements(elements.data(), elements.size());
 }

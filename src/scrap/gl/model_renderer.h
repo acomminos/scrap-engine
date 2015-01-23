@@ -28,43 +28,33 @@ namespace scrap {
 
 class ModelScene;
 
-// The base implementation of Renderer draws Doodads with shader programs
+namespace gl {
+
+// The base implementation of ModelRenderer renders a ModelScene with a shader
 // provided the following attributes:
-// - in vec3 a_pos (3d position)
-// - in vec3 a_normal (3d normal)
-// - in vec3 a_uv (2d uv coordinates)
+// - attribute vec3 a_pos (3d position)
+// - attribute vec3 a_normal (3d normal)
+// - attribute vec3 a_uv (2d uv coordinates)
 // - uniform mat4 u_mvp (model/view/projection matrix)
 // - uniform sampler2d u_tex (uv texture)
-// As well as each doodad's material's custom uniforms.
-// TODO(andrew): isolate cairo GUI
-class Renderer {
+// Custom uniforms can be specified by materials.
+class ModelRenderer {
  public:
-  Renderer(GLsizei width, GLsizei height);
-  ~Renderer();
-  // Sets the default gl::Program used when materials do not specify a custom
-  // program.
-  void SetDefaultProgram(gl::Program *program);
-  void Resize(GLsizei width, GLsizei height);
-  void Render(ModelScene &scene);
+  ModelRenderer(const ModelScene &scene, const Program &program);
+  ~ModelRenderer();
+  // Draws all Doodads in the scene.
+  void Render() const;
  private:
-  void DrawElements(GLuint buffer, GLsizei num_elements);
-  void DrawGUI(ModelScene &scene);
-  GLsizei width_;
-  GLsizei height_;
-  gl::Program *program_;
-  GLuint gui_buffer_;
+  const ModelScene &scene_;
+  const gl::Program &program_;
   GLuint a_pos_;
+  GLuint a_normal_;
   GLuint a_uv_;
   GLuint u_mvp_;
   GLuint u_tex_;
-
-  // GUI
-  gl::Program gui_program_;
-  gl::Texture gui_texture_;
-  cairo_t *cairo_ctx_;
-  cairo_surface_t *cairo_surface_;
 };
 
+}  // namespace gl
 }  // namespace scrap
 
 #endif  // SRC_SCRAP_RENDERER_H_

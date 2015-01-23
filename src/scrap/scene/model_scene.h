@@ -22,7 +22,7 @@
 #include "scrap/scene.h"
 #include "scrap/camera.h"
 #include "scrap/doodad.h"
-#include "scrap/renderer.h"
+#include "scrap/gl/model_renderer.h"
 #include "scrap/gl/program.h"
 #include "scrap/gl/model.h"
 
@@ -31,6 +31,7 @@ namespace scrap {
 class ModelScene : public Scene {
  public:
   ModelScene();
+  ~ModelScene();
   virtual void Render();
   virtual void OnSizeChange(int width, int height);
   virtual void OnShow();
@@ -54,8 +55,8 @@ class ModelScene : public Scene {
 
 
  private:
-  Renderer *renderer_;
-  gl::Program *default_program_;
+  gl::ModelRenderer *model_renderer_;
+  gl::Program default_program_;
   Camera *active_camera_;
   std::vector<Doodad*> doodads_;
 };

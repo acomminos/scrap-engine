@@ -70,14 +70,16 @@ class Material {
   void SetCustomVertexAttrib(std::string name, GLvoid *data, GLint size,
                              GLenum type, GLboolean normalized,
                              GLsizei stride) {
-    VertexAttrib attrib = { 0, size, type, normalized, stride };
-    glGenBuffers(1, &attrib.buffer);
+    GLuint buffer;
+    //glGenBuffers(1, &buffer);
+    VertexAttrib attrib = { buffer, size, type, normalized, stride };
     custom_attribs_[name] = attrib;
   }
 
   bool UnsetCustomVertexAttrib(std::string name) {
     VertexAttrib &attrib = custom_attribs_[name];
-    glDeleteBuffers(1, &attrib.buffer);
+    GLuint buffer = attrib.buffer;
+    //glDeleteBuffers(1, &buffer);
   }
 
   std::map<std::string, int> custom_int_uniforms_;
