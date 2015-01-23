@@ -21,11 +21,20 @@
 #include <glm/glm.hpp>
 #include "scrap/gl/shader.h"
 #include "scrap/gl/gl_config.h"
-#include "scrap/gl/model.h"
 #include "scrap/camera.h"
 
 namespace scrap {
 namespace gl {
+
+typedef struct {
+    bool enabled;
+    GLsizei size;
+    GLenum type;
+    GLboolean normalized;
+    GLsizei stride;
+    GLvoid *offset;
+    GLuint buffer;
+} AttribBuffer;
 
 // A wrapper around a GLSL shader program.
 class Program {
@@ -45,6 +54,7 @@ class Program {
 
   GLuint GetUniformLocation(const char *name) const;
   GLuint GetAttribLocation(const char *name) const;
+  bool BindVertexAttribBuffer(GLuint attrib, const AttribBuffer &buffer) const;
  private:
   bool linked_;
   GLuint program_;

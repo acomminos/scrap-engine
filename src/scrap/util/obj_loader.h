@@ -34,15 +34,13 @@ static const std::regex kVertexRegex =
 static const std::regex kFaceRegex =
     std::regex(R"((\d+)(?:\/(\d+)?(?:\/(\d+))?)?)");
 
-// Loads the OBJ data from the provided input stream into the model given
+// Loads the OBJ data from the provided input stream into the model given.
 // Returns true if the operation was a success.
 bool Parse(std::istream& in, gl::Model &model) {
     std::string type;
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec3> normals;
     std::vector<glm::vec2> uvs;
-    std::vector<gl::Element> elements;
-    //std::vector<int> indices;
     while (!in.eof()) {
         std::getline(in, type, ' ');
         if (type.compare("v") == 0) {
@@ -76,7 +74,7 @@ bool Parse(std::istream& in, gl::Model &model) {
 
             glm::vec3 &vertex = vertices[v];
             glm::vec2 &uv = uvs[vt];
-            elements.push_back((gl::Element){vertex, glm::vec3(), uv});
+            //elements.push_back((gl::Element){vertex, glm::vec3(), uv});
         } else if (type.compare("\\") == 0 || type.compare("\n") == 0) {
             // Ignore newline
         } else {
@@ -88,7 +86,7 @@ skipline:
             next = in.get();
         } while (next != '\n' && next != '\\');
     }
-    model.set_elements(elements.data(), elements.size());
+    //model.set_elements(elements.data(), elements.size());
 }
 
 }  // namespace OBJLoader

@@ -37,7 +37,7 @@ bool scrap::gl::Program::Link(const scrap::gl::Shader &vertex_shader,
     return result;
 }
 
-void scrap::gl::Program::Use() {
+void scrap::gl::Program::Use() const {
     glUseProgram(program_);
 }
 
@@ -57,6 +57,13 @@ GLuint scrap::gl::Program::GetUniformLocation(const char *name) const {
 
 GLuint scrap::gl::Program::GetAttribLocation(const char *name) const {
     return glGetAttribLocation(program_, name);
+}
+
+bool scrap::gl::Program::BindVertexAttribBuffer(GLuint attrib,
+        const AttribBuffer &buffer) const {
+    glBindBuffer(GL_ARRAY_BUFFER, buffer.buffer);
+    glVertexAttribPointer(attrib, buffer.size, buffer.type, buffer.normalized,
+                          buffer.stride, buffer.offset);
 }
 
 /*

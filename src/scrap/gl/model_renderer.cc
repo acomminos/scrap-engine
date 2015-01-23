@@ -23,6 +23,7 @@ scrap::gl::ModelRenderer::ModelRenderer(const ModelScene &scene,
     assert(program.is_linked());
 
     a_pos_ = program.GetAttribLocation("a_pos");
+    a_normal_ = program.GetAttribLocation("a_normal");
     a_uv_ = program.GetAttribLocation("a_uv");
     u_tex_ = program.GetUniformLocation("u_tex");
     u_mvp_ = program.GetUniformLocation("u_mvp");
@@ -57,26 +58,24 @@ void scrap::gl::ModelRenderer::Render() const {
         glm::mat4 transform = camera->GetTransform() * doodad->matrix();
         glUniformMatrix4fv(u_mvp_, 1, GL_FALSE, glm::value_ptr(transform));
 
-        AttribBuffer position_buffer = model.position_buffer();
-        AttribBuffer position_buffer = model.position_buffer();
-        AttribBuffer position_buffer = model.position_buffer();
-        position_buffer.SetVertexAttribPointer(a_pos_);
+        const AttribBuffer &position_buffer = model.position_buffer();
+        const AttribBuffer &normal_buffer = model.normal_buffer();
+        const AttribBuffer &uv_buffer = model.uv_buffer();
 
-        DrawElements(model.array_buffer(), model.num_elements());
+        glActiveTexture(GL_TEXTURE0);
+        // TODO(andrew): render texture with material's shader
+        glBindTexture(GL_TEXTURE_2D, material.texture().texture());
+
+        program_.BindVertexAttribBuffer(a_pos_, position_buffer);
+        program_.BindVertexAttribBuffer(a_normal_, normal_buffer);
+        program_.BindVertexAttribBuffer(a_uv_, uv_buffer);
+
+        glDrawArrays(GL_TRIANGLES, 0, model.num_vertices());
     }
 
     glDisableVertexAttribArray(a_pos_);
     glDisableVertexAttribArray(a_normal_);
     glDisableVertexAttribArray(a_uv_);
-}
-
-void scrap::gl::ModelRenderer::DrawElements(GLuint buffer, GLsizei num_elements) {
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glVertexAttribPointer(a_pos_, 3, GL_FLOAT, GL_FALSE, sizeof(gl::Element),
-                          NULL);
-    glVertexAttribPointer(a_uv_, 2, GL_FLOAT, GL_FALSE, sizeof(gl::Element),
-                          (GLvoid*)(sizeof(GLfloat) * 3));
-    glDrawArrays(GL_TRIANGLES, 0, num_elements);
 }
 
 //  void scrap::gl::ModelRenderer::DrawGUI(ModelScene &scene) {

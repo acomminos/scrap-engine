@@ -6,8 +6,8 @@ set (SOURCE
     gl/texture.cc
     gl/material.cc
     gl/model.cc
+    gl/model_renderer.cc
     doodad.cc
-    renderer.cc
     scene/model_scene.cc
 )
 

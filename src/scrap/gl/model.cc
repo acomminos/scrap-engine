@@ -17,29 +17,37 @@
 #include "scrap/gl/gl_config.h"
 
 scrap::gl::Model::Model() {
-    // TODO(andrew): Models with animations (changing vertex data) shouldn't
-    // use STATIC_DRAW. Make this a configurable option.
-    glGenBuffers(1, &array_buffer_);
-    glBindBuffer(GL_ARRAY_BUFFER, array_buffer_);
-    glBufferData(GL_ARRAY_BUFFER,
-                 num_elements * sizeof(Element),
-                 elements, GL_STATIC_DRAW);
-
-    // TODO(andrew): element array buffers
-
-    glBindBuffer(0, GL_ARRAY_BUFFER);
 }
 
 scrap::gl::Model::~Model() {
-    glDeleteBuffers(1, &array_buffer_);
+    ResetVertexData();
 }
 
-void scrap::gl::Model::SetVertexData(
+void scrap::gl::Model::SetVertexData(const glm::vec3 *positions,
+                                     const glm::vec3 *normals,
+                                     const glm::vec2 *uvs,
+                                     const glm::vec4 *colours,
+                                     GLsizei num_vertices) {
+    ResetVertexData();
 
-void scrap::gl::Model::set_elements(const Element *elements,
-                                    GLsizei num_elements) {
-    glBindBuffer(GL_ARRAY_BUFFER, array_buffer_);
-    glBufferData(GL_ARRAY_BUFFER, num_elements * sizeof(Element),
-                 elements, GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    // TODO(andrew): allocate buffers for vertex data
+}
+
+void scrap::gl::Model::ResetVertexData() {
+    if (position_buffer_.enabled) {
+        glDeleteBuffers(1, &position_buffer_.buffer);
+        position_buffer_.enabled = false;
+    }
+    if (normal_buffer_.enabled) {
+        glDeleteBuffers(1, &normal_buffer_.buffer);
+        normal_buffer_.enabled = false;
+    }
+    if (uv_buffer_.enabled) {
+        glDeleteBuffers(1, &uv_buffer_.buffer);
+        uv_buffer_.enabled = false;
+    }
+    if (colour_buffer_.enabled) {
+        glDeleteBuffers(1, &colour_buffer_.buffer);
+        colour_buffer_.enabled = false;
+    }
 }

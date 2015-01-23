@@ -22,36 +22,23 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "scrap/gl/gl_config.h"
+#include "scrap/gl/program.h"
 
 namespace scrap {
 namespace gl {
-
-typedef struct {
-    bool enabled;
-    GLsizei size;
-    GLenum type;
-    GLboolean normalized;
-    GLsizei stride;
-    GLvoid *offset;
-    GLuint buffer;
-    
-    void SetVertexAttribPointer(GLuint attrib) {
-        glBindBuffer(GL_ARRAY_BUFFER, buffer);
-        glVertexAttribPointer(attrib, size, type, normalized, stride, offset);
-    }
-} AttribBuffer;
 
 // A model assignable to a Doodad. Contains vertex data.
 // Uses the RAII model for OpenGL buffer allocation.
 class Model {
  public:
-  // Sets the vertex data for this model.
-  // If any attribute pointers are null, they will not be uploaded.
   Model();
   ~Model();
+  // Sets the vertex data for this model, uploading each attribute into video
+  // memory. If any attribute pointers are null, they will not be uploaded.
   void SetVertexData(const glm::vec3 *positions, const glm::vec3 *normals,
                      const glm::vec2 *uvs, const glm::vec4 *colours,
                      GLsizei num_vertices);
+  void ResetVertexData();
   AttribBuffer position_buffer() const { return position_buffer_; }
   AttribBuffer normal_buffer() const { return normal_buffer_; }
   AttribBuffer uv_buffer() const { return uv_buffer_; }

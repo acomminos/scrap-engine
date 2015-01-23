@@ -27,6 +27,7 @@ scrap::ModelScene::ModelScene() {
         "#version 100\n"
         "uniform mat4 u_mvp;\n"
         "attribute vec3 a_pos;\n"
+        "attribute vec3 a_normal;\n"
         "attribute vec2 a_uv;\n"
         "varying vec2 v_texcoord;\n"
         "void main(void) {\n"
