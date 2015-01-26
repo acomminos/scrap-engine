@@ -33,7 +33,7 @@ class Camera {
   void set_ratio(float ratio) { ratio_ = ratio; }
   void set_near(float near) { near_ = near; }
   void set_far(float far) { far_ = far; }
-  glm::mat4 GetTransform();
+  glm::mat4 GetTransform() const;
   glm::mat4 ToModelCoords(const glm::mat4 &mat);
  private:
   float fov_;

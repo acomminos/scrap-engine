@@ -37,10 +37,8 @@ scrap::gl::ModelRenderer::~ModelRenderer() {
 
 void scrap::gl::ModelRenderer::Render() const {
     program_.Use();
-    glClearColor(0, 0, 0, 1);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    Camera *camera = scene_.active_camera();
+    const Camera *camera = scene_.active_camera();
     const std::vector<Doodad*> &doodads = scene_.doodads();
 
     glEnableVertexAttribArray(a_pos_);
@@ -48,23 +46,23 @@ void scrap::gl::ModelRenderer::Render() const {
     glEnableVertexAttribArray(a_uv_);
 
     for (auto it = doodads.cbegin(); it != doodads.cend(); it++) {
-        Doodad *doodad = *it;
+        const Doodad *doodad = *it;
         gl::Model &model = doodad->model();
         gl::Material &material = doodad->material();
 
         // TODO(andrew): support for material shaders
 
-        glUniform1i(u_tex_, material.texture().texture());
         glm::mat4 transform = camera->GetTransform() * doodad->matrix();
         glUniformMatrix4fv(u_mvp_, 1, GL_FALSE, glm::value_ptr(transform));
-
-        const AttribBuffer &position_buffer = model.position_buffer();
-        const AttribBuffer &normal_buffer = model.normal_buffer();
-        const AttribBuffer &uv_buffer = model.uv_buffer();
 
         glActiveTexture(GL_TEXTURE0);
         // TODO(andrew): render texture with material's shader
         glBindTexture(GL_TEXTURE_2D, material.texture().texture());
+        glUniform1i(u_tex_, 0);
+
+        const AttribBuffer &position_buffer = model.position_buffer();
+        const AttribBuffer &normal_buffer = model.normal_buffer();
+        const AttribBuffer &uv_buffer = model.uv_buffer();
 
         program_.BindVertexAttribBuffer(a_pos_, position_buffer);
         program_.BindVertexAttribBuffer(a_normal_, normal_buffer);

@@ -13,13 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_SCRAP_RENDERER_H_
-#define SRC_SCRAP_RENDERER_H_
+#ifndef SRC_SCRAP_GL_MODEL_RENDERER_H_
+#define SRC_SCRAP_GL_MODEL_RENDERER_H_
 
 #include <map>
 #include <set>
 #include <memory>
-#include <cairo/cairo.h>
 #include "scrap/doodad.h"
 #include "scrap/camera.h"
 #include "scrap/gl/texture.h"
@@ -34,7 +33,7 @@ namespace gl {
 // provided the following attributes:
 // - attribute vec3 a_pos (3d position)
 // - attribute vec3 a_normal (3d normal)
-// - attribute vec3 a_uv (2d uv coordinates)
+// - attribute vec2 a_uv (2d uv coordinates)
 // - uniform mat4 u_mvp (model/view/projection matrix)
 // - uniform sampler2d u_tex (uv texture)
 // Custom uniforms can be specified by materials.
@@ -57,4 +56,4 @@ class ModelRenderer {
 }  // namespace gl
 }  // namespace scrap
 
-#endif  // SRC_SCRAP_RENDERER_H_
+#endif  // SRC_SCRAP_GL_MODEL_RENDERER_H_

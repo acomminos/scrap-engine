@@ -131,6 +131,10 @@ void Loop() {
     while (!glfwWindowShouldClose(window_)) {
         start_time = glfwGetTime();
 
+        // FIXME(andrew): delegate to scenes?
+        glClearColor(0, 0, 0, 1);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         scrap::Scene *scene = scene_stack_.top();
         scene->Update(delta_time);
         scene->Render();
