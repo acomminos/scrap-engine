@@ -29,7 +29,9 @@ void salvage::ExampleScene::Update(double delta_time) {
 }
 
 void salvage::ExampleScene::DrawGUI(cairo_t *ctx) {
-
+    cairo_set_source_rgba(ctx, 1.0f, 1.0f, 1.0f, 1.0f);
+    cairo_rectangle(ctx, 0, 0, 100, 100);
+    cairo_fill(ctx);
 }
 
 void salvage::ExampleScene::OnMouseButton(int button, int action, int mods) {

@@ -19,8 +19,8 @@
 static GLfloat const kVertexData[] = {
     1.0f, 1.0f, 1.0f, 1.0f,
     -1.0f, 1.0f, 0.0f, 1.0f,
-    1.0f, -1.0f, 0.0f, 0.0f,
-    -1.0f, -1.0f, 1.0f, 0.0f
+    1.0f, -1.0f, 1.0f, 0.0f,
+    -1.0f, -1.0f, 0.0f, 0.0f
 };
 
 static std::string const kVertexShader =
@@ -40,8 +40,9 @@ static std::string const kFragmentShader =
     "varying vec2 v_texcoord;\n"
     "void main(void) {\n"
     "    vec4 colour = texture2D(u_tex, v_texcoord);\n"
-    "    colour.rgb /= colour.a;\n"
-    "    gl_FragColor.zyxw = colour;\n"
+    "    colour.argb = colour.rgba; // cairo outputs in ARGB\n"
+    "    colour.rgb /= colour.a; // discard premultiplied alpha\n"
+    "    gl_FragColor = colour;\n"
     "}";
 
 // FIXME(andrew): do less work in constructor.
@@ -99,11 +100,14 @@ void scrap::gui::CairoRenderer::Render() {
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture_);
+    cairo_surface_flush(surface_);
     unsigned char *data = cairo_image_surface_get_data(surface_);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
                  cairo_image_surface_get_width(surface_),
                  cairo_image_surface_get_height(surface_), 
                  0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)data);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glUniform1i(u_tex_, 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffer_);

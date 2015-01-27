@@ -59,7 +59,11 @@ void scrap::ModelScene::Render() {
     assert(model_renderer_);
     assert(cairo_renderer_);
     model_renderer_->Render();
-    DrawGUI(cairo_renderer_->get_context());
+
+    cairo_t *ctx = cairo_renderer_->get_context();
+    cairo_save(ctx);
+    DrawGUI(ctx);
+    cairo_restore(ctx);
     cairo_renderer_->Render();
 }
 
@@ -69,4 +73,5 @@ void scrap::ModelScene::OnHide() {
 
 void scrap::ModelScene::OnSizeChange(int width, int height) {
     active_camera_->set_ratio((float)width/(float)height);
+    cairo_renderer_->Resize(width, height);
 }
