@@ -124,8 +124,7 @@ void scrap::gui::CairoRenderer::Render() {
 
 void scrap::gui::CairoRenderer::Clear() {
     cairo_save(context_);
-    cairo_set_source_rgba(context_, 0.0f, 0.0f, 0.0f, 0.0f);
-    cairo_set_operator(context_, CAIRO_OPERATOR_SOURCE);
+    cairo_set_operator(context_, CAIRO_OPERATOR_CLEAR);
     cairo_paint(context_);
     cairo_restore(context_);
 }

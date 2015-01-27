@@ -44,6 +44,9 @@ void salvage::ExampleScene::OnMouseScroll(double dx, double dy) {
 }
 
 void salvage::ExampleScene::OnMouseMove(double x, double y) {
+    int center_x = scrap::engine::Width() / 2;
+    int center_y = scrap::engine::Height() / 2;
+    r_ = sqrt(pow(x - center_x, 2) + pow(y - center_y, 2));
 }
 
 void salvage::ExampleScene::OnMouseEnter() {

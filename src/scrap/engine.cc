@@ -56,6 +56,9 @@ void scrap::engine::Init(scrap::Scene *scene, const scrap::Settings& settings) {
                                            int mods) {
         scene_stack_.top()->OnMouseButton(button, action, mods);
     });
+    glfwSetCursorPosCallback(window_, [](GLFWwindow *window, double xpos, double ypos) {
+        scene_stack_.top()->OnMouseMove(xpos, ypos);
+    });
     glfwSetFramebufferSizeCallback(window_, [](GLFWwindow*, int width, int height) {
         glViewport(0, 0, width, height); // FIXME(andrew): should this go here?
         scene_stack_.top()->OnSizeChange(width, height);
