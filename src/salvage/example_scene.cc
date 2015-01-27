@@ -19,6 +19,7 @@
 #include "scrap/util/obj_loader.h"
 
 salvage::ExampleScene::ExampleScene() : ModelScene(),
+                                        r_(100.0f),
                                         camera_(M_PI/2, 1.33, 1, 1000) {
     set_active_camera(&camera_);
 }
@@ -29,8 +30,10 @@ void salvage::ExampleScene::Update(double delta_time) {
 }
 
 void salvage::ExampleScene::DrawGUI(cairo_t *ctx) {
-    cairo_set_source_rgba(ctx, 1.0f, 1.0f, 1.0f, 1.0f);
-    cairo_rectangle(ctx, 0, 0, 100, 100);
+    int width = scrap::engine::Width();
+    int height = scrap::engine::Height();
+    cairo_set_source_rgba(ctx, 1.0f, 0.0f, 0.0f, 1.0f);
+    cairo_rectangle(ctx, width/2, height/2, r_*cos(theta_), r_*sin(theta_));
     cairo_fill(ctx);
 }
 

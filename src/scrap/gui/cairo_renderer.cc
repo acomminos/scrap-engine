@@ -40,8 +40,7 @@ static std::string const kFragmentShader =
     "varying vec2 v_texcoord;\n"
     "void main(void) {\n"
     "    vec4 colour = texture2D(u_tex, v_texcoord);\n"
-    "    colour.argb = colour.rgba; // cairo outputs in ARGB\n"
-    "    colour.rgb /= colour.a; // discard premultiplied alpha\n"
+    "    colour.rgba = colour.bgra; // cairo outputs in ARGB\n"
     "    gl_FragColor = colour;\n"
     "}";
 
@@ -121,4 +120,12 @@ void scrap::gui::CairoRenderer::Render() {
 
     glDisableVertexAttribArray(a_pos_);
     glDisableVertexAttribArray(a_uv_);
+}
+
+void scrap::gui::CairoRenderer::Clear() {
+    cairo_save(context_);
+    cairo_set_source_rgba(context_, 0.0f, 0.0f, 0.0f, 0.0f);
+    cairo_set_operator(context_, CAIRO_OPERATOR_SOURCE);
+    cairo_paint(context_);
+    cairo_restore(context_);
 }

@@ -60,6 +60,7 @@ void scrap::ModelScene::Render() {
     assert(cairo_renderer_);
     model_renderer_->Render();
 
+    cairo_renderer_->Clear();
     cairo_t *ctx = cairo_renderer_->get_context();
     cairo_save(ctx);
     DrawGUI(ctx);

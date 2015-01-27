@@ -29,6 +29,8 @@ class CairoRenderer {
   ~CairoRenderer();
   void Resize(GLsizei width, GLsizei height);
   void Render();
+  // Clears the cairo surface of all data, overwriting with alpha.
+  void Clear();
   cairo_t* get_context() const { return context_; }
  private:
   gl::Program program_;
