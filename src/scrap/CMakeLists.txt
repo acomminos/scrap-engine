@@ -7,6 +7,7 @@ set (SOURCE
     gl/material.cc
     gl/model.cc
     gl/model_renderer.cc
+    gui/cairo_renderer.cc
     doodad.cc
     scene/model_scene.cc
 )

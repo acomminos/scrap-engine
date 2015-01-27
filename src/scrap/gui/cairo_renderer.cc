@@ -25,21 +25,29 @@ static GLfloat const kVertexData[] = {
 
 static std::string const kVertexShader =
     "#version 100\n"
-    "void main() {\n"
-    "\n"
+    "attribute vec2 a_pos;\n"
+    "attribute vec2 a_uv;\n"
+    "varying vec2 v_texcoord;\n"
+    "void main(void) {\n"
+    "    v_texcoord = a_uv;\n"
+    "    gl_Position = vec4(a_pos, -1, 1);\n"
     "}";
 
 static std::string const kFragmentShader =
     "#version 100\n"
-    "void main() {\n"
-    "\n"
+    "precision mediump float;\n"
+    "uniform sampler2D u_tex;\n"
+    "varying vec2 v_texcoord;\n"
+    "void main(void) {\n"
+    "    vec4 colour = texture2D(u_tex, v_texcoord);\n"
+    "    colour.rgb /= colour.a;\n"
+    "    gl_FragColor.zyxw = colour;\n"
     "}";
 
 // FIXME(andrew): do less work in constructor.
-scrap::gui::CairoRenderer::CairoRenderer(GLsizei width, GLsizei height) {
-    // TODO(andrew): surface creation error handling
-    surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
-    context_ = cairo_create(surface_);
+scrap::gui::CairoRenderer::CairoRenderer(GLsizei width, GLsizei height) :
+        context_(nullptr), surface_(nullptr) {
+    Resize(width, height);
 
     // TODO(andrew): pass program in?
     gl::Shader vertShader(gl::ShaderType::VertexShader);
@@ -68,6 +76,19 @@ scrap::gui::CairoRenderer::CairoRenderer(GLsizei width, GLsizei height) {
 scrap::gui::CairoRenderer::~CairoRenderer() {
     glDeleteTextures(1, &texture_);
     glDeleteBuffers(1, &buffer_);
+    cairo_destroy(context_);
+    cairo_surface_destroy(surface_);
+}
+
+void scrap::gui::CairoRenderer::Resize(GLsizei width, GLsizei height) {
+    if (context_)
+        cairo_destroy(context_);
+    if (surface_)
+        cairo_surface_destroy(surface_);
+
+    // TODO(andrew): surface creation error handling
+    surface_ = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+    context_ = cairo_create(surface_);
 }
 
 void scrap::gui::CairoRenderer::Render() {
@@ -82,7 +103,7 @@ void scrap::gui::CairoRenderer::Render() {
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
                  cairo_image_surface_get_width(surface_),
                  cairo_image_surface_get_height(surface_), 
-                 0, GL_RGBA, (GLvoid*)data);
+                 0, GL_RGBA, GL_UNSIGNED_BYTE, (GLvoid*)data);
     glUniform1i(u_tex_, 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, buffer_);

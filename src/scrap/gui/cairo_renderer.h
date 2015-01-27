@@ -20,7 +20,7 @@
 #include "scrap/gl/program.h"
 
 namespace scrap {
-namespace gui {
+namespace gui {  // FIXME(andrew): move to gl namespace
 
 // Uses blending to cleanly draw over existing framebuffer data.
 class CairoRenderer {

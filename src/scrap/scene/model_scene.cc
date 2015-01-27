@@ -41,8 +41,7 @@ scrap::ModelScene::ModelScene() {
         "varying vec2 v_texcoord;\n"
         "void main() {\n"
         "    vec4 color = texture2D(u_tex, v_texcoord);\n"
-        "    color.rgb /= color.a; // cairo premultiplies alpha, undo\n"
-        "    gl_FragColor.zyxw = color; // convert cairo ARGB -> RGBA\n"
+        "    gl_FragColor = color;\n"
         "}");
     default_program_.Link(vert_shader, frag_shader);
     model_renderer_ = new gl::ModelRenderer(*this, default_program_);
@@ -53,14 +52,19 @@ scrap::ModelScene::~ModelScene() {
 }
 
 void scrap::ModelScene::OnShow() {
+    cairo_renderer_ = new gui::CairoRenderer(engine::Width(), engine::Height());
 }
 
 void scrap::ModelScene::Render() {
     assert(model_renderer_);
+    assert(cairo_renderer_);
     model_renderer_->Render();
+    DrawGUI(cairo_renderer_->get_context());
+    cairo_renderer_->Render();
 }
 
 void scrap::ModelScene::OnHide() {
+    delete cairo_renderer_;
 }
 
 void scrap::ModelScene::OnSizeChange(int width, int height) {

@@ -25,6 +25,7 @@
 #include "scrap/gl/model_renderer.h"
 #include "scrap/gl/program.h"
 #include "scrap/gl/model.h"
+#include "scrap/gui/cairo_renderer.h"
 
 namespace scrap {
 
@@ -56,6 +57,7 @@ class ModelScene : public Scene {
 
  private:
   gl::ModelRenderer *model_renderer_;
+  gui::CairoRenderer *cairo_renderer_;
   gl::Program default_program_;
   Camera *active_camera_;
   std::vector<Doodad*> doodads_;
