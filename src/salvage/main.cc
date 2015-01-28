@@ -48,12 +48,21 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    if (optind == argc) {
+        fprintf(stderr, "No scene specified.\n");
+        err = 1;
+    }
+
     if (err) {
         fprintf(stderr, "Usage: salvage [OPTION]... [FILE]...\n");
         return -1;
     }
 
-    printf("Starting salvage (libscrap sandbox)...\n");
+    char *scene = argv[argc - 1];
+
+    printf("Starting salvage (libscrap sandbox)...\n"
+           "Loading scene '%s'\n...", scene);
+
 
     salvage::ExampleScene es;
     scrap::engine::Init(&es, settings);
