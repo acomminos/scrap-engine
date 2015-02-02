@@ -18,7 +18,6 @@
 
 #include <vector>
 #include <map>
-#include <cairo/cairo.h>
 #include "scrap/scene.h"
 #include "scrap/camera.h"
 #include "scrap/doodad.h"
