@@ -38,7 +38,6 @@ class ExampleScene : public scrap::ModelScene {
   const float theta_velocity_ = M_PI/2;  // pi/2 rad/s
   float theta_;
   float r_;
-  scrap::Camera camera_;
 };
 
 }  // namespace salvage

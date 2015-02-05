@@ -16,15 +16,16 @@
 #ifndef SRC_SCRAP_SCENE_MODEL_H_
 #define SRC_SCRAP_SCENE_MODEL_H_
 
-#include <vector>
 #include <map>
+#include <memory>
+#include <vector>
 #include "scrap/scene.h"
 #include "scrap/camera.h"
 #include "scrap/doodad.h"
 #include "scrap/gl/model_renderer.h"
 #include "scrap/gl/program.h"
 #include "scrap/gl/model.h"
-#include "scrap/gui/cairo_renderer.h"
+#include "scrap/gl/cairo_renderer.h"
 
 namespace scrap {
 
@@ -47,19 +48,18 @@ class ModelScene : public Scene {
 
   virtual void OnKey(int key, int scancode, int action, int mods) = 0;
 
-  const std::vector<Doodad*>& doodads() const { return doodads_; }
-  void add_doodad(Doodad *doodad) { doodads_.push_back(doodad); };
+  const std::vector<Doodad>& doodads() const { return doodads_; }
+  void add_doodad(Doodad doodad) { doodads_.push_back(doodad); };
 
-  Camera *active_camera() const { return active_camera_; }
-  void set_active_camera(Camera *camera) { active_camera_ = camera; }
+  const Camera& active_camera() const { return camera_; }
 
 
  private:
-  gl::ModelRenderer *model_renderer_;
-  gui::CairoRenderer *cairo_renderer_;
-  gl::Program default_program_;
-  Camera *active_camera_;
-  std::vector<Doodad*> doodads_;
+  std::shared_ptr<gl::Program> default_program_;
+  std::unique_ptr<gl::CairoRenderer> cairo_renderer_;
+  gl::ModelRenderer model_renderer_;
+  Camera camera_;
+  std::vector<Doodad> doodads_;
 };
 
 }  // namespace scrap

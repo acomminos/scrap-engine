@@ -39,13 +39,13 @@ namespace gl {
 // Custom uniforms can be specified by materials.
 class ModelRenderer {
  public:
-  ModelRenderer(const ModelScene &scene, const Program &program);
+  ModelRenderer();
   ~ModelRenderer();
+  void SetProgram(const std::shared_ptr<Program> &program);
   // Draws all Doodads in the scene.
-  void Render() const;
+  void Render(const ModelScene &scene) const;
  private:
-  const ModelScene &scene_;
-  const gl::Program &program_;
+  std::shared_ptr<Program> program_;
   GLuint a_pos_;
   GLuint a_normal_;
   GLuint a_uv_;

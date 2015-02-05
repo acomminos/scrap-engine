@@ -19,9 +19,7 @@
 #include "scrap/util/obj_loader.h"
 
 salvage::ExampleScene::ExampleScene() : ModelScene(),
-                                        r_(100.0f),
-                                        camera_(M_PI/2, 1.33, 1, 1000) {
-    set_active_camera(&camera_);
+                                        r_(100.0f) {
 }
 
 void salvage::ExampleScene::Update(double delta_time) {

@@ -17,17 +17,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "scrap/scene/model_scene.h"
 
-scrap::gl::ModelRenderer::ModelRenderer(const ModelScene &scene,
-                                        const Program &program) :
-                          scene_(scene), program_(program) {
-    assert(program.is_linked());
-
-    a_pos_ = program.GetAttribLocation("a_pos");
-    a_normal_ = program.GetAttribLocation("a_normal");
-    a_uv_ = program.GetAttribLocation("a_uv");
-    u_tex_ = program.GetUniformLocation("u_tex");
-    u_mvp_ = program.GetUniformLocation("u_mvp");
-
+scrap::gl::ModelRenderer::ModelRenderer() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
 }
@@ -35,24 +25,35 @@ scrap::gl::ModelRenderer::ModelRenderer(const ModelScene &scene,
 scrap::gl::ModelRenderer::~ModelRenderer() {
 }
 
-void scrap::gl::ModelRenderer::Render() const {
-    program_.Use();
+void scrap::gl::ModelRenderer::SetProgram(const std::shared_ptr<Program> &program) {
+    program_ = program;
+    a_pos_ = program->GetAttribLocation("a_pos");
+    a_normal_ = program->GetAttribLocation("a_normal");
+    a_uv_ = program->GetAttribLocation("a_uv");
+    u_tex_ = program->GetUniformLocation("u_tex");
+    u_mvp_ = program->GetUniformLocation("u_mvp");
+}
 
-    const Camera *camera = scene_.active_camera();
-    const std::vector<Doodad*> &doodads = scene_.doodads();
+void scrap::gl::ModelRenderer::Render(const ModelScene &scene) const {
+    assert(program_);
+    assert(program_->is_linked());
+    program_->Use();
+
+    const Camera &camera = scene.active_camera();
+    const std::vector<Doodad> &doodads = scene.doodads();
 
     glEnableVertexAttribArray(a_pos_);
     glEnableVertexAttribArray(a_normal_);
     glEnableVertexAttribArray(a_uv_);
 
     for (auto it = doodads.cbegin(); it != doodads.cend(); it++) {
-        const Doodad *doodad = *it;
-        gl::Model &model = doodad->model();
-        gl::Material &material = doodad->material();
+        const Doodad &doodad = *it;
+        gl::Model &model = doodad.model();
+        gl::Material &material = doodad.material();
 
         // TODO(andrew): support for material shaders
 
-        glm::mat4 transform = camera->GetTransform() * doodad->matrix();
+        glm::mat4 transform = camera.GetTransform() * doodad.matrix();
         glUniformMatrix4fv(u_mvp_, 1, GL_FALSE, glm::value_ptr(transform));
 
         glActiveTexture(GL_TEXTURE0);
@@ -64,9 +65,9 @@ void scrap::gl::ModelRenderer::Render() const {
         const AttribBuffer &normal_buffer = model.normal_buffer();
         const AttribBuffer &uv_buffer = model.uv_buffer();
 
-        program_.BindVertexAttribBuffer(a_pos_, position_buffer);
-        program_.BindVertexAttribBuffer(a_normal_, normal_buffer);
-        program_.BindVertexAttribBuffer(a_uv_, uv_buffer);
+        program_->BindVertexAttribBuffer(a_pos_, position_buffer);
+        program_->BindVertexAttribBuffer(a_normal_, normal_buffer);
+        program_->BindVertexAttribBuffer(a_uv_, uv_buffer);
 
         glDrawArrays(GL_TRIANGLES, 0, model.num_vertices());
     }

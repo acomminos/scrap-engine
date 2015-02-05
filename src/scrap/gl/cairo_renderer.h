@@ -13,14 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef SRC_SCRAP_GUI_CAIRO_RENDERER_H_
-#define SRC_SCRAP_GUI_CAIRO_RENDERER_H_
+#ifndef SRC_SCRAP_GL_CAIRO_RENDERER_H_
+#define SRC_SCRAP_GL_CAIRO_RENDERER_H_
 
 #include <cairo/cairo.h>
 #include "scrap/gl/program.h"
 
 namespace scrap {
-namespace gui {  // FIXME(andrew): move to gl namespace
+namespace gl {
 
 // Uses blending to cleanly draw over existing framebuffer data.
 class CairoRenderer {
@@ -43,8 +43,8 @@ class CairoRenderer {
   GLuint a_uv_;
 };
 
-}  // namespace gui
+}  // namespace gl 
 }  // namespace scrap
 
 
-#endif  // SRC_SCRAP_GUI_CAIRO_RENDERER_H_
+#endif  // SRC_SCRAP_GL_CAIRO_RENDERER_H_

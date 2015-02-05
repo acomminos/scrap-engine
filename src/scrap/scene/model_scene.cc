@@ -19,7 +19,7 @@
 #include "scrap/gl/gl_config.h"
 #include "scrap/engine.h"
 
-scrap::ModelScene::ModelScene() {
+scrap::ModelScene::ModelScene() : camera_(90, 0.5, 100, 1000) {
     gl::Shader vert_shader(gl::VertexShader);
     gl::Shader frag_shader(gl::FragmentShader);
     // FIXME(andrew): example code
@@ -43,22 +43,22 @@ scrap::ModelScene::ModelScene() {
         "    vec4 color = texture2D(u_tex, v_texcoord);\n"
         "    gl_FragColor = color;\n"
         "}");
-    default_program_.Link(vert_shader, frag_shader);
-    model_renderer_ = new gl::ModelRenderer(*this, default_program_);
+
+    default_program_ = std::make_shared<gl::Program>();
+    default_program_->Link(vert_shader, frag_shader);
+    model_renderer_.SetProgram(default_program_);
 }
 
 scrap::ModelScene::~ModelScene() {
-    delete model_renderer_;
 }
 
 void scrap::ModelScene::OnShow() {
-    cairo_renderer_ = new gui::CairoRenderer(engine::Width(), engine::Height());
+    cairo_renderer_.reset(new gl::CairoRenderer(engine::Width(), engine::Height()));
 }
 
 void scrap::ModelScene::Render() {
-    assert(model_renderer_);
     assert(cairo_renderer_);
-    model_renderer_->Render();
+    model_renderer_.Render(*this);
 
     cairo_renderer_->Clear();
     cairo_t *ctx = cairo_renderer_->get_context();
@@ -69,10 +69,10 @@ void scrap::ModelScene::Render() {
 }
 
 void scrap::ModelScene::OnHide() {
-    delete cairo_renderer_;
+    cairo_renderer_.release();
 }
 
 void scrap::ModelScene::OnSizeChange(int width, int height) {
-    active_camera_->set_ratio((float)width/(float)height);
+    camera_.set_ratio((float)width/(float)height);
     cairo_renderer_->Resize(width, height);
 }

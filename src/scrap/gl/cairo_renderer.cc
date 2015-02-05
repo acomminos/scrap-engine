@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "scrap/gui/cairo_renderer.h"
+#include "scrap/gl/cairo_renderer.h"
 
 // Format: GL_TRIANGLE_STRIP { x, y, u, v }
 static GLfloat const kVertexData[] = {
@@ -45,7 +45,7 @@ static std::string const kFragmentShader =
     "}";
 
 // FIXME(andrew): do less work in constructor.
-scrap::gui::CairoRenderer::CairoRenderer(GLsizei width, GLsizei height) :
+scrap::gl::CairoRenderer::CairoRenderer(GLsizei width, GLsizei height) :
         context_(nullptr), surface_(nullptr) {
     Resize(width, height);
 
@@ -73,14 +73,14 @@ scrap::gui::CairoRenderer::CairoRenderer(GLsizei width, GLsizei height) :
 }
 
 
-scrap::gui::CairoRenderer::~CairoRenderer() {
+scrap::gl::CairoRenderer::~CairoRenderer() {
     glDeleteTextures(1, &texture_);
     glDeleteBuffers(1, &buffer_);
     cairo_destroy(context_);
     cairo_surface_destroy(surface_);
 }
 
-void scrap::gui::CairoRenderer::Resize(GLsizei width, GLsizei height) {
+void scrap::gl::CairoRenderer::Resize(GLsizei width, GLsizei height) {
     if (context_)
         cairo_destroy(context_);
     if (surface_)
@@ -91,7 +91,7 @@ void scrap::gui::CairoRenderer::Resize(GLsizei width, GLsizei height) {
     context_ = cairo_create(surface_);
 }
 
-void scrap::gui::CairoRenderer::Render() {
+void scrap::gl::CairoRenderer::Render() {
     program_.Use();
 
     glEnableVertexAttribArray(a_pos_);
@@ -122,7 +122,7 @@ void scrap::gui::CairoRenderer::Render() {
     glDisableVertexAttribArray(a_uv_);
 }
 
-void scrap::gui::CairoRenderer::Clear() {
+void scrap::gl::CairoRenderer::Clear() {
     cairo_save(context_);
     cairo_set_operator(context_, CAIRO_OPERATOR_CLEAR);
     cairo_paint(context_);
