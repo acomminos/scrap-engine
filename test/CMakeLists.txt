@@ -1,5 +1,3 @@
-enable_testing ()
-
 set (TEST_SOURCES
     test_obj_loader.cc
     )
