@@ -34,21 +34,22 @@ class Model {
   Model();
   ~Model();
   // Sets the vertex data for this model, uploading each attribute into video
-  // memory. If any attribute pointers are null, they will not be uploaded.
-  void SetVertexData(const glm::vec3 *positions, const glm::vec3 *normals,
-                     const glm::vec2 *uvs, const glm::vec4 *colours,
+  // memory.
+  void SetVertexData(const AttribBuffer pos_buffer,
+                     const AttribBuffer normal_buffer,
+                     const AttribBuffer uv_buffer,
                      GLsizei num_vertices);
   void ResetVertexData();
-  AttribBuffer position_buffer() const { return position_buffer_; }
-  AttribBuffer normal_buffer() const { return normal_buffer_; }
-  AttribBuffer uv_buffer() const { return uv_buffer_; }
-  AttribBuffer colour_buffer() const { return colour_buffer_; }
+  const AttribBuffer* position_buffer() const { return position_buffer_.get(); }
+  const AttribBuffer* normal_buffer() const { return normal_buffer_.get(); }
+  const AttribBuffer* uv_buffer() const { return uv_buffer_.get(); }
+  const AttribBuffer* colour_buffer() const { return colour_buffer_.get(); }
   GLsizei num_vertices() const { return num_vertices_; }
  private:
-  AttribBuffer position_buffer_;
-  AttribBuffer normal_buffer_;
-  AttribBuffer uv_buffer_;
-  AttribBuffer colour_buffer_;
+  std::unique_ptr<AttribBuffer> position_buffer_;
+  std::unique_ptr<AttribBuffer> normal_buffer_;
+  std::unique_ptr<AttribBuffer> uv_buffer_;
+  std::unique_ptr<AttribBuffer> colour_buffer_;
   GLsizei num_vertices_;
 };
 

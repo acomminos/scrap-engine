@@ -20,10 +20,10 @@
 #include "scrap/engine.h"
 
 scrap::ModelScene::ModelScene() : camera_(90, 0.5, 100, 1000) {
-    gl::Shader vert_shader(gl::VertexShader);
-    gl::Shader frag_shader(gl::FragmentShader);
+    auto vert_shader = std::make_shared<gl::Shader>(gl::VertexShader);
+    auto frag_shader = std::make_shared<gl::Shader>(gl::FragmentShader);
     // FIXME(andrew): example code
-    vert_shader.Compile(
+    vert_shader->Compile(
         "#version 100\n"
         "uniform mat4 u_mvp;\n"
         "attribute vec3 a_pos;\n"
@@ -34,7 +34,7 @@ scrap::ModelScene::ModelScene() : camera_(90, 0.5, 100, 1000) {
         "   gl_Position = u_mvp * vec4(a_pos, 1.0);\n"
         "   v_texcoord = a_uv;\n"
         "}");
-    frag_shader.Compile(
+    frag_shader->Compile(
         "#version 100\n"
         "precision mediump float;\n"
         "uniform sampler2D u_tex;\n"

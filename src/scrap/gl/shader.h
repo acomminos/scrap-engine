@@ -28,6 +28,7 @@ enum ShaderType {
 };
 
 // A wrapper around GLSL shaders using RAII.
+// TODO: rule of three
 class Shader {
  public:
   // Creates a new shader of the given type.

@@ -50,11 +50,11 @@ scrap::gl::CairoRenderer::CairoRenderer(GLsizei width, GLsizei height) :
     Resize(width, height);
 
     // TODO(andrew): pass program in?
-    gl::Shader vertShader(gl::ShaderType::VertexShader);
-    vertShader.Compile(kVertexShader);
+    auto vertShader = std::make_shared<gl::Shader>(gl::ShaderType::VertexShader);
+    vertShader->Compile(kVertexShader);
 
-    gl::Shader fragShader(gl::ShaderType::FragmentShader);
-    fragShader.Compile(kFragmentShader);
+    auto fragShader = std::make_shared<gl::Shader>(gl::ShaderType::FragmentShader);
+    fragShader->Compile(kFragmentShader);
 
     program_.Link(vertShader, fragShader);
     assert(program_.is_linked());

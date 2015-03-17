@@ -25,7 +25,10 @@ namespace scrap {
 namespace util {
 namespace OBJLoader {
 
-bool Parse(std::istream& in, gl::Model &model, GLenum buffer_usage);
+// Loads the OBJ data from the provided input stream into a new model.
+// Uses a singular GL buffer for vertex data. Buffer data is stored according
+// to the buffer_usage enumerated constant.
+gl::Model Parse(std::istream& in, GLenum buffer_usage);
 
 }  // namespace OBJLoader
 }  // namespace util

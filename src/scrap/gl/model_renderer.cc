@@ -61,13 +61,13 @@ void scrap::gl::ModelRenderer::Render(const ModelScene &scene) const {
         glBindTexture(GL_TEXTURE_2D, material.texture().texture());
         glUniform1i(u_tex_, 0);
 
-        const AttribBuffer &position_buffer = model.position_buffer();
-        const AttribBuffer &normal_buffer = model.normal_buffer();
-        const AttribBuffer &uv_buffer = model.uv_buffer();
+        const AttribBuffer *position_buffer = model.position_buffer();
+        const AttribBuffer *normal_buffer = model.normal_buffer();
+        const AttribBuffer *uv_buffer = model.uv_buffer();
 
-        program_->BindVertexAttribBuffer(a_pos_, position_buffer);
-        program_->BindVertexAttribBuffer(a_normal_, normal_buffer);
-        program_->BindVertexAttribBuffer(a_uv_, uv_buffer);
+        program_->BindVertexAttribBuffer(a_pos_, *position_buffer);
+        program_->BindVertexAttribBuffer(a_normal_, *normal_buffer);
+        program_->BindVertexAttribBuffer(a_uv_, *uv_buffer);
 
         glDrawArrays(GL_TRIANGLES, 0, model.num_vertices());
     }

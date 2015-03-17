@@ -17,6 +17,7 @@
 #include <cassert>
 #include "scrap/gl/gl_config.h"
 #include "scrap/util/obj_loader.h"
+#include "scrap/gl/program.h"
 
 // x, y, z, optional w
 static const std::regex kVertexRegex =
@@ -25,11 +26,7 @@ static const std::regex kVertexRegex =
 static const std::regex kFaceRegex =
     std::regex(R"((\d+)(?:\/(\d+)?(?:\/(\d+))?)?)");
 
-// Loads the OBJ data from the provided input stream into the model given.
-// Uses a singular GL buffer for vertex data. Buffer data is stored according
-// to the buffer_usage enumerated constant.
-// Returns true if the operation was a success.
-bool scrap::util::OBJLoader::Parse(std::istream& in, gl::Model &model, GLenum buffer_usage) {
+scrap::gl::Model scrap::util::OBJLoader::Parse(std::istream& in, GLenum buffer_usage) {
     struct Vertex {
         glm::vec3 position;
         glm::vec3 normal;
@@ -92,11 +89,21 @@ skipline:
             next = in.get();
         } while (next != '\n' && next != '\\');
     }
-    GLuint buffer;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex),
-                 vertices.data(), buffer_usage);
+    std::shared_ptr<gl::Buffer> buffer = std::make_shared<gl::Buffer>();
+    GLuint buffer_idx = buffer->buffer();
+    glBindBuffer(GL_ARRAY_BUFFER, buffer_idx);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size(), vertices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    gl::AttribBuffer pos_buffer = {
+        .size = sizeof(GLfloat) * 3,
+        .type = GL_FLOAT,
+        .normalized = GL_FALSE,
+        .stride = sizeof(GLfloat) * 9,
+        .offset = 0,
+        .buffer = buffer
+    };
+
+    //gl::Model model(pos_buffer, NULL, NULL);
     // TODO(andrew): set model attribute
 }

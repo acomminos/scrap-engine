@@ -21,19 +21,19 @@
 #include <glm/glm.hpp>
 #include "scrap/gl/shader.h"
 #include "scrap/gl/gl_config.h"
+#include "scrap/gl/buffer.h"
 #include "scrap/camera.h"
 
 namespace scrap {
 namespace gl {
 
 typedef struct {
-    bool enabled;
     GLsizei size;
     GLenum type;
     GLboolean normalized;
     GLsizei stride;
     GLvoid *offset;
-    GLuint buffer;
+    std::shared_ptr<Buffer> buffer;
 } AttribBuffer;
 
 // A wrapper around a GLSL shader program.
@@ -41,12 +41,15 @@ class Program {
  public:
   // Registers a new shader program with OpenGL.
   Program();
+  Program(const Program &program);
   ~Program();
+  Program& operator=(const Program &program);
 
   // Attaches the given shaders, and links this program.
+  // Stores a reference to the shader pointers.
   // Returns true if the program was successfully linked.
-  bool Link(const scrap::gl::Shader &vertex_shader,
-            const scrap::gl::Shader &fragment_shader);
+  bool Link(const std::shared_ptr<scrap::gl::Shader> &vertex_shader,
+            const std::shared_ptr<scrap::gl::Shader> &fragment_shader);
   bool is_linked() const { return linked_; }
 
   // Instructs OpenGL to use this program.
@@ -55,9 +58,20 @@ class Program {
   GLuint GetUniformLocation(const char *name) const;
   GLuint GetAttribLocation(const char *name) const;
   bool BindVertexAttribBuffer(GLuint attrib, const AttribBuffer &buffer) const;
+
+  std::shared_ptr<scrap::gl::Shader> vertex_shader() const {
+      return vertex_shader_;
+  }
+
+  std::shared_ptr<scrap::gl::Shader> fragment_shader() const {
+      return fragment_shader_;
+  }
+
  private:
   bool linked_;
   GLuint program_;
+  std::shared_ptr<scrap::gl::Shader> vertex_shader_;
+  std::shared_ptr<scrap::gl::Shader> fragment_shader_;
 };
 
 }  // namespace gl

@@ -8,6 +8,7 @@ set (SOURCE
     gl/model.cc
     gl/model_renderer.cc
     gl/cairo_renderer.cc
+    gl/buffer.cc
     util/obj_loader.cc
     doodad.cc
     scene/model_scene.cc

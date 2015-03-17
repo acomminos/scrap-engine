@@ -1,4 +1,4 @@
-// Copyright © 2014 Andrew Comminos <andrew@morlunk.com>
+// Copyright © 2015 Andrew Comminos <andrew@morlunk.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -13,25 +13,28 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "scrap/gl/model.h"
+#ifndef SRC_SCRAP_GL_BUFFER_H_
+#define SRC_SCRAP_GL_BUFFER_H_
+
+#include <vector>
 #include "scrap/gl/gl_config.h"
 
-scrap::gl::Model::Model() {
-}
+namespace scrap {
+namespace gl {
 
-scrap::gl::Model::~Model() {
-    ResetVertexData();
-}
+// An RAII wrapper for an OpenGL buffer.
+// Provides facilities for retrieving vertex attrib data.
+class Buffer {
+ public:
+  Buffer(GLuint buffer) : buffer_(buffer) {};
+  Buffer();
+  ~Buffer();
+  GLuint buffer() const { return buffer_; }
+ private:
+  GLuint buffer_;
+};
 
-void scrap::gl::Model::SetVertexData(const AttribBuffer pos_buffer,
-                                     const AttribBuffer normal_buffer,
-                                     const AttribBuffer uv_buffer,
-                                     GLsizei num_vertices) {
-}
+}  // namespace gl
+}  // namespace scrap
 
-void scrap::gl::Model::ResetVertexData() {
-    position_buffer_.reset();
-    normal_buffer_.reset();
-    uv_buffer_.reset();
-    colour_buffer_.reset();
-}
+#endif  // SRC_SCRAP_GL_BUFFER_H_

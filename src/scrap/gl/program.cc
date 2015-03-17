@@ -19,21 +19,36 @@ scrap::gl::Program::Program() {
     program_ = glCreateProgram();
 }
 
+scrap::gl::Program::Program(const scrap::gl::Program &program) {
+    if (program.is_linked())
+        Link(program.vertex_shader(), program.fragment_shader());
+}
+
 scrap::gl::Program::~Program() {
     glDeleteProgram(program_);
 }
 
-bool scrap::gl::Program::Link(const scrap::gl::Shader &vertex_shader,
-    const scrap::gl::Shader &fragment_shader) {
-    assert(vertex_shader.is_compiled() && fragment_shader.is_compiled());
+scrap::gl::Program& scrap::gl::Program::operator=(const scrap::gl::Program &program) {
+    if (program.is_linked())
+        Link(program.vertex_shader(), program.fragment_shader());
+    return *this;
+}
 
-    glAttachShader(program_, vertex_shader.shader());
-    glAttachShader(program_, fragment_shader.shader());
+bool scrap::gl::Program::Link(
+        const std::shared_ptr<scrap::gl::Shader> &vertex_shader,
+        const std::shared_ptr<scrap::gl::Shader> &fragment_shader) {
+    assert(vertex_shader && vertex_shader->is_compiled()
+           && fragment_shader && fragment_shader->is_compiled());
+
+    glAttachShader(program_, vertex_shader->shader());
+    glAttachShader(program_, fragment_shader->shader());
     glLinkProgram(program_);
 
     GLint result;
     glGetProgramiv(program_, GL_LINK_STATUS, &result);
     linked_ = result;
+    vertex_shader_ = vertex_shader;
+    fragment_shader_ = fragment_shader;
     return result;
 }
 
@@ -61,7 +76,8 @@ GLuint scrap::gl::Program::GetAttribLocation(const char *name) const {
 
 bool scrap::gl::Program::BindVertexAttribBuffer(GLuint attrib,
         const AttribBuffer &buffer) const {
-    glBindBuffer(GL_ARRAY_BUFFER, buffer.buffer);
+    const Buffer &gl_buffer = *buffer.buffer;
+    glBindBuffer(GL_ARRAY_BUFFER, gl_buffer.buffer());
     glVertexAttribPointer(attrib, buffer.size, buffer.type, buffer.normalized,
                           buffer.stride, buffer.offset);
 }
