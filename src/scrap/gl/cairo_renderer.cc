@@ -17,10 +17,10 @@
 
 // Format: GL_TRIANGLE_STRIP { x, y, u, v }
 static GLfloat const kVertexData[] = {
-    1.0f, 1.0f, 1.0f, 1.0f,
-    -1.0f, 1.0f, 0.0f, 1.0f,
-    1.0f, -1.0f, 1.0f, 0.0f,
-    -1.0f, -1.0f, 0.0f, 0.0f
+    1.0f, 1.0f, 1.0f, 0.0f,
+    -1.0f, 1.0f, 0.0f, 0.0f,
+    1.0f, -1.0f, 1.0f, 1.0f,
+    -1.0f, -1.0f, 0.0f, 1.0f
 };
 
 static std::string const kVertexShader =

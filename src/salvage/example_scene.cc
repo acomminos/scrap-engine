@@ -15,6 +15,8 @@
 
 #include "salvage/example_scene.h"
 #include <cstdio>
+#include <iostream>
+#include <sstream>
 #include "scrap/engine.h"
 #include "scrap/util/obj_loader.h"
 
@@ -24,12 +26,23 @@ salvage::ExampleScene::ExampleScene() : ModelScene(),
 
 void salvage::ExampleScene::Update(double delta_time) {
     theta_ = fmod(theta_ + (theta_velocity_ * delta_time), 2*M_PI);
+    delta_t_ = delta_time;
     // printf("dt: %f, t: %fpi\n", delta_time, theta_/M_PI);
 }
 
 void salvage::ExampleScene::DrawGUI(cairo_t *ctx) {
+    static char buf[100];
     int width = scrap::engine::Width();
     int height = scrap::engine::Height();
+
+    // Draw FPS
+    cairo_set_source_rgba(ctx, 1.0f, 1.0f, 1.0f, 1.0f);
+    cairo_move_to(ctx, 50, 50);
+    std::ostringstream fps;
+    fps << "FPS: " << 1.0f/delta_t_;
+    cairo_show_text(ctx, fps.str().c_str());
+
+    // Example rectangle
     cairo_set_source_rgba(ctx, 1.0f, 0.0f, 0.0f, 1.0f);
     cairo_rectangle(ctx, width/2, height/2, r_*cos(theta_), r_*sin(theta_));
     cairo_fill(ctx);

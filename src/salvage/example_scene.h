@@ -36,6 +36,7 @@ class ExampleScene : public scrap::ModelScene {
 
  private:
   const float theta_velocity_ = M_PI/2;  // pi/2 rad/s
+  float delta_t_;
   float theta_;
   float r_;
 };

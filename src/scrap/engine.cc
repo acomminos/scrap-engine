@@ -65,6 +65,7 @@ void scrap::engine::Init(scrap::Scene *scene, const scrap::Settings& settings) {
     });
 
     glfwMakeContextCurrent(window_);
+    // glfwSwapInterval(1); vsync
 
     LoadExtensions();
 
