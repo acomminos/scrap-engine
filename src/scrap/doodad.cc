@@ -17,7 +17,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 scrap::Doodad::Doodad(gl::Model &model, gl::Material &material) : model_(model),
-                                                           material_(material) {
+                                                           material_(material),
+                                                           matrix_(1.0f) {
     // TODO(andrew)
 }
 
@@ -26,9 +27,13 @@ void scrap::Doodad::Rotate(float x, float y, float z) {
 }
 
 void scrap::Doodad::Translate(float x, float y, float z) {
-    matrix_ = glm::translate(matrix_, glm::vec3(x, y, z));
+    Transform(glm::translate(matrix_, glm::vec3(x, y, z)));
 }
 
 void scrap::Doodad::Scale(float x, float y, float z) {
-    matrix_ = glm::scale(matrix_, glm::vec3(x, y, z));
+    Transform(glm::scale(matrix_, glm::vec3(x, y, z)));
+}
+
+void scrap::Doodad::Transform(const glm::mat4 &matrix) {
+    matrix_ = matrix * matrix_;
 }

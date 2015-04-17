@@ -38,11 +38,13 @@ class Doodad {
   void Translate(float x, float y, float z);
   // Scales the doodad by the given scale factors. Applied relatively.
   void Scale(float x, float y, float z);
+  // Composes the current transform matrix on the given matrix.
+  void Transform(const glm::mat4 &matrix);
   
   gl::Model &model() const { return model_; }
   gl::Material &material() const { return material_; }
   // Returns the model transformation matrix applied to the Doodad's model.
-  glm::mat4 matrix() const { return matrix_; }
+  glm::mat4 transform() const { return matrix_; }
 
  private:
   gl::Model &model_;
