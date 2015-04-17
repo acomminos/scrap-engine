@@ -44,7 +44,7 @@ class Doodad {
   gl::Model &model() const { return model_; }
   gl::Material &material() const { return material_; }
   // Returns the model transformation matrix applied to the Doodad's model.
-  glm::mat4 transform() const { return matrix_; }
+  glm::mat4 get_transform() const { return matrix_; }
 
  private:
   gl::Model &model_;

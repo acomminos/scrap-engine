@@ -53,7 +53,7 @@ void scrap::gl::ModelRenderer::Render(const ModelScene &scene) const {
 
         // TODO(andrew): support for material shaders
 
-        glm::mat4 transform = camera.GetTransform() * doodad.matrix();
+        glm::mat4 transform = camera.GetTransform() * doodad.get_transform();
         glUniformMatrix4fv(u_mvp_, 1, GL_FALSE, glm::value_ptr(transform));
 
         glActiveTexture(GL_TEXTURE0);
