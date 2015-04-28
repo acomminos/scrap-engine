@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <cairo/cairo.h>
+#include "scrap/gui/coord.h"
 
 namespace scrap {
 namespace gui {
@@ -23,18 +24,30 @@ namespace gui {
 class Drawable {
  public:
   // Draws in the given Cairo context.
-  virtual void draw(cairo_t *ctx);
+  virtual void Draw(cairo_t *ctx) {}
+  // Called when the mouse enters the drawable's bounds.
+  virtual void OnMouseEnter() {}
+  // Called when the mouse is moved within the drawable's bounds.
+  virtual void OnMouseMove() {}
+  // Called when a mouse button is pressed within the drawable's bounds.
+  virtual void OnMouseButton() {}
+  // Called when the mouse leaves the drawable's bounds.
+  virtual void OnMouseLeave() {}
+  // Called when a key is pressed, regardless of whether or not the mouse was
+  // within the drawable's bounds.
+  // TODO(andrew): implement focus
+  virtual void OnKey(int key, int scancode, int action, int mods) {}
 
-  void set_x(int x) { x_ = x; }
-  void set_y(int y) { y_ = y; }
-  void set_width(int width) { width_ = width; }
-  void set_height(int height) { height_ = height; }
-  int x() { return x_; }
-  int y() { return y_; }
-  int width() { return width_; }
-  int height() { return height_; }
+  const Coord& top() const { return top_; }
+  const Coord& left() const { return left_; }
+  const Coord& bottom() const { return bottom_; }
+  const Coord& right() const { return right_; }
+  void set_top(Coord top) { top_ = top; }
+  void set_left(Coord left) { left_ = left; }
+  void set_bottom(Coord bottom) { bottom_ = bottom; }
+  void set_right(Coord right) { right_ = right; }
  protected:
-  int x_, y_, width_, height_;
+  Coord top_, left_, bottom_, right_;
 };
 
 }  // namespace gui

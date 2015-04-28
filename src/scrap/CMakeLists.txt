@@ -9,7 +9,7 @@ set (SOURCE
     gl/model_renderer.cc
     gl/cairo_renderer.cc
     gl/buffer.cc
-    gui/coords.cc
+    gui/coord.cc
     util/obj_loader.cc
     doodad.cc
     scene/model_scene.cc

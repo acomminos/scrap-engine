@@ -17,10 +17,10 @@
 
 void scrap::gui::DrawableGroup::draw(cairo_t *ctx) {
     // switch to DrawableGroup coordinates
-    cairo_translate(ctx, -x_, -y_);
+    cairo_translate(ctx, -x_.GetAbsolute(), -y_.GetAbsolute());
     for (auto it = children_.begin(); it != children_.end(); it++) {
         cairo_push_group(ctx);
         cairo_pop_group_to_source(ctx);
     }
-    cairo_translate(ctx, x_, y_);
+    cairo_translate(ctx, x_.GetAbsolute(), y_.GetAbsolute());
 }

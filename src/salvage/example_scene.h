@@ -27,12 +27,12 @@ class ExampleScene : public scrap::ModelScene {
   virtual void Update(double delta_time);
   virtual void DrawGUI(cairo_t *ctx);
 
-  virtual void OnMouseButton(int button, int action, int mods);
-  virtual void OnMouseScroll(double dx, double dy);
-  virtual void OnMouseMove(double x, double y);
-  virtual void OnMouseEnter();
-  virtual void OnMouseLeave();
-  virtual void OnKey(int key, int scancode, int action, int mods);
+  virtual void OnMouseButton(int button, int action, int mods) override;
+  virtual void OnMouseScroll(double dx, double dy) override;
+  virtual void OnMouseMove(double x, double y) override;
+  virtual void OnMouseEnter() override;
+  virtual void OnMouseLeave() override;
+  virtual void OnKey(int key, int scancode, int action, int mods) override;
 
  private:
   const float theta_velocity_ = M_PI/2;  // pi/2 rad/s
